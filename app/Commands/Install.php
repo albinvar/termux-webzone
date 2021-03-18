@@ -36,10 +36,12 @@ class Install extends Command
 	    //$lines = shell_exec("");
 		//$this->info($lines);
 		
-		$dir = "/data/data/com.termux/files/home/www";
+		$dir = "/data/data/com.termux/files/usr/var/www";
 		
 		if(!is_dir($dir)){
-			$this->info('not existing');
+			mkdir($dir);
+			$this->info('Directory created successfully..');
+			
 		}
     }
     
