@@ -40,5 +40,5 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "bin": ["termux-pma-installer"]
+    "bin": ["termux-pma"]
 }
