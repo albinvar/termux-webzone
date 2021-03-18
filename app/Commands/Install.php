@@ -12,14 +12,14 @@ class Install extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'install';
 
     /**
      * The description of the command.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Install PMA';
 
     /**
      * Execute the console command.
@@ -28,8 +28,21 @@ class Install extends Command
      */
     public function handle()
     {
-        //
+        $this->createDirectory();
     }
+    
+    private function createDirectory()
+    {
+	    //$lines = shell_exec("");
+		//$this->info($lines);
+		
+		$dir = "/data/data/com.termux/files/home/www";
+		
+		if(!is_dir($dir)){
+			$this->info('not existing');
+		}
+    }
+    
 
     /**
      * Define the command's schedule.
