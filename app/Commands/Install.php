@@ -36,13 +36,34 @@ class Install extends Command
 	    //$lines = shell_exec("");
 		//$this->info($lines);
 		
-		$dir = "/data/data/com.termux/files/usr/var/www";
+		//$dir = "/data/data/com.termux/files/usr/var/www";
+		$dir = "/storage/emulated/0/laravel-zero/termux-pma-installer/test/";
 		
 		if(!is_dir($dir)){
 			mkdir($dir);
 			$this->info('Directory created successfully..');
-			
 		}
+			return $this->downloadPMA($dir);
+    }
+    
+    private function downloadPMA($dir)
+    {
+    	$url = "https://mattstauffer.com/assets/images/logo.svg";
+		$fp = fopen($dir . 'name.zip', "w+");
+
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_FILE, $fp);
+		curl_exec($ch);
+		$st_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+		fclose($fp);
+
+		if($st_code == 200)
+			 $this->info('File downloaded successfully!');
+		else {
+			 $this->error('Error downloading file!');
+		}
+	
     }
     
 
