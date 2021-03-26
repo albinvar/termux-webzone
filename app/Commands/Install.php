@@ -68,14 +68,14 @@ class Install extends Command
     
     private function downloadPMACurl($dir)
     {
-    	$lines = shell_exec("curl -w '\n%{http_code}\n' https://sjcvaipur.in/img/logo.png -o {$dir}/png.png");
+    	$lines = shell_exec("curl -w '\n%{http_code}\n' https://cdn-31.anonfiles.com/8eh8O2m7u7/d2210aca-1616781248/somefile.zip -o {$dir}/file.zip");
 	    $lines = explode("\n", trim($lines));
 		$status = $lines[count($lines)-1];
-		$this->checkDownloadStatus($status);
+		$this->checkDownloadStatus($status, $dir);
     }
     
     
-    private function checkDownloadStatus(Int $status)
+    private function checkDownloadStatus(Int $status, $dir)
     {
     	switch ($status) {
   case 000:
@@ -83,6 +83,7 @@ class Install extends Command
     break;
   case 200:
     $this->comment("\nDownloaded Successfully...!!!");
+    $this->unzip($dir);
     break;
   case 404:
     $this->error("File not found on server..");
@@ -90,6 +91,23 @@ class Install extends Command
   default:
     $this->error("An Unknown Error occurred...");
 }
+    }
+    
+    
+    private function unzip($dir)
+    {
+    	$this->info("\nUnziping Archives....\n");
+	    $zip = new \ZipArchive();
+		$file = $dir."/file.zip";
+    // open archive
+    if ($zip->open($file) !== TRUE) {
+        return $this->error('The Zip file seems to be corrupted. Try to redownload zip...');;
+    }
+    // extract contents to destination directory
+    $zip->extractTo($dir);
+    // close archive
+    $zip->close();
+        return $this->comment('Extracted successfully');
     }
 
     /**
