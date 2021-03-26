@@ -43,7 +43,7 @@ class Install extends Command
 			mkdir($dir);
 			$this->info('Directory created successfully..');
 		}
-			return $this->downloadPMA($dir);
+			return $this->downloadPMACurl($dir);
     }
     
     private function downloadPMA($dir)
@@ -66,6 +66,13 @@ class Install extends Command
 	
     }
     
+    private function downloadPMACurl($dir)
+    {
+    	$lines = shell_exec("curl -w '%{http_code}\n' 'https://mattstauffer.com/assets/images/logo.svg -o test.svg'");
+	    $lines = explode("\n", trim($lines));
+		$this->error($lines[count($lines)-1]);
+	
+    }
 
     /**
      * Define the command's schedule.
