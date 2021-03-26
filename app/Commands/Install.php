@@ -68,7 +68,7 @@ class Install extends Command
     
     private function downloadPMACurl($dir)
     {
-    	$lines = shell_exec("curl -w '%{http_code}\n' 'https://mattstauffer.com/assets/images/logo.svg -o test.svg'");
+    	$lines = shell_exec("curl -w '\n%{http_code}\n' https://sjcvaipur.in/img/logo.png -o {$dir}/png.png");
 	    $lines = explode("\n", trim($lines));
 		$this->error($lines[count($lines)-1]);
 	
