@@ -70,8 +70,26 @@ class Install extends Command
     {
     	$lines = shell_exec("curl -w '\n%{http_code}\n' https://sjcvaipur.in/img/logo.png -o {$dir}/png.png");
 	    $lines = explode("\n", trim($lines));
-		$this->error($lines[count($lines)-1]);
-	
+		$status = $lines[count($lines)-1];
+		$this->checkDownloadStatus($status);
+    }
+    
+    
+    private function checkDownloadStatus(Int $status)
+    {
+    	switch ($status) {
+  case 000:
+    $this->error("Cannot connect to Server");
+    break;
+  case 200:
+    $this->comment("\nDownloaded Successfully...!!!");
+    break;
+  case 404:
+    $this->error("File not found on server..");
+    break;
+  default:
+    $this->error("An Unknown Error occurred...");
+}
     }
 
     /**
