@@ -14,7 +14,7 @@ class Mysql extends Command
      * @var string
      */
     protected $signature = 'server:mysql
-							{--stop}
+							{--s|--stop}
 							{--port=3306}';
 
     /**
@@ -31,6 +31,15 @@ class Mysql extends Command
      */
     public function handle()
     {
+    	pcntl_async_signals(true);
+
+    // Catch the cancellation of the action
+    pcntl_signal(SIGINT, function () {
+        $this->comment("\nShutting down...\n");
+
+        $this->stop();
+    });   
+
         $this->checkInstallation();
     }
     
@@ -59,7 +68,10 @@ class Mysql extends Command
     
     private function start()
     {
-    	$cmd = shell_exec("mysqld --port={$this->option('port')}");
+    	$this->logo();
+	    $this->comment("mysql Services Started....");
+	    $this->line("\n");
+    	$cmd = exec("mysqld --port={$this->option('port')} --gdb");
     }
     
     private function stop()
@@ -69,6 +81,12 @@ class Mysql extends Command
 		    $response = exec($cmd);
         });
     }
+    
+    public function logo()
+	{
+		 $figlet = new \Laminas\Text\Figlet\Figlet();
+		echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
+	}
 
     /**
      * Define the command's schedule.
