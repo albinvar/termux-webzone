@@ -19,7 +19,7 @@ class MysqlInstaller extends Command
      *
      * @var string
      */
-    protected $description = 'Install MySql on Termux';
+    protected $description = 'Install mysql server on Termux';
 
     /**
      * Execute the console command.
@@ -35,7 +35,7 @@ class MysqlInstaller extends Command
     {
     	$file = "/data/data/com.termux/files/usr/bin/mysql";
     	if(file_exists($file)){
-    	dd("exit");
+	    	$this->error('Mysql seems to be installed already, Type "pkg uninstall mariadb" to uninstall mysql..');
     	} else {
 	    	if ($this->confirm('Do you want to install MySql?')) {
 		        $this->install();
