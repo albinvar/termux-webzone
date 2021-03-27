@@ -12,14 +12,14 @@ class Server extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'server:pma';
 
     /**
      * The description of the command.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Start PhpMyAdmin locally';
 
     /**
      * Execute the console command.
@@ -28,9 +28,14 @@ class Server extends Command
      */
     public function handle()
     {
-        //
+        $this->checkInstallations();
     }
-
+    
+    public function checkInstallations()
+    {
+    	
+    }
+    
     /**
      * Define the command's schedule.
      *
