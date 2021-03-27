@@ -14,7 +14,7 @@ class Mysql extends Command
      * @var string
      */
     protected $signature = 'server:mysql
-							{--n}
+							{--stop}
 							{--port=3306}';
 
     /**
@@ -49,6 +49,8 @@ class Mysql extends Command
 		if($source == 'cancel' || $source == 0) {
 			$this->info("Good bye");
 			}
+		} elseif($this->option('stop')) {
+			$this->stop();
     	} else {
 	    	$this->start();
 	    }
@@ -60,7 +62,13 @@ class Mysql extends Command
     	$cmd = shell_exec("mysqld --port={$this->option('port')}");
     }
     
-    
+    private function stop()
+    {
+    	$this->task("Kill Mysql processes ", function () {
+	        $cmd = "killall -9 mysqld 2> /dev/null";
+		    $response = exec($cmd);
+        });
+    }
 
     /**
      * Define the command's schedule.
