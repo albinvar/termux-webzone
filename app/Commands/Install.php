@@ -69,7 +69,7 @@ class Install extends Command
     
     private function downloadPMACurl($dir)
     {
-    	$lines = shell_exec("curl -w '\n%{http_code}\n' https://gitlab.com/albinvar/pma-cli/-/raw/master/somefile.zip -o {$dir}/file.zip");
+    	$lines = shell_exec("curl -w '\n%{http_code}\n' http://localhost:8888/phpMyAdmin.zip -o {$dir}/file.zip");
 	    $lines = explode("\n", trim($lines));
 		$status = $lines[count($lines)-1];
 		$this->checkDownloadStatus($status, $dir);
@@ -124,7 +124,7 @@ class Install extends Command
         return false;
     }
     // extract contents to destination directory
-    $zip->extractTo($dir);
+    $zip->extractTo($dir.'/pma');
     // close archive
     $zip->close();
         return true;
@@ -132,7 +132,15 @@ class Install extends Command
     
     private function setPmaConfig()
     {
-    	return false;
+	    if(file_exists($this->dir.'/pma/config.sample.inc.php'))
+		{
+			if(@rename($this->dir.'/pma/config.sample.inc.php', $this->dir.'/pma/config.inc.php')===true)
+			{
+				return true;
+			} else {
+				return false;
+			}
+		}
     }
 
     /**
