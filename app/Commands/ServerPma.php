@@ -12,7 +12,9 @@ class ServerPma extends Command
      *
      * @var string
      */
-    protected $signature = 'server:pma';
+    protected $signature = 'server:pma
+							{--n}
+							{--port=8999}';
 
     /**
      * The description of the command.
@@ -32,23 +34,33 @@ class ServerPma extends Command
     }
     
     public function checkInstallations()
-	    {$this->info("");
+    {
+    	echo shell_exec("clear");
+	    $this->info("");
     	$this->logo();
 	    $this->info("\n");
-    	$port = 8977;
+    	$port = $this->option('port');
 	    $dir = config('pma.PMA_DIR');
     	$cmd = "php -S 127.0.0.1:{$port} -t {$dir}/pma";
 		$this->comment("Starting phpmyadmin web interface at : http://127.0.0.1:{$port}");
 		$this->info("");
-		shell_exec("xdg-open http://127.0.0.1:{$port}");
+		$this->launch();
 	    shell_exec($cmd);
     }
     
     public function logo()
 	{
 		 $figlet = new \Laminas\Text\Figlet\Figlet();
-		echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
+		 echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
 	}
+    
+    private function launch()
+    {
+    	if(!$this->option('n'))
+	    {
+    	return shell_exec("xdg-open http://127.0.0.1:{$this->option('port')}");
+	    }
+    }
     
     /**
      * Define the command's schedule.
