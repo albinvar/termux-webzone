@@ -227,8 +227,8 @@ class Install extends Command
 	
 	public function logo()
 	{
-		$figlet = new \Laminas\Text\Figlet\Figlet();
-	echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
+		 $figlet = new \Laminas\Text\Figlet\Figlet();
+		echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
 	}
     
     /**
