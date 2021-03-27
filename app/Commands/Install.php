@@ -12,7 +12,8 @@ class Install extends Command
      *
      * @var string
      */
-    protected $signature = 'install';
+    protected $signature = 'pma:install
+							{--f|--force}';
 
     /**
      * The description of the command.
@@ -35,11 +36,18 @@ class Install extends Command
      */
     public function handle()
     {
+    	if($this->option('force')){
+    	$this->removeDir();
+	    
+    }
         $this->checkInstallation();
     }
     
     public function checkInstallation()
     {
+    	$this->info("\n");
+	    $this->logo();
+		$this->info("\n");
     	if(is_dir($this->dir.'/pma') && file_exists($this->dir.'/pma/config.inc.php')){
 	    	if ($this->confirm('Do you want to reinstall PMA?')) {
 	        $this->createDirectory();
@@ -192,6 +200,36 @@ class Install extends Command
 
     return $response?true:false;
 }
+
+	private function removeDir()
+	{
+		$this->task("\nRemoving Old Files", function () {
+     	if(is_dir($this->dir.'/pma')){
+	     $cmd = shell_exec("rm -rf {$this->dir}/pma");
+            if(is_null($cmd))
+            { return true; }
+            else
+			{ return false; }
+			} else {
+				return true;
+			}
+			if(file_exists($this->dir.'/pma/config.inc.php')){
+		     $cmd = shell_exec("rm {$this->dir}/file.zip");
+            if(is_null($cmd))
+            { return true; }
+            else
+			{ return false; }
+			} else {
+				return true;
+			}
+        });
+	}
+	
+	public function logo()
+	{
+		$figlet = new \Laminas\Text\Figlet\Figlet();
+	echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
+	}
     
     /**
      * Define the command's schedule.

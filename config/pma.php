@@ -22,7 +22,7 @@ return [
     |
     */
     
-    'PMA_DIR' => '/storage/emulated/0/laravel-zero/termux-pma-installer/test/',
+    'PMA_DIR' => '/storage/emulated/0/laravel-zero/termux-pma-installer/test',
     
     /*
     |--------------------------------------------------------------------------
