@@ -20,7 +20,14 @@ class Install extends Command
      * @var string
      */
     protected $description = 'Install PMA';
-
+    
+    public function __construct()
+    {
+    	parent::__construct();
+    	$this->dir = config('pma.PMA_DIR');
+    }
+    
+    
     /**
      * Execute the console command.
      *
@@ -28,26 +35,21 @@ class Install extends Command
      */
     public function handle()
     {
-    	$this->dir = "/storage/emulated/0/laravel-zero/termux-pma-installer/test/";
         $this->createDirectory();
     }
     
     private function createDirectory()
     {
-	    //$lines = shell_exec("");
-		//$this->info($lines);
-		
 		//$dir = "/data/data/com.termux/files/usr/var/www";
-		$dir = "/storage/emulated/0/laravel-zero/termux-pma-installer/test/";
 		
-		if(!is_dir($dir)){
-			mkdir($dir);
+		if(!is_dir($this->dir)){
+			mkdir($this->dir);
 			$this->info('Directory created successfully..');
 		}
-			return $this->downloadPMACurl($dir);
+			return $this->getUrl();
     }
     
-    private function downloadPMA($dir)
+    private function downloadPMA()
     {
     	$url = "https://mattstauffer.com/assets/images/logo.svg";
 		$fp = fopen($dir . 'name.zip', "w+");
@@ -67,12 +69,19 @@ class Install extends Command
 	
     }
     
-    private function downloadPMACurl($dir)
+    protected function getUrl()
     {
-    	$lines = shell_exec("curl -w '\n%{http_code}\n' http://localhost:8888/phpMyAdmin.zip -o {$dir}/file.zip");
+    	$json = file_get_contents(config('pma.PMA_URL'));
+		$data = json_decode($json, TRUE);
+		$this->downloadPMACurl($data);
+    }
+    
+    private function downloadPMACurl($data)
+    {
+    	$lines = shell_exec("curl -w '\n%{http_code}\n' {$data['PMA_DOWNLOAD_LINK']} -o {$this->dir}/file.zip");
 	    $lines = explode("\n", trim($lines));
 		$status = $lines[count($lines)-1];
-		$this->checkDownloadStatus($status, $dir);
+		$this->checkDownloadStatus($status, $this->dir);
     }
     
     
