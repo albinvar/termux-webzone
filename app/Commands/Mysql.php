@@ -13,7 +13,9 @@ class Mysql extends Command
      *
      * @var string
      */
-    protected $signature = 'server:mysql';
+    protected $signature = 'server:mysql
+							{--n}
+							{--port=3306}';
 
     /**
      * The description of the command.
@@ -47,8 +49,18 @@ class Mysql extends Command
 		if($source == 'cancel' || $source == 0) {
 			$this->info("Good bye");
 			}
-    	} 
+    	} else {
+	    	$this->start();
+	    }
     }
+    
+    
+    private function start()
+    {
+    	$cmd = shell_exec("mysqld --port={$this->option('port')}");
+    }
+    
+    
 
     /**
      * Define the command's schedule.
