@@ -82,9 +82,15 @@ class Install extends Command
     
     protected function getUrl()
     {
-    	$json = file_get_contents(config('pma.PMA_URL'));
-		$data = json_decode($json, TRUE);
-		$this->downloadPMACurl($data);
+    	$status = $this->isSiteAvailable(config('pma.PMA_URL'));
+	    if($status) {
+	    	$json = file_get_contents(config('pma.PMA_URL'));
+			$data = json_decode($json, TRUE);
+			$this->downloadPMACurl($data);
+		} else {
+			$data = ['PMA_DOWNLOAD_LINK' => config('pma.PMA_DEFAULT_DOWNLOAD_LINK'),];
+			$this->downloadPMACurl($data);
+			}
     }
     
     private function downloadPMACurl($data)
@@ -162,7 +168,31 @@ class Install extends Command
 			}
 		}
     }
+    
+	public function isSiteAvailable($url){
+    // Check, if a valid url is provided
+    if(!filter_var($url, FILTER_VALIDATE_URL)){
+        return false;
+    }
 
+    // Initialize cURL
+    $curlInit = curl_init($url);
+    
+    // Set options
+    curl_setopt($curlInit,CURLOPT_CONNECTTIMEOUT,10);
+    curl_setopt($curlInit,CURLOPT_HEADER,true);
+    curl_setopt($curlInit,CURLOPT_NOBODY,true);
+    curl_setopt($curlInit,CURLOPT_RETURNTRANSFER,true);
+
+    // Get response
+    $response = curl_exec($curlInit);
+    
+    // Close a cURL session
+    curl_close($curlInit);
+
+    return $response?true:false;
+}
+    
     /**
      * Define the command's schedule.
      *
