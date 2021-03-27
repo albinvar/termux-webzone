@@ -12,7 +12,7 @@ class Install extends Command
      *
      * @var string
      */
-    protected $signature = 'pma:install
+    protected $signature = 'install:pma
 							{--f|--force}';
 
     /**
