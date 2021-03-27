@@ -28,6 +28,7 @@ class Install extends Command
      */
     public function handle()
     {
+    	$this->dir = "/storage/emulated/0/laravel-zero/termux-pma-installer/test/";
         $this->createDirectory();
     }
     
@@ -68,7 +69,7 @@ class Install extends Command
     
     private function downloadPMACurl($dir)
     {
-    	$lines = shell_exec("curl -w '\n%{http_code}\n' https://cdn-31.anonfiles.com/8eh8O2m7u7/d2210aca-1616781248/somefile.zip -o {$dir}/file.zip");
+    	$lines = shell_exec("curl -w '\n%{http_code}\n' https://gitlab.com/albinvar/pma-cli/-/raw/master/somefile.zip -o {$dir}/file.zip");
 	    $lines = explode("\n", trim($lines));
 		$status = $lines[count($lines)-1];
 		$this->checkDownloadStatus($status, $dir);
@@ -83,7 +84,14 @@ class Install extends Command
     break;
   case 200:
     $this->comment("\nDownloaded Successfully...!!!");
-    $this->unzip($dir);
+    
+     $this->task("Extracting PMA ", function () {
+     	
+            if($this->unzip($this->dir))
+            { return true; }
+            else
+			{ return false; }
+        });
     break;
   case 404:
     $this->error("File not found on server..");
@@ -96,18 +104,19 @@ class Install extends Command
     
     private function unzip($dir)
     {
-    	$this->info("\nUnziping Archives....\n");
+    	
 	    $zip = new \ZipArchive();
 		$file = $dir."/file.zip";
+		
     // open archive
     if ($zip->open($file) !== TRUE) {
-        return $this->error('The Zip file seems to be corrupted. Try to redownload zip...');;
+        return false;
     }
     // extract contents to destination directory
     $zip->extractTo($dir);
     // close archive
     $zip->close();
-        return $this->comment('Extracted successfully');
+        return true;
     }
 
     /**
