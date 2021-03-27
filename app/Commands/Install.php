@@ -84,14 +84,7 @@ class Install extends Command
     break;
   case 200:
     $this->comment("\nDownloaded Successfully...!!!");
-    
-     $this->task("Extracting PMA ", function () {
-     	
-            if($this->unzip($this->dir))
-            { return true; }
-            else
-			{ return false; }
-        });
+    $this->runTasks();
     break;
   case 404:
     $this->error("File not found on server..");
@@ -99,6 +92,24 @@ class Install extends Command
   default:
     $this->error("An Unknown Error occurred...");
 }
+    }
+    
+    private function runTasks()
+    {
+    	$this->task("Extracting PMA ", function () {
+     	
+            if($this->unzip($this->dir))
+            { return true; }
+            else
+			{ return false; }
+        });
+        $this->task("Set Configuration File ", function () {
+     	
+            if($this->setPmaConfig($this->dir))
+            { return true; }
+            else
+			{ return false; }
+        });
     }
     
     
@@ -117,6 +128,11 @@ class Install extends Command
     // close archive
     $zip->close();
         return true;
+    }
+    
+    private function setPmaConfig()
+    {
+    	return false;
     }
 
     /**
