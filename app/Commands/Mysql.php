@@ -42,7 +42,7 @@ class Mysql extends Command
 		    );
 		
 		if($source == 'install now' || $source == 1) {
-			$this->call('mysql:install');
+			$this->call('install:mysql');
 			}
 		if($source == 'cancel' || $source == 0) {
 			$this->info("Good bye");

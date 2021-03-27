@@ -12,7 +12,7 @@ class MysqlInstaller extends Command
      *
      * @var string
      */
-    protected $signature = 'mysql:install';
+    protected $signature = 'install:mysql';
 
     /**
      * The description of the command.
