@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
+use Illuminate\Support\Facades\Artisan;
 
 class Mysql extends Command
 {
@@ -12,14 +13,14 @@ class Mysql extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'server:mysql';
 
     /**
      * The description of the command.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Start MySql Services';
 
     /**
      * Execute the console command.
@@ -28,7 +29,25 @@ class Mysql extends Command
      */
     public function handle()
     {
-        //
+        $this->checkInstallation();
+    }
+    
+    public function checkInstallation()
+    {
+    	$file = "/data/data/com.termux/files/usr/bin/mysql";
+    	if(!file_exists($file)){
+	    	$source = $this->choice(
+        "mysql doesn't seem to be installed, do you want to install it now ?",
+        [1 => 'install now', 0 => 'cancel']
+		    );
+		
+		if($source == 'install now' || $source == 1) {
+			$this->call('mysql:install');
+			}
+		if($source == 'cancel' || $source == 0) {
+			$this->info("Good bye");
+			}
+    	} 
     }
 
     /**
