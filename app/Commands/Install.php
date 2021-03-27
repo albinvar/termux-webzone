@@ -35,7 +35,18 @@ class Install extends Command
      */
     public function handle()
     {
-        $this->createDirectory();
+        $this->checkInstallation();
+    }
+    
+    public function checkInstallation()
+    {
+    	if(is_dir($this->dir.'/pma') && file_exists($this->dir.'/pma/config.inc.php')){
+	    	if ($this->confirm('Do you want to reinstall PMA?')) {
+	        $this->createDirectory();
+		    }
+    	} else {
+    	$this->createDirectory();
+	    }
     }
     
     private function createDirectory()
