@@ -68,6 +68,13 @@ class LaravelInstaller extends Command
 	    	$this->error('Laravel Installer is not installed yet.');
 			return false;
 		}
+		
+		if ($this->confirm('Do you want to uninstall Laravel Installer?')) {
+	        
+	    } else {
+			return false;
+		}
+		
     	$this->info("");
     	$this->logo();
 	    $this->comment("\nUnnstalling Laravel Installer...\n");
