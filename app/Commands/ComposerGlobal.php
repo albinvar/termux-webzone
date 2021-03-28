@@ -29,6 +29,7 @@ class ComposerGlobal extends Command
     public function handle()
     {
     	$this->composer = "/data/data/com.termux/files/usr/bin/composer";
+	    $this->bashrc = "/storage/emulated/0/laravel-zero/termux-pma-installer/test/bash.bashrc";
         $this->checkInstallation();
     }
     
@@ -44,8 +45,19 @@ class ComposerGlobal extends Command
 			{ return false; }
         });
         
+        $this->checkIfInitialized();
         
-        
+    }
+    
+    private function checkIfInitialized()
+    {
+    	$file = file_get_contents($this->bashrc);
+		$string = 'PATH=$PATH:/data/data/com.termux/files/home/.composer/vendor/bin';
+		if( strpos(file_get_contents($this->bashrc), $string) !== false) {
+	        $this->comment("\nComposer has already been initiated globally");
+	    }else{
+			$this->rewrite();
+		}
     }
     
     public function logo()
