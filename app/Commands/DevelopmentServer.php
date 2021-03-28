@@ -46,6 +46,7 @@ class DevelopmentServer extends Command
     private function start()
     {
     	$path = "/sdcard/www";
+	    echo exec('clear');
     	$this->logo();
 	    $this->comment("Localhost Services Started....");
 	    $this->line("\n");
