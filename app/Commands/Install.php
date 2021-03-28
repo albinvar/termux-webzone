@@ -20,7 +20,7 @@ class Install extends Command
      *
      * @var string
      */
-    protected $description = 'Install PMA';
+    protected $description = 'Install PhpMyAdmin web interface';
     
     public function __construct()
     {
@@ -59,7 +59,6 @@ class Install extends Command
     
     private function createDirectory()
     {
-		//$dir = "/data/data/com.termux/files/usr/var/www";
 		
 		if(!is_dir($this->dir)){
 			mkdir($this->dir);
@@ -68,6 +67,7 @@ class Install extends Command
 			return $this->getUrl();
     }
     
+    /*
     private function downloadPMA()
     {
     	$url = "https://mattstauffer.com/assets/images/logo.svg";
@@ -87,6 +87,7 @@ class Install extends Command
 		}
 	
     }
+    */
     
     protected function getUrl()
     {
@@ -103,7 +104,7 @@ class Install extends Command
     
     private function downloadPMACurl($data)
     {
-    	$lines = shell_exec("curl -w '\n%{http_code}\n' {$data['PMA_DOWNLOAD_LINK']} -o {$this->dir}/file.zip");
+    	$lines = shell_exec("curl -w '\n%{http_code}\n' {$data['PMA_DOWNLOAD_LINK']} -o {$this->dir}/pma.zip");
 	    $lines = explode("\n", trim($lines));
 		$status = $lines[count($lines)-1];
 		$this->checkDownloadStatus($status, $this->dir);
@@ -147,18 +148,18 @@ class Install extends Command
     }
     
     
-    private function unzip($dir)
+    private function unzip()
     {
     	
 	    $zip = new \ZipArchive();
-		$file = $dir."/file.zip";
+		$file = $this->dir."/pma.zip";
 		
     // open archive
     if ($zip->open($file) !== TRUE) {
         return false;
     }
     // extract contents to destination directory
-    $zip->extractTo($dir.'/pma');
+    $zip->extractTo($this->dir.'/pma');
     // close archive
     $zip->close();
         return true;

@@ -11,7 +11,7 @@ return [
     |
     */
 
-    'PMA_URL' => 'http://localhost:8888/api.php',
+    'PMA_URL' => 'https://albinvar.github.io/webzone-api/v1/config.json',
     
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ return [
     |
     */
     
-    'PMA_DIR' => '/storage/emulated/0/laravel-zero/termux-pma-installer/test',
+    'PMA_DIR' => '/data/data/com.termux/files/usr/var/www',
     
     /*
     |--------------------------------------------------------------------------
@@ -33,6 +33,6 @@ return [
     |
     */
     
-    'PMA_DEFAULT_DOWNLOAD_LINK' => 'http://localhost:8889/phpMyAdmin.zip',
+    'PMA_DEFAULT_DOWNLOAD_LINK' => 'https://files.phpmyadmin.net/phpMyAdmin/5.1.0/phpMyAdmin-5.1.0-all-languages.zip',
 
 ];
