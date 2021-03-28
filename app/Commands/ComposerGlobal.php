@@ -12,7 +12,8 @@ class ComposerGlobal extends Command
      *
      * @var string
      */
-    protected $signature = 'composer:global';
+    protected $signature = 'composer:global
+							{--s|--silent}';
 
     /**
      * The description of the command.
@@ -35,7 +36,9 @@ class ComposerGlobal extends Command
     
     private function checkInstallation()
     {
+    	if(!$this->option('silent')){
     	$this->logo();
+	    }
 	    $this->info("\n");
 	    $is_installed = $this->task("Check whether composer is installed ", function () {
      	

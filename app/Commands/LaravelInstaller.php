@@ -59,6 +59,7 @@ class LaravelInstaller extends Command
 	    $this->comment("\nInstalling Laravel Installer...\n");
     	$cmd = exec('composer global require laravel/installer'); 
 	    $this->comment("\nInstalled successfully. Launch it using \"laravel --help\" command.\n");
+		$this->initComposerGlobal();
     }
     
     private function uninstall()
@@ -72,6 +73,13 @@ class LaravelInstaller extends Command
 	    $this->comment("\nUnnstalling Laravel Installer...\n");
     	$cmd = exec('composer global remove laravel/installer'); 
 	    $this->comment("\nUninstalled successfully. \n");
+    }
+    
+    private function initComposerGlobal()
+    {
+    	$this->task("Initialize Command ", function () {
+		    $this->callSilently('composer:global', ['-s' => true]);
+        });
     }
     
     public function logo()
