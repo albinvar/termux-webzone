@@ -39,6 +39,7 @@ class DevelopmentServer extends Command
     	if(!is_dir($path)){
 	    	mkdir($path);
 			$this->comment('Directory created..');
+			$this->createIndex($path);
 	    }
 	 $this->start();
     }
@@ -60,6 +61,11 @@ class DevelopmentServer extends Command
 	    {
     	return shell_exec("xdg-open http://127.0.0.1:{$this->option('port')}");
 	    }
+    }
+    
+    private function createIndex($path)
+    {
+    	$cmd = exec("touch {$path}/index.php && echo -e \"<center><h1>Created Successfully</h1><p>Everything just went fine.....</p><\center>\" >> {$path}/index.php");
     }
     
     public function logo()
