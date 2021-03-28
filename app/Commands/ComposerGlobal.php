@@ -52,18 +52,33 @@ class ComposerGlobal extends Command
     private function checkIfInitialized()
     {
     	$file = file_get_contents($this->bashrc);
-		$string = "\n\nPATH=\$PATH:/data/data/com.termux/files/home/.composer/vendor/bin";
-		if( strpos(file_get_contents($this->bashrc), $string) !== false) {
+		$this->string = "\n\nPATH=\$PATH:/data/data/com.termux/files/home/.composer/vendor/bin";
+		if( strpos(file_get_contents($this->bashrc), $this->string) !== false) {
 	        $this->comment("\nComposer has already been initiated globally");
 	    }else{
-			$this->rewrite($string);
+		$is_initiated = $this->task("configuring composer globally ", function () {
+     	
+            if($this->rewrite())
+            { return true; }
+            else
+			{ return false; }
+        });
+        
+        if($is_initiated){
+        	$this->info("\nComposer initialised successfully..\n");
+	        $this->comment("You need to restart your termux session to apply changes..");
+         }
 		}
     }
     
-    private function rewrite($string)
+    private function rewrite()
     {
-		file_put_contents($this->bashrc, $string, FILE_APPEND | LOCK_EX);
-		$this->comment("\nComposer initiated successfully..\n");
+		$action = file_put_contents($this->bashrc, $this->string, FILE_APPEND | LOCK_EX);
+		if($action) {
+			return true;
+		} else {
+			return false;
+		}
     }
     
     public function logo()
