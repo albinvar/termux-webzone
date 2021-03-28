@@ -1,13 +1,9 @@
 <p align="center">
-    <img title="Laravel Zero" height="100" src="https://raw.githubusercontent.com/laravel-zero/docs/master/images/logo/laravel-zero-readme.png" />
+    <img title="Laravel Zero" height="100" src="https://i.ibb.co/kVTNLCZ/68747470733a2f2f692e696d6775722e636f6d2f384975594c526c2e6a7067.jpg" />
 </p>
 
 <p align="center">
-  <a href="https://github.com/laravel-zero/framework/actions"><img src="https://img.shields.io/github/workflow/status/laravel-zero/framework/Tests.svg" alt="Build Status"></img></a>
-  <a href="https://packagist.org/packages/laravel-zero/framework"><img src="https://img.shields.io/packagist/dt/laravel-zero/framework.svg" alt="Total Downloads"></a>
-  <a href="https://packagist.org/packages/laravel-zero/framework"><img src="https://img.shields.io/packagist/v/laravel-zero/framework.svg?label=stable" alt="Latest Stable Version"></a>
-  <a href="https://packagist.org/packages/laravel-zero/framework"><img src="https://img.shields.io/packagist/l/laravel-zero/framework.svg" alt="License"></a>
-</p>
+  </p>
 
 <h4> <center>This is a <bold>community project</bold> and not an official Laravel one </center></h4>
 
