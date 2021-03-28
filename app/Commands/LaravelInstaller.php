@@ -28,9 +28,34 @@ class LaravelInstaller extends Command
      */
     public function handle()
     {
-        
+    	$this->laravelInstaller = "/data/data/com.termux/files/home/.composer/vendor/bin/laravel";
+        $this->checkInstallation();
     }
-
+    
+    public function checkInstallation()
+    {
+    	if(file_exists($this->laravelInstaller)){
+	    	$this->error('Laravel Installer is already installed. Use "laravel new <app_name>" to create a laravel project.');
+		} else {
+			$this->install();
+		}
+    }
+    
+    private function install()
+    {
+    	$this->info("");
+    	$this->logo();
+	    $this->comment("\nInstalling Laravel Installer...\n");
+    	$cmd = exec('composer global require laravel/installer'); 
+	    $this->comment("\nInstalled successfully. Launch it using \"laravel --help\" command.\n");
+    }
+    
+    public function logo()
+	{
+		 $figlet = new \Laminas\Text\Figlet\Figlet();
+		echo $figlet->setFont(config('logo.font'))->render("Laravel  Installer");
+	}
+    
     /**
      * Define the command's schedule.
      *
