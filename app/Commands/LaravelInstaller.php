@@ -12,7 +12,8 @@ class LaravelInstaller extends Command
      *
      * @var string
      */
-    protected $signature = 'installer:laravel';
+    protected $signature = 'installer:laravel
+							{action?}';
 
     /**
      * The description of the command.
@@ -29,25 +30,48 @@ class LaravelInstaller extends Command
     public function handle()
     {
     	$this->laravelInstaller = "/data/data/com.termux/files/home/.composer/vendor/bin/laravel";
-        $this->checkInstallation();
+
+    	if($this->argument('action') == "uninstall"){
+	    	$this->uninstall();
+	    } else {
+			$this->install();
+        }
     }
     
     public function checkInstallation()
     {
     	if(file_exists($this->laravelInstaller)){
-	    	$this->error('Laravel Installer is already installed. Use "laravel new <app_name>" to create a laravel project.');
+	    	return true;
 		} else {
-			$this->install();
+			return false;
 		}
     }
     
     private function install()
     {
+    	if($this->checkInstallation()){
+	    	$this->error('Laravel Installer is already installed. Use "laravel new <app_name>" to create a laravel project.');
+			return false;
+		}
+    
     	$this->info("");
     	$this->logo();
 	    $this->comment("\nInstalling Laravel Installer...\n");
     	$cmd = exec('composer global require laravel/installer'); 
 	    $this->comment("\nInstalled successfully. Launch it using \"laravel --help\" command.\n");
+    }
+    
+    private function uninstall()
+    {
+    	if(!$this->checkInstallation()){
+	    	$this->error('Laravel Installer is not installed yet.');
+			return false;
+		}
+    	$this->info("");
+    	$this->logo();
+	    $this->comment("\nUnnstalling Laravel Installer...\n");
+    	$cmd = exec('composer global remove laravel/installer'); 
+	    $this->comment("\nUninstalled successfully. \n");
     }
     
     public function logo()
