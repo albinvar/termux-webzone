@@ -13,7 +13,7 @@ class LaravelInstaller extends Command
      * @var string
      */
     protected $signature = 'installer:laravel
-							{action?}';
+							{--uninstall}';
 
     /**
      * The description of the command.
@@ -31,7 +31,7 @@ class LaravelInstaller extends Command
     {
     	$this->laravelInstaller = "/data/data/com.termux/files/home/.composer/vendor/bin/laravel";
 
-    	if($this->argument('action') == "uninstall"){
+    	if($this->option('uninstall')){
 	    	$this->uninstall();
 	    } else {
 			$this->install();
@@ -69,11 +69,9 @@ class LaravelInstaller extends Command
 			return false;
 		}
 		
-		if ($this->confirm('Do you want to uninstall Laravel Installer?')) {
-	        
-	    } else {
-			return false;
-		}
+		if (!$this->confirm('Do you want to uninstall Laravel Installer?')) {
+	        return false;
+	    }
 		
     	$this->info("");
     	$this->logo();
