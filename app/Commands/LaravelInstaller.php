@@ -29,7 +29,7 @@ class LaravelInstaller extends Command
      */
     public function handle()
     {
-    	$this->laravelInstaller = "/data/data/com.termux/files/home/.composer/vendor/bin/laravel";
+    	$this->laravelInstaller = config('pma.LARAVEL_INSTALLER_PATH');
 
     	if($this->option('uninstall')){
 	    	$this->uninstall();

@@ -31,7 +31,7 @@ class Mysql extends Command
      */
     public function handle()
     {
-    	$this->file = "/data/data/com.termux/files/usr/bin/mysql";
+    	$this->mysql = config('pma.MYSQL_PATH');
     	pcntl_async_signals(true);
 
     // Catch the cancellation of the action
@@ -46,7 +46,7 @@ class Mysql extends Command
     
     public function checkInstallation()
     {
-    	if(!file_exists($this->file)){
+    	if(!file_exists($this->mysql)){
 	    	$source = $this->choice(
         "mysql doesn't seem to be installed, do you want to install it now ?",
         [1 => 'install now', 0 => 'cancel']

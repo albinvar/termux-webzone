@@ -95,4 +95,14 @@ return [
     */
 	 'PROJECT_BASE_PATH' => '/sdcard/www',
 	
+	/*
+    |--------------------------------------------------------------------------
+    | LARAVEL INSTALLER Path
+    |--------------------------------------------------------------------------
+    |
+    | Set laravel installer path.
+    |
+    */
+	 'LARAVEL_INSTALLER_PATH' => '/data/data/com.termux/files/home/.composer/vendor/bin/laravel',
+	
 ];
