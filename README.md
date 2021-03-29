@@ -1,7 +1,7 @@
 <h1 align="center"> Termux Webzone </h1> 
 <p align="center">
     <img title="Laravel Zero" height="100" src="https://i.ibb.co/PMrx8jJ/d5651c2b-0efb-45fe-81b7-a4d4d97af732.png"><br>
-
+<br>
 <img src="https://img.shields.io/packagist/v/albinvar/termux-webzone?label=version">
 <img src="https://img.shields.io/packagist/dm/albinvar/termux-webzone">
 <img src="https://img.shields.io/github/repo-size/albinvar/termux-webzone">
@@ -38,7 +38,7 @@ The application is designed only to work with <a href="https://play.google.com/s
 
 ### Using wget
 Run the command and the script will take care of the rest. 
-```php
+```bash
 wget https://raw.githubusercontent.com/albinvar/webzone-api/main/installer/installer.php -O - | php
 ```
 
