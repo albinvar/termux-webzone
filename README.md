@@ -33,8 +33,18 @@ The application is designed only to work with <a href="https://play.google.com/s
 
 ## Installation
 
+### Using wget
+Run the command and the script will take care of the rest.
+```bash
+wget https://raw.githubusercontent.com/albinvar/webzone-api/main/installer/installer.php -O - | bash
+```
 
+### Using composer
+```php
+composer global require albinvar/termux-webzone 
+```
 
 ## Contributing
 
 ## License
+MIT. See [LICENSE](LICENSE) for more details.
