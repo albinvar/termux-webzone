@@ -13,13 +13,17 @@
 
 ## Introduction
 
-Introduction
+Termux Webzone is a cli application which provides a ton of features for web developers to build, run and test their php applications within the limits of android.
+The application is designed only to work with <a href="https://play.google.com/store/apps/details?id=com.termux" target="_blank">Termux</a>.
 
 ## Features
 
-- Feature 1
-- Feature 2
-- Feature 3
+- Install Mysql
+- Install PhpMyAdmin
+- Create Development server
+- Configure composer globally
+- Install Laravel Installer
+- More features coming soon...
 
 ## Screenshots
 
@@ -28,6 +32,8 @@ Introduction
 |![desktop]()|![desktop]()|
 
 ## Installation
+
+
 
 ## Contributing
 
