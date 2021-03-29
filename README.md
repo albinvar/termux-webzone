@@ -44,6 +44,18 @@ composer global require albinvar/termux-webzone
 |--|--|
 |![desktop]()|![desktop]()|
 
+## Commands
+
+The following commands are available in our tool. You can use the individual crafting routines which are similar to the Artisan commands.
+
+-   install:mysql
+-   install:pma
+-   installer:laravel
+-   installer:symfony
+-   server:dev
+-   server:pma
+-   server:mysql
+
 ## Contributing
 
 ## License
