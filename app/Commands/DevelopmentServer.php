@@ -29,30 +29,28 @@ class DevelopmentServer extends Command
      */
     public function handle()
     {
+    	$this->path = config('pma.PROJECT_BASE_PATH');
         $this->checkInstallation();
     }
     
     public function checkInstallation()
     {
-    	$path = "/sdcard/www";
-    
-    	if(!is_dir($path)){
-	    	mkdir($path);
+    	if(!is_dir($this->path)){
+	    	mkdir($this->path);
 			$this->comment('Directory created..');
-			$this->createIndex($path);
+			$this->createIndex($this->path);
 	    }
 	 $this->start();
     }
     
     private function start()
     {
-    	$path = "/sdcard/www";
 	    echo exec('clear');
     	$this->logo();
-	    $this->comment("Localhost Services Started....");
+	    $this->comment("Starting Localhost Server....");
 	    $this->line("\n");
 		$this->launch();
-    	$cmd = exec("php -S 127.0.0.1:{$this->option('port')} -t {$path}");
+    	$cmd = exec("php -S 127.0.0.1:{$this->option('port')} -t {$this->path}");
     }
     
     private function launch()
@@ -63,9 +61,9 @@ class DevelopmentServer extends Command
 	    }
     }
     
-    private function createIndex($path)
+    private function createIndex()
     {
-    	$cmd = exec("touch {$path}/index.php && echo -e \"<center><h1>Created Successfully</h1><p>Everything just went fine.....</p><\center>\" >> {$path}/index.php");
+    	$cmd = exec("touch {$this->path}/index.php && echo -e \"<center><h1>Created Successfully</h1><p>Everything just went fine.....</p><\center>\" >> {$this->path}/index.php");
     }
     
     public function logo()

@@ -65,4 +65,14 @@ return [
     */
 	 'path' => 'PATH=\$PATH:/data/data/com.termux/files/home/.composer/vendor/bin',
 	
+	/*
+    |--------------------------------------------------------------------------
+    | PROJECT Base Path
+    |--------------------------------------------------------------------------
+    |
+    | Set base path for development server.
+    |
+    */
+	 'PROJECT_BASE_PATH' => '/sdcard/www',
+	
 ];
