@@ -16,6 +16,19 @@
 Termux Webzone is a cli application which provides a ton of features for web developers to build, run and test their php applications within the limits of android.
 The application is designed only to work with <a href="https://play.google.com/store/apps/details?id=com.termux" target="_blank">Termux</a>.
 
+## Installation
+
+### Using wget
+Run the command and the script will take care of the rest.
+```bash
+wget https://raw.githubusercontent.com/albinvar/webzone-api/main/installer/installer.php -O - | bash
+```
+
+### Using composer
+```php
+composer global require albinvar/termux-webzone 
+```
+
 ## Features
 
 - Install Mysql
@@ -30,19 +43,6 @@ The application is designed only to work with <a href="https://play.google.com/s
 |Default Interface|After Uploading|
 |--|--|
 |![desktop]()|![desktop]()|
-
-## Installation
-
-### Using wget
-Run the command and the script will take care of the rest.
-```bash
-wget https://raw.githubusercontent.com/albinvar/webzone-api/main/installer/installer.php -O - | bash
-```
-
-### Using composer
-```php
-composer global require albinvar/termux-webzone 
-```
 
 ## Contributing
 
