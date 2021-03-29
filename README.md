@@ -1,6 +1,9 @@
 <h1 align="center"> Termux Webzone </h1> 
 <p align="center">
-    <img title="Laravel Zero" height="100" src="https://i.ibb.co/kVTNLCZ/68747470733a2f2f692e696d6775722e636f6d2f384975594c526c2e6a7067.jpg">
+    <img title="Laravel Zero" height="100" src="https://i.ibb.co/kVTNLCZ/68747470733a2f2f692e696d6775722e636f6d2f384975594c526c2e6a7067.jpg"><br>
+
+<img src="https://img.shields.io/github/repo-size/albinvar/termux-webzone">
+<a href="LICENSE"><img src="https://img.shields.io/apm/l/Github"></a>
 </p>
 
 <pre>
@@ -25,7 +28,7 @@
 
 ## Introduction
 
-Termux Webzone is a cli application which provides a ton of features for web developers to build, run and test their php applications within the limits of android.
+Termux Webzone is a CLI application which provides a ton of features for web developers to build, run and test their php applications within the limits of android.
 The application is designed only to work with <a href="https://play.google.com/store/apps/details?id=com.termux" target="_blank">Termux</a>.
 
 ## Installation
