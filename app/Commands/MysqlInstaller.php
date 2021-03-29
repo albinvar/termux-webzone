@@ -28,13 +28,14 @@ class MysqlInstaller extends Command
      */
     public function handle()
     {
+    	$this->mysql = config('pma.MYSQL_PATH');
+	    $this->command = config('pma.MYSQL_INSTALLATION_COMMAND');
         $this->checkInstallation();
     }
     
     public function checkInstallation()
     {
-    	$file = "/data/data/com.termux/files/usr/bin/mysql";
-    	if(file_exists($file)){
+    	if(file_exists($this->mysql)){
 	    	$this->error('Mysql seems to be installed already, Type "pkg uninstall mariadb" to uninstall mysql..');
     	} else {
 	    	if ($this->confirm('Do you want to install MySql?')) {
@@ -45,9 +46,9 @@ class MysqlInstaller extends Command
     
     private function install()
     {
-    	$cmd = "pkg update -y && pkg upgrade -y && pkg install mariadb -y 2> /dev/null";
-	    
-		exec($cmd, $output, $result);
+    	$this->info("\nInstalling MySql\n");
+    
+		exec($this->command, $output, $result);
 		
 		$this->comment('MySql installed successfully...');
     }
