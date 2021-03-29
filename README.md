@@ -22,9 +22,10 @@
 ## Table of Contents
 
 - [Introduction](#introduction)
+- [Installation](#installation)
 - [Features](#features)
 - [Screenshots](#screenshots)
-- [Installation](#installation)
+- [Commands](#commands)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -36,14 +37,26 @@ The application is designed only to work with <a href="https://play.google.com/s
 ## Installation
 
 ### Using wget
-Run the command and the script will take care of the rest.
-```bash
-wget https://raw.githubusercontent.com/albinvar/webzone-api/main/installer/installer.php -O - | bash
+Run the command and the script will take care of the rest. 
+```php
+wget https://raw.githubusercontent.com/albinvar/webzone-api/main/installer/installer.php -O - | php
 ```
 
 ### Using composer
 ```php
 composer global require albinvar/termux-webzone 
+```
+
+### Manual installation
+- Download the script from [here](https://raw.githubusercontent.com/albinvar/webzone-api/main/installer/installer.php).
+- Execute the file using php.
+```php
+php installer.php
+```
+
+- You can also install via composer by adding the flag `-c` or `--composer`.
+```php
+php installer.php --composer
 ```
 
 ## Features
