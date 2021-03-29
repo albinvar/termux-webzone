@@ -20,7 +20,7 @@ class ComposerGlobal extends Command
      *
      * @var string
      */
-    protected $description = 'Make composer commands global';
+    protected $description = 'Init composer globally';
 
     /**
      * Execute the console command.
@@ -29,8 +29,8 @@ class ComposerGlobal extends Command
      */
     public function handle()
     {
-    	$this->composer = "/data/data/com.termux/files/usr/bin/composer";
-	    $this->bashrc = "/storage/emulated/0/laravel-zero/termux-pma-installer/test/bash.bashrc";
+    	$this->composer = config('pma.composer');
+	    $this->bashrc = config('pma.bashrc');
         $this->checkInstallation();
     }
     
@@ -52,10 +52,15 @@ class ComposerGlobal extends Command
         
     }
     
+    public function setString()
+    {
+			$this->string = "\n".config('path');
+    }
+    
     private function checkIfInitialized()
     {
     	$file = file_get_contents($this->bashrc);
-		$this->string = "\n\nPATH=\$PATH:/data/data/com.termux/files/home/.composer/vendor/bin";
+	    $this->setString();
 		if( strpos(file_get_contents($this->bashrc), $this->string) !== false) {
 	        $this->comment("\nComposer has already been initiated globally");
 	    }else{

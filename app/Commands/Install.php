@@ -215,7 +215,7 @@ class Install extends Command
 				return true;
 			}
 			if(file_exists($this->dir.'/pma/config.inc.php')){
-		     $cmd = shell_exec("rm {$this->dir}/file.zip");
+		     $cmd = shell_exec("rm {$this->dir}/pma.zip");
             if(is_null($cmd))
             { return true; }
             else

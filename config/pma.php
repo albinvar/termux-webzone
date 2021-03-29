@@ -34,5 +34,35 @@ return [
     */
     
     'PMA_DEFAULT_DOWNLOAD_LINK' => 'https://files.phpmyadmin.net/phpMyAdmin/5.1.0/phpMyAdmin-5.1.0-all-languages.zip',
-
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Composer
+    |--------------------------------------------------------------------------
+    |
+    | Composer installation path.
+    |
+    */
+	 'composer' => "/data/data/com.termux/files/usr/bin/composer",
+	
+	/*
+    |--------------------------------------------------------------------------
+    | Bashrc
+    |--------------------------------------------------------------------------
+    |
+    | 'bash.bashrc' path.
+    |
+    */
+	 'bashrc' => "/data/data/com.termux/files/usr/etc/bash.bashrc",
+	
+	/*
+    |--------------------------------------------------------------------------
+    | PATH Environment Variable
+    |--------------------------------------------------------------------------
+    |
+    | used on bash.bashrc
+    |
+    */
+	 'path' => 'PATH=\$PATH:/data/data/com.termux/files/home/.composer/vendor/bin',
+	
 ];
