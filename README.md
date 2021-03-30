@@ -42,6 +42,12 @@ Run the command and the script will take care of the rest.
 wget https://raw.githubusercontent.com/albinvar/webzone-api/main/installer/installer.php -O - | php
 ```
 
+## Using curl
+Run the command and the script will take care of the rest. 
+```bash
+curl -s https://raw.githubusercontent.com/albinvar/webzone-api/main/installer/installer.php | php
+```
+
 ### Using composer
 ```php
 composer global require albinvar/termux-webzone 
