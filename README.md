@@ -78,7 +78,7 @@ php installer.php --composer
 
 |Default Interface|After Uploading|
 |--|--|
-|![desktop]()|![desktop]()|
+|![desktop](https://i.ibb.co/7Yv6YfX/IMG-20210330-231901.jpg)|![desktop](https://i.ibb.co/nRVHtgw/IMG-20210330-231922.jpg)|
 
 ## Commands
 
