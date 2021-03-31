@@ -54,9 +54,21 @@ class SettingsInit extends Command
     
     public function create()
     {
-    	$this->createDirectory();
+    	$this->task("Creating Required Folders ", function () {
+     	
+            if($this->createDirectory())
+            { return true; }
+            else
+			{ return false; }
+        });
     
-    	$this->createSettingsJson();
+    	$this->task("Creating JSON file ", function () {
+     	
+            if($this->createSettingsJson())
+            { return true; }
+            else
+			{ return false; }
+        });
     }
     
     /**
