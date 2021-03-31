@@ -7,6 +7,9 @@ use LaravelZero\Framework\Commands\Command;
 
 class SettingsInit extends Command
 {
+	public $settings;
+	
+	
     /**
      * The signature of the command.
      *
@@ -47,6 +50,13 @@ class SettingsInit extends Command
 		} else {
 			$this->create();
 		}
+    }
+    
+    public function create()
+    {
+    	$this->createDirectory();
+    
+    	$this->createSettingsJson();
     }
     
     /**
