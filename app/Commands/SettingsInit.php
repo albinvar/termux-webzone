@@ -44,7 +44,7 @@ class SettingsInit extends Command
     
     public function checkIfSettingsExist()
     {
-    	if(file_exists($this->settings))
+    	if(file_exists($this->settings.'/settings.json'))
 	    {
 			return true;
 		} else {
@@ -70,6 +70,19 @@ class SettingsInit extends Command
 			{ return false; }
         });
     }
+    
+    private function createDirectory()
+    {
+		
+		if(!is_dir($this->settings)){
+			mkdir($this->settings);
+			return true;
+		} else {
+			return false;
+			}
+    }
+    
+    
     
     /**
      * Define the command's schedule.

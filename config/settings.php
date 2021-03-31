@@ -11,7 +11,7 @@ return [
     |
     */
 
-    'PATH' => '/data/data/com.termux/files/usr/var/webzone/settings.json',
+    'PATH' => '/data/data/com.termux/files/usr/var/webzone',
     
 	
 ];
