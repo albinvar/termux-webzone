@@ -5,7 +5,7 @@ return [
     'disks' => [
         'local' => [
             'driver' => 'local',
-            'root' => getcwd(),
+            'root' => "/data/data/com.termux/files/usr/var/webzone",
         ],
     ],
 ];
