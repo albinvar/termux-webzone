@@ -4,31 +4,24 @@ namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
+use Illuminate\Support\Facades\File;
 
-class SettingsInit extends Command
+class Settings extends Command
 {
     /**
      * The signature of the command.
      *
      * @var string
      */
-    protected $signature = 'settings:init';
+    protected $signature = 'settings';
 
     /**
      * The description of the command.
      *
      * @var string
      */
-    protected $description = 'Init Settings Json file';
-    
-    
-    public function __construct()
-    {
-    	parent::__construct();
-    	$this->settings = config('settings.PATH');
-    }
-    
-    
+    protected $description = 'Settings for webzone';
+
     /**
      * Execute the console command.
      *
@@ -36,19 +29,28 @@ class SettingsInit extends Command
      */
     public function handle()
     {
-        $this->checkIfSettingsExist();
+        $this->showSettings();
     }
     
-    public function checkIfSettingsExist()
+    public function logo()
+	{
+		 $figlet = new \Laminas\Text\Figlet\Figlet();
+		echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
+	}
+    
+    public function showSettings()
     {
-    	if(file_exists($this->settings))
-	    {
-			return true;
-		} else {
-			$this->create();
-		}
+    	echo exec('clear');
+    	$this->logo();
+	    $this->newLine();
+    	$this->option1();
     }
     
+    public function option1()
+    {
+    	
+    }
+
     /**
      * Define the command's schedule.
      *
