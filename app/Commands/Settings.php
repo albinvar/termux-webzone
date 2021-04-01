@@ -73,16 +73,33 @@ class Settings extends Command
 				$this->showDefault();
 				$path = $this->dirUpdater();
 				if(!$this->checkDir($path)){
-					$this->error('Invalid path');
-					sleep(3);
+					$this->error('The path you have provided seems to be invalid. Try again..');
+					sleep(4);
 					exec('clear');
 					return $this->call('settings');
 				}
 				$type = "normal";
 				$this->edit($body, $key, $path, $type);
 				break;
+				
+			case 'Localhost Port':
+				$body = "Localhost Port";
+				$key = 'php_port';
+				$this->showDefault();
+				$port = $this->portUpdater();
+				
+				if(!is_numeric($port) && strlen($port) > 5){
+					$this->error('The port you have provided seems to be invalid. Try again..');
+					sleep(3);
+					exec('clear');
+					return $this->call('settings');
+				}
+				$type = "normal";
+				$this->edit($body, $key, $port, $type);
+				break;
+
 			case 'Exit':
-				$this->info('Thanks for using me');
+				$this->info('Good Bye!');
 				break;
 		}
     }
@@ -99,7 +116,10 @@ class Settings extends Command
     {
     	$json_object = json_encode($data);
 		file_put_contents(config('settings.PATH').'/settings.json', $json_object);
-    	$this->info('updated');
+		$this->newLine();
+    	$this->comment('Updated successfully...');
+	    sleep(3);
+	    return $this->call('settings');
     }
     
     private function checkDir($path)
@@ -133,6 +153,16 @@ class Settings extends Command
 		$this->newLine();
     	$path = $this->ask($q);
 		return $path;
+			
+    }
+    
+    private function portUpdater($q="Enter a specific port")
+    {
+    	echo exec('clear');
+	    $this->logo();
+		$this->newLine();
+    	$port = $this->ask($q);
+		return $port;
 			
     }
     
