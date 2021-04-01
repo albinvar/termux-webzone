@@ -29,6 +29,7 @@ class Settings extends Command
      */
     public function handle()
     {
+    	$this->callSilently('settings:init');
         $this->showSettings();
     }
     
@@ -43,14 +44,32 @@ class Settings extends Command
     	echo exec('clear');
     	$this->logo();
 	    $this->newLine();
-    	$this->option1();
+    	$this->showList();
     }
     
-    public function option1()
+    public function getOptions()
     {
-    	
+    	$json_object = file_get_contents(config('settings.PATH').'/settings.json');
+		$data = json_decode($json_object, false);
+    	return $data;
     }
+    
+    public function options()
+    {
+    	$data = $this->getOptions();
+	    
+    }
+    
+    private function showList()
+    {
+    	$source = $this->choice(
+        'What would you like to modify',
+        [1 => 'Project Root', 'Localhost Port', 'MySql Port', 'Ngrok port', 'PhpMyAdmin Port', 9 => 'Exit']
+    );
 
+    $this->info("Source chosen is $source");
+    }
+    
     /**
      * Define the command's schedule.
      *
