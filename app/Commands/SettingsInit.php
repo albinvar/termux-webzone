@@ -46,7 +46,9 @@ class SettingsInit extends Command
     {
     	if(file_exists($this->settings.'/settings.json'))
 	    {
-			return true;
+			if($this->validateJson()){
+				$this->createSettingsJson();
+			}
 		} else {
 			$this->create();
 		}
@@ -96,7 +98,12 @@ class SettingsInit extends Command
     private function validateJson()
     {
     	$json_object = file_get_contents($this->settings.'/settings.json');
-		$data = json_decode($json_object, true);
+		$data = json_decode($json_object);
+		if($data === null) {
+			 return true;
+		} else {
+			return false;
+			}
     }
     
     /**
