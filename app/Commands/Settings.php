@@ -70,10 +70,11 @@ class Settings extends Command
 			case 'Project Root':
 				$body = "Project Root";
 				$key = 'project_dir';
+				$this->showDefault();
 				$path = $this->dirUpdater();
 				if(!$this->checkDir($path)){
 					$this->error('Invalid path');
-					sleep(4);
+					sleep(3);
 					exec('clear');
 					return $this->call('settings');
 				}
@@ -109,6 +110,20 @@ class Settings extends Command
 		} else {
 			return false;
 		}
+    }
+    
+    private function showDefault($q="Do you want to change this setting?")
+    {
+    	echo exec('clear');
+	    $this->logo();
+		$this->newLine();
+    	if($this->confirm($q))
+	    {
+		return true;
+		} else {
+			return $this->call('settings');
+		}
+			
     }
     
     private function dirUpdater($q="Enter folder path")
