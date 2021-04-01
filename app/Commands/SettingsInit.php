@@ -49,6 +49,7 @@ class SettingsInit extends Command
 			if($this->validateJson()){
 				$this->createSettingsJson();
 			}
+			return $this->info("Initialized settings");
 		} else {
 			$this->create();
 		}
@@ -80,8 +81,10 @@ class SettingsInit extends Command
 			mkdir($this->settings);
 			return true;
 		} else {
-			return false;
+			if(is_dir($this->settings)){
+				return true;
 			}
+		}
     }
     
     private function createSettingsJson()
@@ -92,7 +95,13 @@ class SettingsInit extends Command
 		
     	$array = config('settings.ARRAY');
 		$json_object = json_encode($array);
-		file_put_contents($this->settings.'/settings.json', $json_object);
+		$success = file_put_contents($this->settings.'/settings.json', $json_object);
+		if($success === FALSE)
+		{
+			return false;
+		} else {
+			return true;
+			}
     }
     
     private function validateJson()
