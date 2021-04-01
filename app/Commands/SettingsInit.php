@@ -82,7 +82,22 @@ class SettingsInit extends Command
 			}
     }
     
+    private function createSettingsJson()
+    {
+    	if(!file_exists($this->settings.'/settings.json')){
+	    	touch($this->settings.'/settings.json');
+		}
+		
+    	$array = config('settings.ARRAY');
+		$json_object = json_encode($array);
+		file_put_contents($this->settings.'/settings.json', $json_object);
+    }
     
+    private function validateJson()
+    {
+    	$json_object = file_get_contents($this->settings.'/settings.json');
+		$data = json_decode($json_object, true);
+    }
     
     /**
      * Define the command's schedule.
