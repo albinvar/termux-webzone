@@ -13,8 +13,10 @@ class DevelopmentServer extends Command
      * @var string
      */
     protected $signature = 'server:dev
-							{--port=8088}
-							{--n}';
+							{--n}
+							{--port=}
+							{--path=}
+							';
     /**
      * The description of the command.
      *
@@ -29,7 +31,8 @@ class DevelopmentServer extends Command
      */
     public function handle()
     {
-    	$this->path = config('pma.PROJECT_BASE_PATH');
+    	$this->setPort();
+	    $this->setDir();
         $this->checkInstallation();
     }
     
@@ -43,6 +46,28 @@ class DevelopmentServer extends Command
 	 $this->start();
     }
     
+    private function setPort()
+    {
+    	if(!empty($this->option('port'))){
+		    $this->port = $this->option('port');
+    	} elseif(!empty($this->getData()['php_port'])){
+	    	$this->port = $this->getData()['php_port'];
+		} else {
+			$this->port = config('pma.LOCALHOST_PORT');
+		}
+    }
+
+	private function setDir()
+    {
+    	if(!empty($this->option('path'))){
+		    $this->path = $this->option('path');
+    	} elseif(!empty($this->getData()['localhost_path'])){
+	    	$this->path = $this->getData()['localhost_path'];
+		} else {
+			$this->path = config('pma.PROJECT_BASE_PATH');
+		}
+    }
+    
     private function start()
     {
 	    echo exec('clear');
@@ -50,14 +75,14 @@ class DevelopmentServer extends Command
 	    $this->comment("Starting Localhost Server....");
 	    $this->line("\n");
 		$this->launch();
-    	$cmd = exec("php -S 127.0.0.1:{$this->option('port')} -t {$this->path}");
+    	$cmd = exec("php -S 127.0.0.1:{$this->port} -t {$this->path}");
     }
     
     private function launch()
     {
     	if(!$this->option('n'))
 	    {
-    	return shell_exec("xdg-open http://127.0.0.1:{$this->option('port')}");
+    	return shell_exec("xdg-open http://127.0.0.1:{$this->port}");
 	    }
     }
     
@@ -71,6 +96,13 @@ class DevelopmentServer extends Command
 		 $figlet = new \Laminas\Text\Figlet\Figlet();
 		echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
 	}
+    
+    public function getData()
+    {
+    	$json_object = file_get_contents(config('settings.PATH').'/settings.json');
+		$data = json_decode($json_object, true);
+    	return $data;
+    }
     
     /**
      * Define the command's schedule.
