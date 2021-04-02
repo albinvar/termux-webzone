@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\ConfigIniter;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 use Illuminate\Support\Facades\Artisan;
