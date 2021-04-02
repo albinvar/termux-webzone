@@ -64,7 +64,7 @@ class Settings extends Command
     {
     	$source = $this->choice(
         'What would you like to modify',
-        [1 => 'Project Root', 'Localhost Port', 'MySql Port', 'Ngrok port', 'PhpMyAdmin Port', 9 => 'Exit']
+        [1 => 'Project Root', 'Localhost Port', 'MySql Port', 'Ngrok Port', 'PhpMyAdmin Port', 9 => 'Exit']
     );
 	    switch($source)
 		{
@@ -252,7 +252,7 @@ class Settings extends Command
 
 protected function validateInput($rules, $fieldName, $value)
 {
-    $validator = \Validator::make([
+    $validator = Validator::make([
        $fieldName => $value
     ], [
        $fieldName => $rules
