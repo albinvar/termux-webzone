@@ -97,6 +97,54 @@ class Settings extends Command
 				$type = "normal";
 				$this->edit($body, $key, $port, $type);
 				break;
+				
+			case 'MySql Port':
+				$body = "Mysql Port";
+				$key = 'mysql_port';
+				$this->showDefault();
+				$port = $this->portUpdater();
+				
+				if(!is_numeric($port) && strlen($port) > 5){
+					$this->error('The port you have provided seems to be invalid. Try again..');
+					sleep(3);
+					exec('clear');
+					return $this->call('settings');
+				}
+				$type = "normal";
+				$this->edit($body, $key, $port, $type);
+				break;
+				
+			case 'MySql Port':
+				$body = "Mysql Port";
+				$key = 'mysql_port';
+				$this->showDefault();
+				$port = $this->portUpdater();
+				
+				if(!is_numeric($port) && strlen($port) > 5){
+					$this->error('The port you have provided seems to be invalid. Try again..');
+					sleep(3);
+					exec('clear');
+					return $this->call('settings');
+				}
+				$type = "normal";
+				$this->edit($body, $key, $port, $type);
+				break;
+				
+			case 'PhpMyAdmin Port':
+				$body = "PhpMyAdmin Port";
+				$key = 'pma_port';
+				$this->showDefault();
+				$port = $this->portUpdater();
+				
+				if(!is_numeric($port) && strlen($port) > 5){
+					$this->error('The port you have provided seems to be invalid. Try again..');
+					sleep(3);
+					exec('clear');
+					return $this->call('settings');
+				}
+				$type = "normal";
+				$this->edit($body, $key, $port, $type);
+				break;
 
 			case 'Exit':
 				$this->info('Good Bye!');
