@@ -31,6 +31,7 @@ class DevelopmentServer extends Command
      */
     public function handle()
     {
+    	$this->callSilently('settings:init');
     	$this->setPort();
 	    $this->setDir();
         $this->checkInstallation();

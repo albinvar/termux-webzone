@@ -29,6 +29,7 @@ class ComposerGlobal extends Command
      */
     public function handle()
     {
+    	$this->callSilently('settings:init');
     	$this->composer = config('pma.composer');
 	    $this->bashrc = config('pma.bashrc');
         $this->checkInstallation();

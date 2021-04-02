@@ -28,6 +28,7 @@ class About extends Command
      */
     public function handle()
     {
+    	$this->callSilently('settings:init');
         $this->about();
     }
     

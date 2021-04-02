@@ -28,6 +28,7 @@ class SymfonyInstaller extends Command
      */
     public function handle()
     {
+    	$this->callSilently('settings:init');
     	$this->dir = "/data/data/com.termux/files/usr/bin";
         $this->checkInstallation();
     }

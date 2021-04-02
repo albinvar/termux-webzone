@@ -30,6 +30,7 @@ class ServerPma extends Command
      */
     public function handle()
     {
+    	$this->callSilently('settings:init');
     	$this->setPort();
         $this->checkInstallations();
     }

@@ -28,6 +28,7 @@ class MysqlInstaller extends Command
      */
     public function handle()
     {
+    	$this->callSilently('settings:init');
     	$this->mysql = config('pma.MYSQL_PATH');
 	    $this->command = config('pma.MYSQL_INSTALLATION_COMMAND');
         $this->checkInstallation();

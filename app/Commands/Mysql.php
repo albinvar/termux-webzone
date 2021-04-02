@@ -32,6 +32,7 @@ class Mysql extends Command
      */
     public function handle()
     {
+    	$this->callSilently('settings:init');
     	$this->setPort();
     	$this->mysql = config('pma.MYSQL_PATH');
     	pcntl_async_signals(true);
