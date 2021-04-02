@@ -5,6 +5,7 @@ namespace App\Commands;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 class Settings extends Command
 {
@@ -211,10 +212,52 @@ class Settings extends Command
     	echo exec('clear');
 	    $this->logo();
 		$this->newLine();
-    	$port = $this->ask($q);
+    	$port = $this->askValid(
+    $q, 
+    "port", 
+    ['required', 'digits_between:4,5', 'numeric']
+);
 		return $port;
 			
     }
+    
+    
+    protected function askValid($question, $field, $rules)
+{
+    $value = $this->ask($question);
+
+    if($message = $this->validateInput($rules, $field, $value)) {
+    	switch($message){
+    	case 'validation.digits_between':
+	        $msg = "Doesn't apper to be a valid port";
+		break;
+		case 'validation.required':
+	        $msg = "The field is required";
+		break;
+		case 'validation.numeric':
+	        $msg = "The value should be a Number";
+		break;
+        }
+        $this->error($msg);
+        return $this->askValid($question, $field, $rules);
+    }
+
+    return $value;
+}
+
+
+protected function validateInput($rules, $fieldName, $value)
+{
+    $validator = \Validator::make([
+       $fieldName => $value
+    ], [
+       $fieldName => $rules
+    ]);
+
+    return $validator->fails()
+        ? $validator->errors()->first($fieldName)
+        : null;
+}
     
     /**
      * Define the command's schedule.
