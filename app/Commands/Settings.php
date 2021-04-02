@@ -89,7 +89,7 @@ class Settings extends Command
 				$this->showDefault("Do you want to change the default Localhost Port?", $key);
 				$port = $this->portUpdater();
 				
-				if(!is_numeric($port) && strlen($port) > 5){
+				if(strlen($port) > 5){
 					$this->error('The port you have provided seems to be invalid. Try again..');
 					sleep(3);
 					exec('clear');
@@ -105,7 +105,7 @@ class Settings extends Command
 				$this->showDefault("Do you want to change the default MySql port?", $key);
 				$port = $this->portUpdater();
 				
-				if(!is_numeric($port) && strlen($port) > 5){
+				if(strlen($port) > 5){
 					$this->error('The port you have provided seems to be invalid. Try again..');
 					sleep(3);
 					exec('clear');
@@ -121,7 +121,7 @@ class Settings extends Command
 				$this->showDefault("Do you want to change the default Ngrok port?", $key);
 				$port = $this->portUpdater();
 				
-				if(!is_numeric($port) && strlen($port) > 5){
+				if(strlen($port) > 5){
 					$this->error('The port you have provided seems to be invalid. Try again..');
 					sleep(3);
 					exec('clear');
@@ -137,7 +137,7 @@ class Settings extends Command
 				$this->showDefault('Do you want to change the PMA port', $key);
 				$port = $this->portUpdater();
 				
-				if(!is_numeric($port) && strlen($port) > 5){
+				if(strlen($port) > 5){
 					$this->error('The port you have provided seems to be invalid. Try again..');
 					sleep(3);
 					exec('clear');
@@ -202,7 +202,11 @@ class Settings extends Command
     	echo exec('clear');
 	    $this->logo();
 		$this->newLine();
-    	$path = $this->ask($q);
+    	$path =  $this->askValid(
+    $q, 
+    "path", 
+    ['required', 'string']
+);
 		return $path;
 			
     }
