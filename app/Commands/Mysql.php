@@ -15,7 +15,7 @@ class Mysql extends Command
      */
     protected $signature = 'server:mysql
 							{--s|--stop}
-							{--port=3306}';
+							{--port=}';
 
     /**
      * The description of the command.
@@ -31,6 +31,7 @@ class Mysql extends Command
      */
     public function handle()
     {
+    	$this->setPort();
     	$this->mysql = config('pma.MYSQL_PATH');
     	pcntl_async_signals(true);
 
@@ -65,13 +66,24 @@ class Mysql extends Command
 	    }
     }
     
+    private function setPort()
+    {
+    	if(!empty($this->option('port'))){
+		    $this->port = $this->option('port');
+    	} elseif(!empty($this->getPort())){
+	    	$this->port = $this->getPort();
+		} else {
+			$this->port = config('pma.MYSQL_PORT');
+		}
+    }
+    
     
     private function start()
     {
     	$this->logo();
 	    $this->comment("mysql Services Started....");
 	    $this->line("\n");
-    	$cmd = exec("mysqld --port={$this->option('port')} --gdb");
+    	$cmd = exec("mysqld --port={$this->port} --gdb");
     }
     
     private function stop()
@@ -87,6 +99,14 @@ class Mysql extends Command
 		 $figlet = new \Laminas\Text\Figlet\Figlet();
 		echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
 	}
+	
+	public function getPort()
+    {
+    	$json_object = file_get_contents(config('settings.PATH').'/settings.json');
+		$data = json_decode($json_object, true);
+    	return $data['mysql_port'];
+    }
+
 
     /**
      * Define the command's schedule.
