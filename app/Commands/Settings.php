@@ -70,7 +70,7 @@ class Settings extends Command
 			case 'Project Root':
 				$body = "Project Root";
 				$key = 'project_dir';
-				$this->showDefault();
+				$this->showDefault("Do you want to change default project root?", $key);
 				$path = $this->dirUpdater();
 				if(!$this->checkDir($path)){
 					$this->error('The path you have provided seems to be invalid. Try again..');
@@ -85,7 +85,7 @@ class Settings extends Command
 			case 'Localhost Port':
 				$body = "Localhost Port";
 				$key = 'php_port';
-				$this->showDefault();
+				$this->showDefault("Do you want to change the default Localhost Port?", $key);
 				$port = $this->portUpdater();
 				
 				if(!is_numeric($port) && strlen($port) > 5){
@@ -101,7 +101,7 @@ class Settings extends Command
 			case 'MySql Port':
 				$body = "Mysql Port";
 				$key = 'mysql_port';
-				$this->showDefault();
+				$this->showDefault("Do you want to change the default MySql port?", $key);
 				$port = $this->portUpdater();
 				
 				if(!is_numeric($port) && strlen($port) > 5){
@@ -114,10 +114,10 @@ class Settings extends Command
 				$this->edit($body, $key, $port, $type);
 				break;
 				
-			case 'MySql Port':
-				$body = "Mysql Port";
-				$key = 'mysql_port';
-				$this->showDefault();
+			case 'Ngrok Port':
+				$body = "Ngrok Port";
+				$key = 'ngrok_port';
+				$this->showDefault("Do you want to change the default Ngrok port?", $key);
 				$port = $this->portUpdater();
 				
 				if(!is_numeric($port) && strlen($port) > 5){
@@ -133,7 +133,7 @@ class Settings extends Command
 			case 'PhpMyAdmin Port':
 				$body = "PhpMyAdmin Port";
 				$key = 'pma_port';
-				$this->showDefault();
+				$this->showDefault('Do you want to change the PMA port', $key);
 				$port = $this->portUpdater();
 				
 				if(!is_numeric($port) && strlen($port) > 5){
@@ -164,7 +164,6 @@ class Settings extends Command
     {
     	$json_object = json_encode($data);
 		file_put_contents(config('settings.PATH').'/settings.json', $json_object);
-		$this->newLine();
     	$this->comment('Updated successfully...');
 	    sleep(3);
 	    return $this->call('settings');
@@ -180,10 +179,13 @@ class Settings extends Command
 		}
     }
     
-    private function showDefault($q="Do you want to change this setting?")
+    private function showDefault($q="Do you want to change this setting?", $key=null)
     {
     	echo exec('clear');
+	    $data = $this->getOptions();
+		$value = $data[$key];
 	    $this->logo();
+		$this->info('Default Value : ' . $value);
 		$this->newLine();
     	if($this->confirm($q))
 	    {
