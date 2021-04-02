@@ -25,7 +25,6 @@ class Install extends Command
     public function __construct()
     {
     	parent::__construct();
-	    $this->callSilently('settings:init');
     	$this->dir = config('pma.PMA_DIR');
     }
     
@@ -37,6 +36,7 @@ class Install extends Command
      */
     public function handle()
     {
+    	$this->callSilently('settings:init');
     	if($this->option('force')){
     	$this->removeDir();
 	    
