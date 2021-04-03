@@ -28,7 +28,21 @@ class NodeJsIniter extends Command
      */
     public function handle()
     {
-        //
+    	$this->nodejs = "/data/data/com.termux/files/usr/bin/node";
+	    $this->npm = "/data/data/com.termux/files/usr/bin/npm";
+        $this->checkInstallation();
+    }
+    
+    public function checkInstallation()
+    {
+    	if(file_exists($this->nodejs) && file_exists($this->npm)){
+	    	
+	    } else {
+	    	if ($this->confirm('Do you want a present?')) {
+		        $this->info("I'll never give you up.");
+		    }
+		}
+		
     }
 
     /**
