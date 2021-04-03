@@ -44,18 +44,21 @@ class ServerAll extends Command
 	    	//
     	} else {
 	    	$this->error('The path seems to be invalid.');
+			die();
 	    }
 	
     	if(file_exists($this->mysql)){
 	    	//
     	} else {
 	    	$this->error('Mysql not installed yet..');
+			die();
 	    }
 	
     	if(is_dir($this->pma)){
 	    	//
     	} else {
 	    	$this->error('Pma not installed yet..');
+			die();
 	
 	    }
 		$this->runAll();
