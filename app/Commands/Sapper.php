@@ -36,6 +36,9 @@ class Sapper extends Command
         echo exec('clear');
         $this->logo();
         $this->newLine();
+        $this->comment("Creating Sapper Project {$this->name} on {$this->path}");
+        $this->info("npm won't work on /sdcard unless you need to root you phone. You can create Projects on termux home to use npm.");
+        $this->newLine();
         $this->install();
         $this->create();
     }
@@ -44,7 +47,7 @@ class Sapper extends Command
     public function logo()
 	{
 		 $figlet = new \Laminas\Text\Figlet\Figlet();
-		 echo $figlet->setFont(config('logo.font'))->render("Sapper");
+		 $this->info($figlet->setFont(config('logo.font'))->render("Sapper"));
 	}
 	
 	public function install()
