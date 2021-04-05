@@ -39,8 +39,11 @@ class ShareLocalhost extends Command
 	    {
 			return true;
 		} else {
-			$this->installopenssh();
-			$this->call('share:localhost.run');
+			if($this->confirm ("Do you want to install openssh?")){
+				$this->installopenssh();
+				sleep(1);
+				$this->call('share:localhost.run');
+			}
 		}
     }
     
@@ -48,7 +51,6 @@ class ShareLocalhost extends Command
     {
 	    $this->task("Installing openssh", function () {
 			exec('apt-get install openssh -qqq');
-			sleep(1);
 			return true;
 		});
 	}
