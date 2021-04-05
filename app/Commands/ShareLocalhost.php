@@ -33,8 +33,15 @@ class ShareLocalhost extends Command
         $this->checkInstallation();
     }
     
+    public function logo()
+	{
+		 $figlet = new \Laminas\Text\Figlet\Figlet();
+		$this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
+	}
+    
     public function checkInstallation()
     {
+    	$this->logo();
     	if(file_exists($this->dir.'/ssh'))
 	    {
 			return true;
@@ -43,7 +50,9 @@ class ShareLocalhost extends Command
 				$this->installopenssh();
 				sleep(1);
 				$this->call('share:localhost.run');
-			}
+			} else {
+				$this->error('aborting...');
+				}
 		}
     }
     
