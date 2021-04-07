@@ -44,6 +44,7 @@ class ShareLocalhost extends Command
     	$this->logo();
     	if(file_exists($this->dir.'/ssh'))
 	    {
+			$this->activity();
 			return true;
 		} else {
 			if($this->confirm ("Do you want to install openssh?")){
@@ -54,6 +55,12 @@ class ShareLocalhost extends Command
 				$this->error('aborting...');
 				}
 		}
+    }
+    
+    private function activity()
+    {
+    	exec('ssh -R 80:localhost:8080 localhost.run');
+    
     }
     
     private function installopenssh()
