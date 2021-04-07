@@ -28,7 +28,22 @@ class ShareTor extends Command
      */
     public function handle()
     {
-        //
+        $this->checkInstallation();
+    }
+    
+    public function checkInstallation()
+    {
+    	if(!file_exists($this->dir.'/tor')){
+			if($this->confirm ("Do you want to install tor?")){
+				$this->installtor();
+				sleep(1);
+				$this->call('share:tor');
+			} else {
+				$this->error('aborting...');
+				exit();
+				}
+		}
+    	
     }
 
     /**
