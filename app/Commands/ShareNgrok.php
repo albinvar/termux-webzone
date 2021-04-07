@@ -31,6 +31,7 @@ class ShareNgrok extends Command
     public function handle()
     {
     	$this->dir = "/data/data/com.termux/files/usr/bin";
+	    $this->setPort();
     	
 	   if($this->option('stop')){
 		exec('killall ngrok -q');
@@ -39,6 +40,17 @@ class ShareNgrok extends Command
 		}
 		echo exec('clear');
         $this->checkInstallation();
+    }
+    
+    private function setPort()
+    {
+    	if(!empty($this->option('port'))){
+		    $this->port = $this->option('port');
+    	} elseif(!empty($this->getPort())){
+	    	$this->port = $this->getPort();
+		} else {
+			$this->port = config('pma.NGROK_PORT');
+		}
     }
     
     public function logo()
@@ -79,7 +91,7 @@ class ShareNgrok extends Command
     {
     	$this->info("Starting ngrok....");
         exec('killall ngrok -q');
-    	exec("ngrok http {$this->option('port')} > /dev/null 2>/dev/null &");
+    	exec("ngrok http {$this->port} > /dev/null 2>/dev/null &");
 	    sleep(3);
 	    //pclose(popen("ngrok http {$this->option('port')}","r"));
 	    $this->newLine();
@@ -172,6 +184,13 @@ class ShareNgrok extends Command
 			{ return false; }
         });
         
+    }
+    
+    public function getPort()
+    {
+    	$json_object = file_get_contents(config('settings.PATH').'/settings.json');
+		$data = json_decode($json_object, true);
+    	return $data['ngrok_port'];
     }
     
     /**
