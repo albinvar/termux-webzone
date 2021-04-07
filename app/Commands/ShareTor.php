@@ -12,7 +12,8 @@ class ShareTor extends Command
      *
      * @var string
      */
-    protected $signature = 'share:tor';
+    protected $signature = 'share:tor
+							{--port=}';
 
     /**
      * The description of the command.
@@ -29,6 +30,7 @@ class ShareTor extends Command
     public function handle()
     {
     	echo exec('clear');
+	    $this->setPort();
 	    $this->torrc = "/storage/emulated/0/laravel-zero/webzone/test/torrc";
     	$this->dir = "/data/data/com.termux/files/usr/bin";
         $this->checkInstallation();
@@ -39,6 +41,17 @@ class ShareTor extends Command
 		 $figlet = new \Laminas\Text\Figlet\Figlet();
 		$this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
 	}
+	
+	private function setPort()
+    {
+    	if(!empty($this->option('port'))){
+		    $this->port = $this->option('port');
+    	} elseif(!empty($this->getPort())){
+	    	$this->port = $this->getPort();
+		} else {
+			$this->port = config('pma.TOR_PORT');
+		}
+    }
     
     public function checkInstallation()
     {
@@ -115,6 +128,13 @@ class ShareTor extends Command
 		} else {
 			return false;
 		}
+    }
+    
+    public function getPort()
+    {
+    	$json_object = file_get_contents(config('settings.PATH').'/settings.json');
+		$data = json_decode($json_object, true);
+    	return $data['tor_port'];
     }
 
     /**
