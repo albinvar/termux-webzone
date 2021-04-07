@@ -62,6 +62,7 @@ return [
         Illuminate\Foundation\Console\VendorPublishCommand::class,
         App\Commands\SettingsInit::class,
         App\Commands\NodeJsIniter::class,
+        App\Commands\ResetTorrc::class,
     ],
 
     /*
