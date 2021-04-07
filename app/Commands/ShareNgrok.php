@@ -14,7 +14,7 @@ class ShareNgrok extends Command
      */
     protected $signature = 'share:ngrok
 							{--s|--stop}
-							{--port=8080}';
+							{--port=}';
 
     /**
      * The description of the command.
