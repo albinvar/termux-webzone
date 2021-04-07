@@ -72,11 +72,16 @@ php installer.php --composer
 - Create Development server
 - Configure composer globally
 - Install Laravel Installer
+- Create sapper projects
+- Create onion sites (tor)
+- Portforwading through Ngrok
+- Portforwading through Localhost.run
+- Configure almost everything
 - More features coming soon...
 
 ## Screenshots
 
-|Default Interface|After Uploading|
+|Installer|Webzone CLI|
 |--|--|
 |![desktop](https://i.ibb.co/7Yv6YfX/IMG-20210330-231901.jpg)|![desktop](https://i.ibb.co/nRVHtgw/IMG-20210330-231922.jpg)|
 
@@ -84,6 +89,9 @@ php installer.php --composer
 
 The following commands are available in our tool. You can use the individual crafting routines which are similar to the Artisan commands.
 
+-   about
+-   settings
+-   self-update
 -   install:mysql
 -   install:pma
 -   installer:laravel
@@ -91,6 +99,10 @@ The following commands are available in our tool. You can use the individual cra
 -   server:dev
 -   server:pma
 -   server:mysql
+-   server: all
+-   share:localhost.run
+-   share:ngrok
+-   share:tor
 
 ## Contributing
 
