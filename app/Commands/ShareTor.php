@@ -13,6 +13,7 @@ class ShareTor extends Command
      * @var string
      */
     protected $signature = 'share:tor
+							{--reset}
 							{--port=}';
 
     /**
@@ -31,6 +32,7 @@ class ShareTor extends Command
     {
     	echo exec('clear');
 	    $this->setPort();
+		if($this->option('reset')){ $this->call('tor:reset'); exit();}
 	    $this->torrc = "/storage/emulated/0/laravel-zero/webzone/test/torrc";
     	$this->dir = "/data/data/com.termux/files/usr/bin";
         $this->checkInstallation();
