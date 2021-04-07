@@ -66,7 +66,7 @@ class ResetTorrc extends Command
     	$this->task("Creating required folders ", function () {
 		
 			exec("mkdir -p {$this->tor_hidden_dir}");
-			retun true;
+			return true;
 		
 		});
 		
