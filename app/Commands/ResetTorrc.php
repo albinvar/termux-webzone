@@ -29,7 +29,7 @@ class ResetTorrc extends Command
      */
     public function handle()
     {
-    	$this->torrc = "/storage/emulated/0/laravel-zero/webzone/test/torrc";
+    	$this->torrc = "/data/data/com.termux/files/usr/etc/tor/torrc";
         $this->runTasks();
         if($this->option('force'))
         {

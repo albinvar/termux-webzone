@@ -30,7 +30,7 @@ class ShareTor extends Command
      */
     public function handle()
     {
-    	$this->torrc = "/storage/emulated/0/laravel-zero/webzone/test/torrc";
+    	$this->torrc = "/data/data/com.termux/files/usr/etc/tor/torrc";
     	$this->dir = "/data/data/com.termux/files/usr/bin";
     	if(!file_exists($this->torrc)){ 
     	$this->callSilently('tor:reset');
@@ -64,7 +64,7 @@ class ShareTor extends Command
     	$this->logo();
     	if(!file_exists($this->dir.'/tor')){
 			if($this->confirm ("Do you want to install tor?")){
-				$this->installtor();
+				$this->installTor();
 				sleep(1);
 				$this->call('share:tor');
 			} else {
@@ -76,7 +76,11 @@ class ShareTor extends Command
 			foreach($this->olds as $string){
 				$this->checkIfInitialized($string['old'], $string['new'], $string['type']);
 			}
-			$this->comment("You need to restart your termux session to apply changes..");
+			$this->comment("Starting up Tor client.....");
+			exec('killall tor >/dev/null 2>&1');
+			$this->line(exec('tor > /dev/null 2>/dev/null &'));
+			sleep(3);
+			$this->info($this->getHostname());
 			}
     	
     }
@@ -141,6 +145,17 @@ class ShareTor extends Command
     	$json_object = file_get_contents(config('settings.PATH').'/settings.json');
 		$data = json_decode($json_object, true);
     	return $data['tor_port'];
+    }
+    
+    private function getHostname()
+    {
+    	$file = "/data/data/com.termux/files/usr/var/lib/tor/hidden_service/hostname";
+    	if(file_exists($file)) {
+	    	$link = file_get_contents($file);
+			return "link : " . $link;
+		} else {
+	    	return "Something went wrong....";
+		}
     }
 
     /**
