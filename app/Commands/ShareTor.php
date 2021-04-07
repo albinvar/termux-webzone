@@ -30,11 +30,15 @@ class ShareTor extends Command
      */
     public function handle()
     {
+    	$this->torrc = "/storage/emulated/0/laravel-zero/webzone/test/torrc";
+    	$this->dir = "/data/data/com.termux/files/usr/bin";
+    	if(!file_exists($this->torrc)){ 
+    	$this->callSilently('tor:reset');
+	    }
     	echo exec('clear');
 	    $this->setPort();
-		if($this->option('reset')){ $this->call('tor:reset'); exit();}
-	    $this->torrc = "/storage/emulated/0/laravel-zero/webzone/test/torrc";
-    	$this->dir = "/data/data/com.termux/files/usr/bin";
+		if($this->option('reset')){ $this->call('tor:reset', ['--force' => true]); exit();}
+	    
         $this->checkInstallation();
     }
     

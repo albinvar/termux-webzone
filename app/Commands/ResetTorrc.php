@@ -12,7 +12,8 @@ class ResetTorrc extends Command
      *
      * @var string
      */
-    protected $signature = 'tor:reset';
+    protected $signature = 'tor:reset
+							{--f|--force}';
 
     /**
      * The description of the command.
@@ -30,7 +31,10 @@ class ResetTorrc extends Command
     {
     	$this->torrc = "/storage/emulated/0/laravel-zero/webzone/test/torrc";
         $this->runTasks();
+        if($this->option('force'))
+        {
         $this->call('share:tor');
+        }
     }
     
     private function runTasks()

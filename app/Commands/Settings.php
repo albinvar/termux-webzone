@@ -64,7 +64,7 @@ class Settings extends Command
     {
     	$source = $this->choice(
         'What would you like to modify',
-        [1 => 'Project Root', 'Localhost Port', 'MySql Port', 'Ngrok Port', 'PhpMyAdmin Port', 9 => 'Exit']
+        [1 => 'Project Root', 'Localhost Port', 'MySql Port', 'Ngrok Port', 'Tor Server Port', 'PhpMyAdmin Port', 9 => 'Exit']
     );
 	    switch($source)
 		{
@@ -131,6 +131,23 @@ class Settings extends Command
 				$this->edit($body, $key, $port, $type);
 				break;
 				
+			case 'Tor Server Port':
+				$body = "Tor server Port";
+				$key = 'tor_port';
+				$this->showDefault("Do you want to change the default Torrc port?", $key);
+				$port = $this->portUpdater();
+				
+				if(strlen($port) > 5){
+					$this->error('The port you have provided seems to be invalid. Try again..');
+					sleep(3);
+					exec('clear');
+					return $this->call('settings');
+				}
+				$type = "tor";
+				$this->edit($body, $key, $port, $type);
+				
+				break;
+				
 			case 'PhpMyAdmin Port':
 				$body = "PhpMyAdmin Port";
 				$key = 'pma_port';
@@ -149,24 +166,28 @@ class Settings extends Command
 
 			case 'Exit':
 				$this->info('Good Bye!');
+				die();
 				break;
 		}
     }
     
-    private function edit($description, $key, $default, $type)
+    private function edit($description, $key, $default, $type="normal")
     {
     	$data = $this->getOptions();
 	    $data[$key] = $default;
-		$this->update($data);
+		$this->update($data, $type);
     
     }
     
-    private function update($data)
+    private function update($data, $type)
     {
     	$json_object = json_encode($data);
 		file_put_contents(config('settings.PATH').'/settings.json', $json_object);
     	$this->comment('Updated successfully...');
 	    sleep(3);
+		if($type == "tor"){
+			return $this->call('tor:reset');
+			}
 	    return $this->call('settings');
     }
     
