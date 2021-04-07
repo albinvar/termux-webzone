@@ -65,6 +65,20 @@ php installer.php
 php installer.php --composer
 ```
 
+## Updation
+
+You can update webzone simply using the inbuilt command.
+
+```bash
+webzone self-update
+```
+
+Or if you have installed via composer, use
+
+```bash
+composer global update albinvar/termux-webzone
+```
+
 ## Features
 
 - Install Mysql
