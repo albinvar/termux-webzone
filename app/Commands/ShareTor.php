@@ -30,7 +30,7 @@ class ShareTor extends Command
      */
     public function handle()
     {
-    	$this->torrc = "/data/data/com.termux/files/usr/etc/tor/torrc";
+    	$this->torrc = config('pma.TORRC');
     	$this->dir = "/data/data/com.termux/files/usr/bin";
     	if(!file_exists($this->torrc)){ 
     	$this->callSilently('tor:reset');

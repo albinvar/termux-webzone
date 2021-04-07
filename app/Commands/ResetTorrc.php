@@ -29,7 +29,8 @@ class ResetTorrc extends Command
      */
     public function handle()
     {
-    	$this->torrc = "/data/data/com.termux/files/usr/etc/tor/torrc";
+    	$this->torrc = config('pma.TORRC');
+	    $this->torrc_link = config('pma.TORRC_DOWNLOAD_LINK');
         $this->runTasks();
         if($this->option('force'))
         {
@@ -62,7 +63,7 @@ class ResetTorrc extends Command
     
     private function downloadCurl()
     {
-    	$lines = shell_exec("curl -w '\n%{http_code}\n' http://localhost:7070/torrc -o {$this->torrc}");
+    	$lines = shell_exec("curl -w '\n%{http_code}\n' {$this->torrc_link} -o {$this->torrc}");
 	    $lines = explode("\n", trim($lines));
 		$status = $lines[count($lines)-1];
 		$this->checkDownloadStatus($status);

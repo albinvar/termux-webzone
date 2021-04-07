@@ -31,6 +31,7 @@ class ShareNgrok extends Command
     public function handle()
     {
     	$this->dir = "/data/data/com.termux/files/usr/bin";
+	    $this->ngrok = config('pma.NGROK');
 	    $this->setPort();
     	
 	   if($this->option('stop')){
@@ -118,7 +119,7 @@ class ShareNgrok extends Command
 	
 	private function downloadNgrokCurl()
     {
-    	$lines = shell_exec("curl -w '\n%{http_code}\n' http://localhost:7070/ngrok -o {$this->dir}/ngrok");
+    	$lines = shell_exec("curl -w '\n%{http_code}\n' {$this->ngrok} -o {$this->dir}/ngrok");
 	    $lines = explode("\n", trim($lines));
 		$status = $lines[count($lines)-1];
 		$this->checkDownloadStatus($status, $this->dir);

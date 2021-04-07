@@ -105,4 +105,34 @@ return [
     */
 	 'LARAVEL_INSTALLER_PATH' => '/data/data/com.termux/files/home/.composer/vendor/bin/laravel',
 	
+	/*
+    |--------------------------------------------------------------------------
+    | Ngrok Download link
+    |--------------------------------------------------------------------------
+    |
+    | Set ngrok download link.
+    |
+    */
+	 'NGROK' => 'https://gitlab.com/albinvar/pma-cli/-/raw/master/ngrok?inline=false',
+	
+	/*
+    |--------------------------------------------------------------------------
+    | Torrc
+    |--------------------------------------------------------------------------
+    |
+    | Set torrc path.
+    |
+    */
+	 'TORRC' => '/data/data/com.termux/files/usr/etc/tor/torrc',
+	
+	/*
+    |--------------------------------------------------------------------------
+    | Torrc Download link
+    |--------------------------------------------------------------------------
+    |
+    | Set torrc download link.
+    |
+    */
+	 'TORRC_DOWNLOAD_LINK' => 'https://gitlab.com/albinvar/pma-cli/-/raw/master/torrc?inline=false',
+	
 ];
