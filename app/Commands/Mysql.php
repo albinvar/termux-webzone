@@ -99,7 +99,7 @@ class Mysql extends Command
     public function logo()
 	{
 		 $figlet = new \Laminas\Text\Figlet\Figlet();
-		echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
+		$this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
 	}
 	
 	public function getPort()
