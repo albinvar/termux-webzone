@@ -30,6 +30,7 @@ class ShareNgrok extends Command
      */
     public function handle()
     {
+    	$this->callSilently('settings:init');
     	$this->dir = "/data/data/com.termux/files/usr/bin";
 	    $this->ngrok = config('pma.NGROK');
 	    $this->setPort();

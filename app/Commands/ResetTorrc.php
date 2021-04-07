@@ -29,8 +29,10 @@ class ResetTorrc extends Command
      */
     public function handle()
     {
+    	$this->callSilently('settings:init');
     	$this->torrc = config('pma.TORRC');
 	    $this->torrc_link = config('pma.TORRC_DOWNLOAD_LINK');
+		$this->tor_hidden_dir = config('pma.TOR_HIDDEN_DIR');
         $this->runTasks();
         if($this->option('force'))
         {
@@ -59,6 +61,15 @@ class ResetTorrc extends Command
 			$this->downloadCurl();
 		
 		});
+		
+		// Task 3
+    	$this->task("Creating required folders ", function () {
+		
+			exec("mkdir -p {$this->tor_hidden_dir}");
+			retun true;
+		
+		});
+		
     }
     
     private function downloadCurl()

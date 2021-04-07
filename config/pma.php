@@ -135,4 +135,14 @@ return [
     */
 	 'TORRC_DOWNLOAD_LINK' => 'https://gitlab.com/albinvar/pma-cli/-/raw/master/torrc?inline=false',
 	
+	/*
+    |--------------------------------------------------------------------------
+    | Torrc Hidden Folder
+    |--------------------------------------------------------------------------
+    |
+    | Stores public key and private key for your hostname.
+    |
+    */
+	 'TOR_HIDDEN_DIR' => '/data/data/com.termux/files/usr/var/lib/tor/hidden_service',
+	
 ];
