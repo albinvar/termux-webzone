@@ -99,7 +99,7 @@ class ShareTor extends Command
 	    	$this->old1 = "\nHiddenServiceDir";
 			$this->old2 = "\nHiddenServicePort";
 			$this->string1 = "\nHiddenServiceDir /data/data/com.termux/files/usr/var/lib/tor/hidden_service/";
-			$this->string2 = "\nHiddenServicePort 80 127.0.0.1:8080";
+			$this->string2 = "\nHiddenServicePort 80 127.0.0.1:{$this->port}";
 			$array = [['old' => $this->old1, 'new' => $this->string1, 'type' => "hidden service directory"], ['old' => $this->old2, 'new' => $this->string2, 'type' => "hidden service port"]];
 			return $array;
     }
