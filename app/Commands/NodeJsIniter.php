@@ -28,69 +28,66 @@ class NodeJsIniter extends Command
      */
     public function handle()
     {
-    	echo exec("clear");
-	    $this->logo();
-		
-    	$this->nodejs = "/data/data/com.termux/files/usr/bin/node";
-	    $this->npm = "/data/data/com.termux/files/usr/bin/npm";
+        echo exec("clear");
+        $this->logo();
+        
+        $this->nodejs = "/data/data/com.termux/files/usr/bin/node";
+        $this->npm = "/data/data/com.termux/files/usr/bin/npm";
         $this->checkInstallation();
     }
     
     public function logo()
-	{
-		 $figlet = new \Laminas\Text\Figlet\Figlet();
-		$this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
-	}
+    {
+        $figlet = new \Laminas\Text\Figlet\Figlet();
+        $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
+    }
     
     public function checkInstallation()
     {
-    	$a = $this->checkNodeJs();
-	    $b = $this->checkNpm();
-	
-		if($this->nodeStatus && $this->npmStatus){
-			
-		} else {
-	    	if ($this->confirm('Do you to install nodejs?')) {
-		        $this->install();
-		    }
-		}
-		
-		
+        $a = $this->checkNodeJs();
+        $b = $this->checkNpm();
+    
+        if ($this->nodeStatus && $this->npmStatus) {
+        } else {
+            if ($this->confirm('Do you to install nodejs?')) {
+                $this->install();
+            }
+        }
     }
     
     
     private function checkNodeJs()
     {
-    	$this->task("Checking Nodejs ", function () {
-    	if(file_exists($this->nodejs)){
-    	    $this->nodeStatus = true;
-	    	return true;
-	    } else {
-			$this->nodeStatus = false;
-			return false;
-			}
-		});
+        $this->task("Checking Nodejs ", function () {
+            if (file_exists($this->nodejs)) {
+                $this->nodeStatus = true;
+                return true;
+            } else {
+                $this->nodeStatus = false;
+                return false;
+            }
+        });
     }
     
     private function checkNpm()
     {
-    	$this->task("Checking Npm ", function () {
-    	if(file_exists($this->npm)){
-	    	$this->npmStatus = true;
-	    	return true;
-	    } else {
-			$this->npmStatus = false;
-			return false;
-			}
-		});
+        $this->task("Checking Npm ", function () {
+            if (file_exists($this->npm)) {
+                $this->npmStatus = true;
+                return true;
+            } else {
+                $this->npmStatus = false;
+                return false;
+            }
+        });
     }
     
     private function install()
     {
-    	$this->task("Installing Nodejs ", function () {
-    	$cmd = "apt-get install nodejs -y -qqq";
-	    $response = exec($cmd);
-		});
+        $this->task("Installing Nodejs ", function () {
+            $cmd = "apt-get install nodejs -y -qqq";
+            $response = exec($cmd);
+        });
     }
 
     /**

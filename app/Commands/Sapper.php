@@ -30,8 +30,8 @@ class Sapper extends Command
      */
     public function handle()
     {
-    	$this->path = $this->option('path');
-	    $this->name = $this->option('name');
+        $this->path = $this->option('path');
+        $this->name = $this->option('name');
         $this->call('nodejs:init');
         echo exec('clear');
         $this->logo();
@@ -45,20 +45,20 @@ class Sapper extends Command
     
     
     public function logo()
-	{
-		 $figlet = new \Laminas\Text\Figlet\Figlet();
-		 $this->info($figlet->setFont(config('logo.font'))->render("Sapper"));
-	}
-	
-	public function install()
-	{
-		$code = exec('npm install -g degit');
-	}
-	
-	public function create()
-	{
-		exec('cd '. $this->path .' && npx degit "sveltejs/sapper-template#rollup" '. $this->name .' && cd '. $this->name .' && npm install && npm run dev');
-	}
+    {
+        $figlet = new \Laminas\Text\Figlet\Figlet();
+        $this->info($figlet->setFont(config('logo.font'))->render("Sapper"));
+    }
+    
+    public function install()
+    {
+        $code = exec('npm install -g degit');
+    }
+    
+    public function create()
+    {
+        exec('cd '. $this->path .' && npx degit "sveltejs/sapper-template#rollup" '. $this->name .' && cd '. $this->name .' && npm install && npm run dev');
+    }
     /**
      * Define the command's schedule.
      *

@@ -28,23 +28,23 @@ class SymfonyInstaller extends Command
      */
     public function handle()
     {
-    	$this->callSilently('settings:init');
-    	$this->dir = "/data/data/com.termux/files/usr/bin";
+        $this->callSilently('settings:init');
+        $this->dir = "/data/data/com.termux/files/usr/bin";
         $this->checkInstallation();
     }
     
     public function checkInstallation()
     {
-    	$link = "https://get.symfony.com/cli/installer";
-		$lines = shell_exec("curl -w '\n%{http_code}\n' {$link} -o {$this->dir}/symfony && chmod +x {$this->dir}/symfony");
-	    $lines = explode("\n", trim($lines));
-		$status = $lines[count($lines)-1];
-		$this->checkDownloadStatus($status, $this->dir);
+        $link = "https://get.symfony.com/cli/installer";
+        $lines = shell_exec("curl -w '\n%{http_code}\n' {$link} -o {$this->dir}/symfony && chmod +x {$this->dir}/symfony");
+        $lines = explode("\n", trim($lines));
+        $status = $lines[count($lines)-1];
+        $this->checkDownloadStatus($status, $this->dir);
     }
     
     private function checkDownloadStatus(Int $status, $dir)
     {
-    	switch ($status) {
+        switch ($status) {
   case 000:
     $this->error("Cannot connect to Server");
     break;
@@ -62,12 +62,12 @@ class SymfonyInstaller extends Command
     
     private function runTasks()
     {
-    	$this->task("verifying command ", function () {
-     	
-            if(file_exists($this->dir.'/symfony'))
-            { return true; }
-            else
-			{ return false; }
+        $this->task("verifying command ", function () {
+            if (file_exists($this->dir.'/symfony')) {
+                return true;
+            } else {
+                return false;
+            }
         });
     }
 

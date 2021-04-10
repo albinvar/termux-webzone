@@ -28,30 +28,30 @@ class MysqlInstaller extends Command
      */
     public function handle()
     {
-    	$this->callSilently('settings:init');
-    	$this->mysql = config('pma.MYSQL_PATH');
-	    $this->command = config('pma.MYSQL_INSTALLATION_COMMAND');
+        $this->callSilently('settings:init');
+        $this->mysql = config('pma.MYSQL_PATH');
+        $this->command = config('pma.MYSQL_INSTALLATION_COMMAND');
         $this->checkInstallation();
     }
     
     public function checkInstallation()
     {
-    	if(file_exists($this->mysql)){
-	    	$this->error('Mysql seems to be installed already, Type "pkg uninstall mariadb" to uninstall mysql..');
-    	} else {
-	    	if ($this->confirm('Do you want to install MySql?')) {
-		        $this->install();
-			  }
-	    }
+        if (file_exists($this->mysql)) {
+            $this->error('Mysql seems to be installed already, Type "pkg uninstall mariadb" to uninstall mysql..');
+        } else {
+            if ($this->confirm('Do you want to install MySql?')) {
+                $this->install();
+            }
+        }
     }
     
     private function install()
     {
-    	$this->info("\nInstalling MySql\n");
+        $this->info("\nInstalling MySql\n");
     
-		exec($this->command, $output, $result);
-		
-		$this->comment('MySql installed successfully...');
+        exec($this->command, $output, $result);
+        
+        $this->comment('MySql installed successfully...');
     }
 
     /**

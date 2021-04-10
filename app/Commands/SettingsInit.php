@@ -7,9 +7,9 @@ use LaravelZero\Framework\Commands\Command;
 
 class SettingsInit extends Command
 {
-	public $settings;
-	
-	
+    public $settings;
+    
+    
     /**
      * The signature of the command.
      *
@@ -27,8 +27,8 @@ class SettingsInit extends Command
     
     public function __construct()
     {
-    	parent::__construct();
-    	$this->settings = config('settings.PATH');
+        parent::__construct();
+        $this->settings = config('settings.PATH');
     }
     
     
@@ -44,75 +44,72 @@ class SettingsInit extends Command
     
     public function checkIfSettingsExist()
     {
-    	if(file_exists($this->settings.'/settings.json'))
-	    {
-			if($this->validateJson()){
-				$this->createSettingsJson();
-			}
-			return $this->info("Initialized settings");
-		} else {
-			$this->create();
-		}
+        if (file_exists($this->settings.'/settings.json')) {
+            if ($this->validateJson()) {
+                $this->createSettingsJson();
+            }
+            return $this->info("Initialized settings");
+        } else {
+            $this->create();
+        }
     }
     
     public function create()
     {
-    	$this->task("Creating Required Folders ", function () {
-     	
-            if($this->createDirectory())
-            { return true; }
-            else
-			{ return false; }
+        $this->task("Creating Required Folders ", function () {
+            if ($this->createDirectory()) {
+                return true;
+            } else {
+                return false;
+            }
         });
     
-    	$this->task("Creating JSON file ", function () {
-     	
-            if($this->createSettingsJson())
-            { return true; }
-            else
-			{ return false; }
+        $this->task("Creating JSON file ", function () {
+            if ($this->createSettingsJson()) {
+                return true;
+            } else {
+                return false;
+            }
         });
     }
     
     private function createDirectory()
     {
-		
-		if(!is_dir($this->settings)){
-			mkdir($this->settings);
-			return true;
-		} else {
-			if(is_dir($this->settings)){
-				return true;
-			}
-		}
+        if (!is_dir($this->settings)) {
+            mkdir($this->settings);
+            return true;
+        } else {
+            if (is_dir($this->settings)) {
+                return true;
+            }
+        }
     }
     
     private function createSettingsJson()
     {
-    	if(!file_exists($this->settings.'/settings.json')){
-	    	touch($this->settings.'/settings.json');
-		}
-		
-    	$array = config('settings.ARRAY');
-		$json_object = json_encode($array);
-		$success = file_put_contents($this->settings.'/settings.json', $json_object);
-		if($success === FALSE)
-		{
-			return false;
-		} else {
-			return true;
-			}
+        if (!file_exists($this->settings.'/settings.json')) {
+            touch($this->settings.'/settings.json');
+        }
+        
+        $array = config('settings.ARRAY');
+        $json_object = json_encode($array);
+        $success = file_put_contents($this->settings.'/settings.json', $json_object);
+        if ($success === false) {
+            return false;
+        } else {
+            return true;
+        }
     }
     
     private function validateJson()
     {
-    	$json_object = file_get_contents($this->settings.'/settings.json');
-		$data = json_decode($json_object);
-		if($data === null) {
-			 return true;
-		} else {
-			return false;
-			}
+        $json_object = file_get_contents($this->settings.'/settings.json');
+        $data = json_decode($json_object);
+        if ($data === null) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
     /**

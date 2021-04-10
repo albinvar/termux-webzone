@@ -32,81 +32,81 @@ class Mysql extends Command
      */
     public function handle()
     {
-    	$this->callSilently('settings:init');
-    	$this->setPort();
-    	$this->mysql = config('pma.MYSQL_PATH');
-    	pcntl_async_signals(true);
+        $this->callSilently('settings:init');
+        $this->setPort();
+        $this->mysql = config('pma.MYSQL_PATH');
+        pcntl_async_signals(true);
 
-    // Catch the cancellation of the action
-    pcntl_signal(SIGINT, function () {
-        $this->comment("\nShutting down...\n");
+        // Catch the cancellation of the action
+        pcntl_signal(SIGINT, function () {
+            $this->comment("\nShutting down...\n");
 
-        $this->stop();
-    });   
+            $this->stop();
+        });
 
         $this->checkInstallation();
     }
     
     public function checkInstallation()
     {
-    	if(!file_exists($this->mysql)){
-	    	$source = $this->choice(
-        "mysql doesn't seem to be installed, do you want to install it now ?",
-        [1 => 'install now', 0 => 'cancel']
-		    );
-		
-		if($source == 'install now' || $source == 1) {
-			$this->call('install:mysql');
-			}
-		if($source == 'cancel' || $source == 0) {
-			$this->info("Good bye");
-			}
-		} elseif($this->option('stop')) {
-			$this->stop();
-    	} else {
-	    	$this->start();
-	    }
+        if (!file_exists($this->mysql)) {
+            $source = $this->choice(
+                "mysql doesn't seem to be installed, do you want to install it now ?",
+                [1 => 'install now', 0 => 'cancel']
+            );
+        
+            if ($source == 'install now' || $source == 1) {
+                $this->call('install:mysql');
+            }
+            if ($source == 'cancel' || $source == 0) {
+                $this->info("Good bye");
+            }
+        } elseif ($this->option('stop')) {
+            $this->stop();
+        } else {
+            $this->start();
+        }
     }
     
     private function setPort()
     {
-    	if(!empty($this->option('port'))){
-		    $this->port = $this->option('port');
-    	} elseif(!empty($this->getPort())){
-	    	$this->port = $this->getPort();
-		} else {
-			$this->port = config('pma.MYSQL_PORT');
-		}
+        if (!empty($this->option('port'))) {
+            $this->port = $this->option('port');
+        } elseif (!empty($this->getPort())) {
+            $this->port = $this->getPort();
+        } else {
+            $this->port = config('pma.MYSQL_PORT');
+        }
     }
     
     
     private function start()
     {
-    	$this->logo();
-	    $this->comment("mysql Services Started....");
-	    $this->line("\n");
-    	$cmd = exec("mysqld --port={$this->port} --gdb");
+        $this->logo();
+        $this->comment("mysql Services Started....");
+        $this->line("\n");
+        $cmd = exec("mysqld --port={$this->port} --gdb");
     }
     
     private function stop()
     {
-    	$this->task("Kill Mysql processes ", function () {
-	        $cmd = "killall -9 mysqld 2> /dev/null";
-		    $response = exec($cmd);
+        $this->task("Kill Mysql processes ", function () {
+            $cmd = "killall -9 mysqld 2> /dev/null";
+            $response = exec($cmd);
         });
     }
     
     public function logo()
-	{
-		 $figlet = new \Laminas\Text\Figlet\Figlet();
-		$this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
-	}
-	
-	public function getPort()
     {
-    	$json_object = file_get_contents(config('settings.PATH').'/settings.json');
-		$data = json_decode($json_object, true);
-    	return $data['mysql_port'];
+        $figlet = new \Laminas\Text\Figlet\Figlet();
+        $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
+    }
+    
+    public function getPort()
+    {
+        $json_object = file_get_contents(config('settings.PATH').'/settings.json');
+        $data = json_decode($json_object, true);
+        return $data['mysql_port'];
     }
 
 

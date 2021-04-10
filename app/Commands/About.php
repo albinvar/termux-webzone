@@ -28,38 +28,38 @@ class About extends Command
      */
     public function handle()
     {
-    	$this->callSilently('settings:init');
+        $this->callSilently('settings:init');
         $this->about();
     }
     
     public function about()
     {
-    	$this->logo();
-	    $this->comment("  ".app('git.version'));
-		$this->newLine();
-		$this->info('Termux Webzone is a CLI application which provides a ton of features for web developers to build, run and test their php applications within the limits of android. The application is designed only to work with Termux.');
-		$this->newLine();
-		$this->comment('  github: https://github.com/albinvar/termux-webzone');
-		$this->newLine();
-		$this->credits();
+        $this->logo();
+        $this->comment("  ".app('git.version'));
+        $this->newLine();
+        $this->info('Termux Webzone is a CLI application which provides a ton of features for web developers to build, run and test their php applications within the limits of android. The application is designed only to work with Termux.');
+        $this->newLine();
+        $this->comment('  github: https://github.com/albinvar/termux-webzone');
+        $this->newLine();
+        $this->credits();
     }
     
     public function logo()
-	{
-		 $figlet = new \Laminas\Text\Figlet\Figlet();
-		echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
-	}
-	
-	public function credits()
-	{
-		$headers = ['Developers', 'role'];
-
-	    $data = [
-	        ['Albin', 'Developer']
-	    ];
+    {
+        $figlet = new \Laminas\Text\Figlet\Figlet();
+        echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
+    }
     
-	    $this->table($headers, $data);
-	}
+    public function credits()
+    {
+        $headers = ['Developers', 'role'];
+
+        $data = [
+            ['Albin', 'Developer']
+        ];
+    
+        $this->table($headers, $data);
+    }
     
     /**
      * Define the command's schedule.

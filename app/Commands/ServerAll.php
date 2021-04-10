@@ -34,47 +34,46 @@ class ServerAll extends Command
         $this->pma = config('pma.PMA_DIR');
         $this->mysql_port = $this->getData()['mysql_port'];
         $this->pma_port = $this->getData()['pma_port'];
-    	$this->localhost_port = $this->getData()['php_port'];
+        $this->localhost_port = $this->getData()['php_port'];
         $this->checkInstallation();
     }
     
     public function checkInstallation()
     {
-    	if(is_dir($this->root)){
-	    	//
-    	} else {
-	    	$this->error('The path seems to be invalid.');
-			die();
-	    }
-	
-    	if(file_exists($this->mysql)){
-	    	//
-    	} else {
-	    	$this->error('Mysql not installed yet..');
-			die();
-	    }
-	
-    	if(is_dir($this->pma)){
-	    	//
-    	} else {
-	    	$this->error('Pma not installed yet..');
-			die();
-	
-	    }
-		$this->runAll();
+        if (is_dir($this->root)) {
+            //
+        } else {
+            $this->error('The path seems to be invalid.');
+            die();
+        }
+    
+        if (file_exists($this->mysql)) {
+            //
+        } else {
+            $this->error('Mysql not installed yet..');
+            die();
+        }
+    
+        if (is_dir($this->pma)) {
+            //
+        } else {
+            $this->error('Pma not installed yet..');
+            die();
+        }
+        $this->runAll();
     }
     
     private function runAll()
     {
-    	$cmd = "php -S 127.0.0.1:{$this->pma_port} -t {$this->pma} & php -S 127.0.0.1:{$this->localhost_port} -t {$this->root} & mysqld --port={$this->mysql_port} --gdb & echo \"PHP, MySQL Services Started\" && fg";
-	    exec($cmd);
+        $cmd = "php -S 127.0.0.1:{$this->pma_port} -t {$this->pma} & php -S 127.0.0.1:{$this->localhost_port} -t {$this->root} & mysqld --port={$this->mysql_port} --gdb & echo \"PHP, MySQL Services Started\" && fg";
+        exec($cmd);
     }
     
     public function getData()
     {
-    	$json_object = file_get_contents(config('settings.PATH').'/settings.json');
-		$data = json_decode($json_object, true);
-    	return $data;
+        $json_object = file_get_contents(config('settings.PATH').'/settings.json');
+        $data = json_decode($json_object, true);
+        return $data;
     }
     
     /**
