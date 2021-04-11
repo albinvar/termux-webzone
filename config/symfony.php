@@ -23,5 +23,16 @@ return [
     */
 
     'PATH' => '/data/data/com.termux/files/usr/bin/symfony',
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Symfony App Types
+    |--------------------------------------------------------------------------
+    |
+    | Array mentioning app types..
+    |
+    */
+
+    'TYPES' => ['web', 'console'],
 	
 ];

@@ -14,6 +14,7 @@ class Symfony extends Command
      */
     protected $signature = 'create:symfony
 							{name?}
+							{--type=}
 							{--path=}';
 
     /**
@@ -63,6 +64,30 @@ class Symfony extends Command
 			$this->path = '/sdcard';
 		}
 		
+		// set project type.
+		if(!empty($this->option('type')))
+		{
+			if(in_array($this->option('type'), config('symfony.TYPES'))){
+				if($this->option('type') == 'web') {
+			
+				$this->type = 'symfony/website-skeleton';
+			
+				} elseif($this->option('type') == 'console') {
+			
+				$this->type = 'symfony/skeleton';
+				} else {
+					$this->type = 'symfony/skeleton';
+				}
+			} else {
+				$this->error('Invalid type');
+				die();
+				}
+				
+			} else {
+				$this->type = 'symfony/website-skeleton';
+			}
+			
+		
 		//check if directory exists
 	    if(!$this->checkDir()){ 
 			exit(); 
@@ -79,7 +104,7 @@ class Symfony extends Command
     
     private function create()
     {
-    	$cmd = "cd {$this->path} && composer create-project symfony/website-skeleton \"{$this->name}\"";
+    	$cmd = "cd {$this->path} && composer create-project {$this->type} \"{$this->name}\"";
 	    $this->exec($cmd);
     }
     
