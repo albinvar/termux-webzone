@@ -49,8 +49,13 @@ class Laravel extends Command
 		if(!empty($this->option('path')))
 		{
 			$this->path = $this->option('path');
+			
+		} elseif(!empty(config('pma.PROJECT_BASE_PATH')) && is_dir(config('pma.PROJECT_BASE_PATH'))) {
+			
+			$this->path = config('pma.PROJECT_BASE_PATH');
+			
 		} else {
-			$this->path = '/sdcard/tmp';
+			$this->path = '/sdcard';
 		}
 		
 		
