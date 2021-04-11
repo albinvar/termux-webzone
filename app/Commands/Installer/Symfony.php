@@ -29,14 +29,32 @@ class Symfony extends Command
     public function handle()
     {
         $this->callSilently('settings:init');
+        $this->symfony = config('symfony.PATH');
         $this->dir = "/data/data/com.termux/files/usr/bin";
-        $this->checkInstallation();
+        $this->install();
     }
     
     public function checkInstallation()
     {
+        if (file_exists($this->symfony)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public function install()
+    {
+    	if ($this->checkInstallation()) {
+            $this->error('Symfony CLI is already installed. Use "symfony help" to show all commands.');
+            return false;
+        }
+        
+        $this->info(exec('clear'));
+        $this->logo();
+        $this->comment("\nInstalling Symfony CLI...\n");
         $link = config('symfony.CLI_DOWNLOAD_LINK');
-        $lines = shell_exec("curl -w '\n%{http_code}\n' {$link} -o {$this->dir}/symfony && chmod +x {$this->dir}/symfony");
+        $lines = shell_exec("curl -w '\n%{http_code}\n' {$link} -o {$this->symfony} && chmod +x {$this->symfony}");
         $lines = explode("\n", trim($lines));
         $status = $lines[count($lines)-1];
         $this->checkDownloadStatus($status, $this->dir);
@@ -63,12 +81,18 @@ class Symfony extends Command
     private function runTasks()
     {
         $this->task("verifying command ", function () {
-            if (file_exists($this->dir.'/symfony')) {
+            if (file_exists($this->symfony)) {
                 return true;
             } else {
                 return false;
             }
         });
+    }
+    
+    public function logo()
+    {
+        $figlet = new \Laminas\Text\Figlet\Figlet();
+        $this->comment($figlet->setFont(config('logo.font'))->render("Symfony"));
     }
 
     /**
