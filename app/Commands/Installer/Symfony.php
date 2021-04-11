@@ -35,7 +35,7 @@ class Symfony extends Command
     
     public function checkInstallation()
     {
-        $link = "https://get.symfony.com/cli/installer";
+        $link = config('symfony.CLI_DOWNLOAD_LINK');
         $lines = shell_exec("curl -w '\n%{http_code}\n' {$link} -o {$this->dir}/symfony && chmod +x {$this->dir}/symfony");
         $lines = explode("\n", trim($lines));
         $status = $lines[count($lines)-1];
