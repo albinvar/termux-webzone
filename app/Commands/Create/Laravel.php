@@ -12,7 +12,8 @@ class Laravel extends Command
      *
      * @var string
      */
-    protected $signature = 'create:laravel';
+    protected $signature = 'create:laravel
+							{--path=}';
 
     /**
      * The description of the command.
@@ -28,18 +29,33 @@ class Laravel extends Command
      */
     public function handle()
     {
+    	$this->init();
         $this->create();
+    }
+    
+    private function init()
+    {
+    	//set path
+		if(!empty($this->option('path')))
+		{
+			$this->path = $this->option('path');
+		} else {
+			$this->path = '/sdcard/tmp';
+		}
+		
+		
+		
     }
     
     private function create()
     {
-    	$cmd = "cd /sdcard/tmp && composer create-project laravel/laravel example-app";
+    	$cmd = "cd {$this->path} && composer create-project laravel/laravel example-app";
 	    $this->exec($cmd);
     }
     
     private function exec($command)
     {
-    	$this->info(exec($command));
+    	$this->line(exec($command));
     }
     
     /**
