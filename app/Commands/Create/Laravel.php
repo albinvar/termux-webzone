@@ -28,14 +28,20 @@ class Laravel extends Command
      */
     public function handle()
     {
-        $this->checkComposer();
+        $this->create();
     }
     
     private function create()
     {
-    	
+    	$cmd = "cd /sdcard/tmp && composer create-project laravel/laravel example-app";
+	    $this->exec($cmd);
     }
-
+    
+    private function exec($command)
+    {
+    	$this->info(exec($command));
+    }
+    
     /**
      * Define the command's schedule.
      *
