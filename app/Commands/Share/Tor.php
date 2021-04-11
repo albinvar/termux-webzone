@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Commands;
+namespace App\Commands\Share;
 
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
-class ShareTor extends Command
+class Tor extends Command
 {
     /**
      * The signature of the command.
