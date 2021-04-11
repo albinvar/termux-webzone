@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Commands;
+namespace App\Commands\Server;
 
 use App\ConfigIniter;
 use Illuminate\Console\Scheduling\Schedule;
