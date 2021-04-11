@@ -32,6 +32,8 @@ class Laravel extends Command
     {
     	$this->callSilently('settings:init');
     	$this->dir = $this->getData()['project_dir'];
+	    $this->line(exec('clear'));
+		$this->logo();
     	$this->init();
         
     }
@@ -66,7 +68,11 @@ class Laravel extends Command
 			exit(); 
 		} else { 
 			$this->line(exec('tput sgr0'));
+			$this->info('Creating laravel app');
+			$this->newline();
 			$this->create();
+			$this->newline();
+			$this->comment("Laravel App created successfully on {$this->path}/{$this->name}");
 		}
 		
     }
@@ -80,6 +86,12 @@ class Laravel extends Command
     private function exec($command)
     {
     	$this->line(exec($command));
+    }
+    
+    public function logo()
+    {
+        $figlet = new \Laminas\Text\Figlet\Figlet();
+        $this->comment($figlet->setFont(config('logo.font'))->render("Laravel"));
     }
     
     private function checkDir()
