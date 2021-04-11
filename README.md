@@ -108,6 +108,8 @@ The following commands are available in our tool. You can use the individual cra
 -   self-update
 -   install:mysql
 -   install:pma
+-   create:laravel
+-   create:sapper
 -   installer:laravel
 -   installer:symfony
 -   server:dev
