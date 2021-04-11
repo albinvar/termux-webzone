@@ -30,6 +30,7 @@ class Laravel extends Command
      */
     public function handle()
     {
+    	$this->callSilently('settings:init');
     	$this->dir = $this->getData()['project_dir'];
     	$this->init();
         $this->create();
@@ -56,6 +57,7 @@ class Laravel extends Command
 			$this->path = $this->dir;
 			
 		} else {
+			//planing to generate random names from a new package.
 			$this->path = '/sdcard';
 		}
 		
