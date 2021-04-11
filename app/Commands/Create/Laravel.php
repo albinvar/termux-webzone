@@ -43,6 +43,7 @@ class Laravel extends Command
 		{
 			$this->name = $this->argument('name');
 		} else {
+			//planing to generate random names from a new package.
 			$this->name = 'something';
 		}
     
@@ -57,7 +58,7 @@ class Laravel extends Command
 			$this->path = $this->dir;
 			
 		} else {
-			//planing to generate random names from a new package.
+			
 			$this->path = '/sdcard';
 		}
 		

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Commands;
+namespace App\Commands\Installer;
 
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
-class LaravelInstaller extends Command
+class Laravel extends Command
 {
     /**
      * The signature of the command.
