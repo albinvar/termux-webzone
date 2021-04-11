@@ -13,6 +13,7 @@ class Laravel extends Command
      * @var string
      */
     protected $signature = 'create:laravel
+							{name}
 							{--path=}';
 
     /**
@@ -35,6 +36,15 @@ class Laravel extends Command
     
     private function init()
     {
+    	//name of project
+		if(!empty($this->argument('name')))
+		{
+			$this->name = $this->argument('name');
+		} else {
+			$this->name = 'something';
+		}
+    
+    
     	//set path
 		if(!empty($this->option('path')))
 		{
@@ -49,7 +59,7 @@ class Laravel extends Command
     
     private function create()
     {
-    	$cmd = "cd {$this->path} && composer create-project laravel/laravel example-app";
+    	$cmd = "cd {$this->path} && composer create-project laravel/laravel {$this->name}";
 	    $this->exec($cmd);
     }
     
