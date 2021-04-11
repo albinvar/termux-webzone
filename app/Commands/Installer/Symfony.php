@@ -45,7 +45,7 @@ class Symfony extends Command
     
     public function install()
     {
-    	if ($this->checkInstallation()) {
+        if ($this->checkInstallation()) {
             $this->error('Symfony CLI is already installed. Use "symfony help" to show all commands.');
             return false;
         }
