@@ -62,7 +62,12 @@ class Laravel extends Command
 		}
 		
 		//check if directory exists
-	    if(!$this->checkDir()){ exit(); } else { $this->create(); }
+	    if(!$this->checkDir()){ 
+			exit(); 
+		} else { 
+			$this->line(exec('tput sgr0'));
+			$this->create();
+		}
 		
     }
     
