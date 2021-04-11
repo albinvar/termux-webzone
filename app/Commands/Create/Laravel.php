@@ -59,7 +59,7 @@ class Laravel extends Command
     
     private function create()
     {
-    	$cmd = "cd {$this->path} && composer create-project laravel/laravel {$this->name}";
+    	$cmd = "cd {$this->path} && composer create-project laravel/laravel \"{$this->name}\"";
 	    $this->exec($cmd);
     }
     
