@@ -30,6 +30,7 @@ class Laravel extends Command
      */
     public function handle()
     {
+    	$this->dir = $this->getData()['project_dir'];
     	$this->init();
         $this->create();
     }
@@ -50,9 +51,9 @@ class Laravel extends Command
 		{
 			$this->path = $this->option('path');
 			
-		} elseif(!empty(config('pma.PROJECT_BASE_PATH')) && is_dir(config('pma.PROJECT_BASE_PATH'))) {
+		} elseif(!empty($this->dir) && is_dir($this->dir)) {
 			
-			$this->path = config('pma.PROJECT_BASE_PATH');
+			$this->path = $this->dir;
 			
 		} else {
 			$this->path = '/sdcard';
@@ -71,6 +72,13 @@ class Laravel extends Command
     private function exec($command)
     {
     	$this->line(exec($command));
+    }
+    
+    public function getData()
+    {
+        $json_object = file_get_contents(config('settings.PATH').'/settings.json');
+        $data = json_decode($json_object, true);
+        return $data;
     }
     
     /**
