@@ -13,7 +13,7 @@ class Laravel extends Command
      * @var string
      */
     protected $signature = 'create:laravel
-							{name}
+							{name?}
 							{--path=}';
 
     /**
