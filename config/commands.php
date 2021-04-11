@@ -60,9 +60,9 @@ return [
         Illuminate\Console\Scheduling\ScheduleRunCommand::class,
         Illuminate\Console\Scheduling\ScheduleFinishCommand::class,
         Illuminate\Foundation\Console\VendorPublishCommand::class,
-        App\Commands\SettingsInit::class,
+        App\Commands\Settings\SettingsInit::class,
         App\Commands\NodeJsIniter::class,
-        App\Commands\ResetTorrc::class,
+        App\Commands\Settings\ResetTorrc::class,
     ],
 
     /*
