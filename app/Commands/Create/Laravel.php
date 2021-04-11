@@ -33,7 +33,7 @@ class Laravel extends Command
     	$this->callSilently('settings:init');
     	$this->dir = $this->getData()['project_dir'];
     	$this->init();
-        $this->create();
+        
     }
     
     private function init()
@@ -46,7 +46,6 @@ class Laravel extends Command
 			//planing to generate random names from a new package.
 			$this->name = 'something';
 		}
-    
     
     	//set path
 		if(!empty($this->option('path')))
@@ -62,7 +61,8 @@ class Laravel extends Command
 			$this->path = '/sdcard';
 		}
 		
-		
+		//check if directory exists
+	    if(!$this->checkDir()){ exit(); } else { $this->create(); }
 		
     }
     
@@ -75,6 +75,18 @@ class Laravel extends Command
     private function exec($command)
     {
     	$this->line(exec($command));
+    }
+    
+    private function checkDir()
+    {
+    	if(file_exists($this->path . '/' . $this->name))
+	    {
+			$this->error("A duplicate file/directory found in the path. Please choose a better name.");
+			return false;
+			
+		} else { 
+			return true;
+		}
     }
     
     public function getData()
