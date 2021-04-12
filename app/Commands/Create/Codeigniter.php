@@ -71,7 +71,7 @@ class Codeigniter extends Command
     
     private function create()
     {
-        $cmd = "cd {$this->path} && composer create-project Codeigniter/Codeigniter \"{$this->name}\"";
+        $cmd = "cd {$this->path} && composer create-project codeigniter4/appstarter \"{$this->name}\"";
         $this->exec($cmd);
     }
     
