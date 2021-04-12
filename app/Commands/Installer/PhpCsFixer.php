@@ -28,9 +28,9 @@ class PhpCsFixer extends Command
      * @return mixed
      */
     public function handle()
-    {  
-    	$this->fixer = config('pma.PHP_CS_FIXER_PATH');
-	    
+    {
+        $this->fixer = config('pma.PHP_CS_FIXER_PATH');
+        
         if ($this->option('uninstall')) {
             $this->uninstall();
         } else {
