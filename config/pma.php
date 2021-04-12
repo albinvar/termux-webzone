@@ -145,4 +145,14 @@ return [
     */
 	 'TOR_HIDDEN_DIR' => '/data/data/com.termux/files/usr/var/lib/tor/hidden_service',
 	
+	/*
+    |--------------------------------------------------------------------------
+    | PHP-CS-FIXER Path
+    |--------------------------------------------------------------------------
+    |
+    | Set php-cs-fixer installer path.
+    |
+    */
+	 'PHP_CS_FIXER_PATH' => '/data/data/com.termux/files/home/.composer/vendor/bin/php-cs-fixer',
+	
 ];
