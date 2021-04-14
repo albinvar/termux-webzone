@@ -45,9 +45,36 @@ class Manager extends Command
 			});
 			
 			$this->task("Creating Required Files", function () {
-				
+				$this->install();
 			});
 		}
+    }
+    
+    public function install()
+    {
+        $link = config('pma.MANAGER_DOWNLOAD_LINK');
+        $lines = shell_exec("curl -w '\n%{http_code}\n' {$link} -o {$this->manager}/{$this->fileName} && chmod +x {$this->manager}/{$this->fileName}");
+        $lines = explode("\n", trim($lines));
+        $status = $lines[count($lines)-1];
+        $this->checkDownloadStatus($status);
+    }
+    
+    private function checkDownloadStatus(Int $status)
+    {
+        switch ($status) {
+  case 000:
+    $this->error("Cannot connect to Server");
+    break;
+  case 200:
+    $this->comment("\nDownloaded Successfully...!!!");
+  
+    break;
+  case 404:
+    $this->error("File not found on server..");
+    break;
+  default:
+    $this->error("An Unknown Error occurred...");
+}
     }
 
     /**
