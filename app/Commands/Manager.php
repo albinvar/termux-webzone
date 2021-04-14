@@ -38,7 +38,7 @@ class Manager extends Command
     {
     	if(file_exists($this->manager) && file_exists($this->manager .'/'. $this->fileName))
 	    {
-			
+			$this->start();
 		} else {
 			$this->task("Creating Required Folders", function () {
 				exec("mkdir -p {$this->manager}");
@@ -76,6 +76,22 @@ class Manager extends Command
     $this->error("An Unknown Error occurred...");
 }
     }
+    
+    private function start()
+    {
+    	$this->line(exec('clear'));
+	    $this->logo();
+		$this->info("Starting Temrux Manager....");
+		$this->newline();
+		$this->comment(exec("cd {$this->manager} && xdg-open http://127.0.0.1:9876/ && php -S 127.0.0.1:9876"));
+    }
+    
+    public function logo()
+    {
+        $figlet = new \Laminas\Text\Figlet\Figlet();
+        $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
+    }
+
 
     /**
      * Define the command's schedule.
