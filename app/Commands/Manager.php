@@ -28,7 +28,26 @@ class Manager extends Command
      */
     public function handle()
     {
-        //
+    	$this->fileName = "index.php";
+    	$this->link = config('pma.MANAGER_DOWNLOAD_LINK');
+	    $this->manager = config('pma.MANAGER_PATH');
+        $this->checkInstallation();
+    }
+    
+    private function checkInstallation()
+    {
+    	if(file_exists($this->manager) && file_exists($this->manager .'/'. $this->fileName))
+	    {
+			
+		} else {
+			$this->task("Creating Required Folders", function () {
+				exec("mkdir -p {$this->manager}");
+			});
+			
+			$this->task("Creating Required Files", function () {
+				
+			});
+		}
     }
 
     /**
