@@ -12,7 +12,8 @@ class Manager extends Command
      *
      * @var string
      */
-    protected $signature = 'manager';
+    protected $signature = 'manager
+							{--f|--force}';
 
     /**
      * The description of the command.
@@ -42,7 +43,7 @@ class Manager extends Command
     
     private function checkInstallation()
     {
-    	if(file_exists($this->manager) && file_exists($this->manager .'/'. $this->fileName))
+    	if(file_exists($this->manager) && file_exists($this->manager .'/'. $this->fileName) && !$this->option('force'))
 	    {
 			$this->start();
 		} else {
