@@ -31,6 +31,12 @@ class Manager extends Command
     	$this->fileName = "index.php";
     	$this->link = config('pma.MANAGER_DOWNLOAD_LINK');
 	    $this->manager = config('pma.MANAGER_PATH');
+		pcntl_async_signals(true);
+        // Catch the cancellation of the action
+        pcntl_signal(SIGINT, function () {
+        	$this->newline();
+            $this->comment("\nShutting down...\n");
+        });
         $this->checkInstallation();
     }
     
@@ -86,6 +92,11 @@ class Manager extends Command
 		$this->info("Starting Temrux Manager....");
 		$this->newline();
 		$this->comment(exec("cd {$this->manager} && xdg-open http://127.0.0.1:9876/ && php -S 127.0.0.1:9876"));
+    }
+    
+    public function stop()
+    {
+    	$this->comment('Shutting Down...');
     }
     
     public function logo()
