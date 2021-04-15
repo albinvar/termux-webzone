@@ -29,13 +29,13 @@ class Manager extends Command
      */
     public function handle()
     {
-    	$this->fileName = "index.php";
-    	$this->link = config('pma.MANAGER_DOWNLOAD_LINK');
-	    $this->manager = config('pma.MANAGER_PATH');
-		pcntl_async_signals(true);
+        $this->fileName = "index.php";
+        $this->link = config('pma.MANAGER_DOWNLOAD_LINK');
+        $this->manager = config('pma.MANAGER_PATH');
+        pcntl_async_signals(true);
         // Catch the cancellation of the action
         pcntl_signal(SIGINT, function () {
-        	$this->newline();
+            $this->newline();
             $this->comment("\nShutting down...\n");
         });
         $this->checkInstallation();
@@ -43,20 +43,18 @@ class Manager extends Command
     
     private function checkInstallation()
     {
-    	if(file_exists($this->manager) && file_exists($this->manager .'/'. $this->fileName) && !$this->option('force'))
-	    {
-			$this->start();
-		} else {
-			$this->task("Creating Required Folders", function () {
-				exec("mkdir -p {$this->manager}");
-			});
-			
-			$this->task("Creating Required Files", function () {
-				$this->install();
-				
-			});
-			$this->start();
-		}
+        if (file_exists($this->manager) && file_exists($this->manager .'/'. $this->fileName) && !$this->option('force')) {
+            $this->start();
+        } else {
+            $this->task("Creating Required Folders", function () {
+                exec("mkdir -p {$this->manager}");
+            });
+            
+            $this->task("Creating Required Files", function () {
+                $this->install();
+            });
+            $this->start();
+        }
     }
     
     public function install()
@@ -88,16 +86,16 @@ class Manager extends Command
     
     private function start()
     {
-    	$this->line(exec('clear'));
-	    $this->logo();
-		$this->info("Starting Temrux Manager....");
-		$this->newline();
-		$this->comment(exec("cd {$this->manager} && xdg-open http://127.0.0.1:9876/ && php -S 127.0.0.1:9876"));
+        $this->line(exec('clear'));
+        $this->logo();
+        $this->info("Starting Temrux Manager....");
+        $this->newline();
+        $this->comment(exec("cd {$this->manager} && xdg-open http://127.0.0.1:9876/ && php -S 127.0.0.1:9876"));
     }
     
     public function stop()
     {
-    	$this->comment('Shutting Down...');
+        $this->comment('Shutting Down...');
     }
     
     public function logo()
