@@ -46,7 +46,9 @@ class Manager extends Command
 			
 			$this->task("Creating Required Files", function () {
 				$this->install();
+				
 			});
+			$this->start();
 		}
     }
     
