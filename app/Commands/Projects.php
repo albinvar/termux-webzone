@@ -28,7 +28,41 @@ class Projects extends Command
      */
     public function handle()
     {
-        //
+        if(file_exists($this->getRoot()))
+        {
+        	$this->listAll();
+        } else {
+        	$this->error('The folder '. $this->getRoot .' was not found.');
+        }
+    }
+    
+    public function listAll()
+    {
+    	$headers = 'Projects';
+	    $folders = null;
+	    
+	foreach ($this->getProjects() as $result) {
+    if ($result === '.' or $result === '..') continue;
+    
+    if (is_dir($this->getRoot() . '/' . $result)) {
+        $folders[] = [$result];
+    }
+    }
+
+    $this->table($headers, $folders);
+    }
+    
+    private function getProjects()
+    {
+    	$files = scandir($this->getRoot());
+	    return $files;
+    }
+    
+    public function getRoot()
+    {
+        $json_object = file_get_contents(config('settings.PATH').'/settings.json');
+        $data = json_decode($json_object, true);
+        return $data['project_dir'];
     }
 
     /**
