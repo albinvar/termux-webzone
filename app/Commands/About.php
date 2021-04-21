@@ -19,7 +19,7 @@ class About extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'About Webzone';
 
     /**
      * Execute the console command.
