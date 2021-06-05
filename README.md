@@ -290,6 +290,59 @@ $ webzone installer:wordpress
 - `-f|--force` ->  Reinstall wordpress from server.
 <hr>
 
+### server:all
+```bash
+$ webzone server:all
+```
+**Use** : Enable Localhost, Pma, Mysql just in one command (BETA).
+
+<hr>
+
+### server:dev
+```bash
+$ webzone server:dev
+```
+**Use** : Start localhost for development with the path set in settings. by default uses _/sdcard/www_.
+
+`options`
+- `--n` -> Prevent opening browser after starting server.
+- `--port` ->  Overides default port (8080) set in settings. 
+- `--path` ->  Overides default path (/sdcard/www) set in settings. 
+<hr>
+
+### server:mysql
+```bash
+$ webzone server:mysql
+```
+**Use** : Start MySql database  with the default port set in settings. by default uses _/sdcard/www_.
+
+`options`
+- `--port` ->  Overides default port (3306) set in settings. 
+- `-s | --stop` ->  Kill all Mysql processes. 
+<hr>
+
+### server:pma
+```bash
+$ webzone server:pma
+```
+**Use** : Start PhpMyAdmin on default port (8000) in settings.
+
+`options`
+- `--n` -> Prevent opening browser after starting server.
+- `--port` ->  Overides default port (8000) set in settings. 
+<hr>
+
+### server:wordpress
+```bash
+$ webzone server:wordpress
+```
+**Use** : Start wordpress site on default port (7070) in settings.
+
+`options`
+- `--n` -> Prevent opening browser after starting server.
+- `--port` ->  Overides default port (7070) set in settings. 
+<hr>
+
 
 ## Contributing
 
