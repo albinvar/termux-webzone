@@ -30,7 +30,7 @@ return [
 				  'ngrok_port' => '8080',
 				  'live-server_port' => '',
 				  'pma_port' => '8000',
-				  
+				  'wordpress_port' => '7070',
 				],
 						
 ];
