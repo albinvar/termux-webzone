@@ -31,19 +31,32 @@ class Wordpress extends Command
     public function handle()
     {
         $this->callSilently('settings:init');
+        $this->wordpress = config('wordpress.PATH');
         $this->setPort();
-        $this->checkInstallations();
+        $this->install();
     }
     
-    public function checkInstallations()
+    public function install()
     {
         echo shell_exec("clear");
         $this->info("");
         $this->logo();
         $this->info("\n");
+        $status  = $this->task("Checking Installations", function () {
+	    	return $this->checkInstallation();
+	    });
+		
+		if(!$status){
+			if ($this->confirm('Do you want Install wordpress?')) {
+		        $this->call('installer:wordpress');
+		    } else {
+			 return $this->error('Exiting...');
+			}
+		}
+		
         $dir = config('wordpress.PATH');
         $cmd = "php -S 127.0.0.1:{$this->port} -t {$dir}";
-        $this->comment("Starting wordpress at : http://127.0.0.1:{$this->port}");
+        $this->comment("\nStarting wordpress at : http://127.0.0.1:{$this->port}");
         $this->info("");
         $this->launch();
         shell_exec($cmd);
@@ -78,6 +91,15 @@ class Wordpress extends Command
         $json_object = file_get_contents(config('settings.PATH').'/settings.json');
         $data = json_decode($json_object, true);
         return $data['wordpress_port'];
+    }
+    
+    private function checkInstallation()
+    {
+    	if (is_dir($this->wordpress) && file_exists($this->wordpress.'/readme.html')) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
