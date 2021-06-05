@@ -12,7 +12,8 @@ class Wordpress extends Command
      *
      * @var string
      */
-    protected $signature = 'installer:wordpress';
+    protected $signature = 'installer:wordpress
+							{--f|--force}';
 
     /**
      * The description of the command.
@@ -30,14 +31,18 @@ class Wordpress extends Command
     {
         $this->callSilently('settings:init');
         $this->wordpress = config('wordpress.PATH');
-        $this->dir = config('wordpress.PATH') . '/wordpress';
+        $this->zip = config('wordpress.WORDPRESS');
+        $this->dir = config('wordpress.DIR');
+        if ($this->option('force')) {
+            $this->removeDir();
+        }
         $this->install();
     }
     
     
     public function checkInstallation()
     {
-        if (file_exists($this->dir)) {
+         if (is_dir($this->wordpress) && file_exists($this->wordpress.'/readme.html')) {
             return true;
         } else {
             return false;
@@ -56,14 +61,14 @@ class Wordpress extends Command
         $this->logo();
         $this->comment("\nInstalling Wordpress...\n");
         $link = config('wordpress.DOWNLOAD_LINK');
-        $lines = shell_exec("curl -w '\n%{http_code}\n' {$link} -o {$this->wordpress}/wordpress.zip && chmod +x {$this->wordpress}");
+        $lines = shell_exec("curl -w '\n%{http_code}\n' {$link} -o {$this->zip}");
         $lines = explode("\n", trim($lines));
         $status = $lines[count($lines)-1];
-        $this->checkDownloadStatus($status, $this->dir);
+        $this->checkDownloadStatus($status);
     }
     
     
-    private function checkDownloadStatus(Int $status, $dir)
+    private function checkDownloadStatus(Int $status)
     {
         switch ($status) {
   case 000:
@@ -83,7 +88,7 @@ class Wordpress extends Command
     
     private function runTasks()
     {
-        $this->task("verifying command ", function () {
+        $this->task("verifying installation ", function () {
             if (file_exists($this->dir)) {
                 return true;
             } else {
