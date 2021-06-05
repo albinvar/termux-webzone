@@ -122,6 +122,27 @@ The following commands are available in our tool. You can use the individual cra
 -   share:ngrok
 -   share:tor
 
+## Available Commands
+
+### Manager
+```bash
+$ webzone manager 
+```
+
+**Use** : An interactive web interface for managing files inside termux storage built using php. Thanks to [Ging-dev](https://github.com/ging-dev) for this attractive feature.
+
+`options`
+
+<hr>
+
+### settings
+```bash
+$ webzone settings
+```
+**Use** : Helps to configure ports and paths to be used for each commands. 
+
+<hr>
+
 ## Contributing
 
 ## License
