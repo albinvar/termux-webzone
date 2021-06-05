@@ -343,6 +343,62 @@ $ webzone server:wordpress
 - `--port` ->  Overides default port (7070) set in settings. 
 <hr>
 
+### share:localhost.run
+```bash
+$ webzone share:localhost.run
+```
+**Use** : Connect a tunnel to your web appplication running on port 8080 (default) 
+
+`options`
+- `--port` ->  Overides default port (8080). 
+<hr>
+
+### share:localhost.run
+```bash
+$ webzone share:localhost.run
+```
+**Use** : Connect a tunnel to your web appplication running on port 8080 (default) 
+
+`options`
+- `--port` ->  Overides default port (8080). 
+<hr>
+
+### share:localhost.run
+```bash
+$ webzone share:localhost.run
+```
+**Use** : Connect a tunnel to your web appplication running on port 8080 (default) 
+
+`options`
+- `--port` ->  Overides default port (8080). 
+<hr>
+
+### share:ngrok
+```bash
+$ webzone share:ngrok
+```
+**Use** : ngrok provides a real-time web UI where you can introspect all HTTP traffic running over your tunnels. Replay any request against your tunnel with one click.
+
+`options`
+- `--port` ->  Overides ngrok port setting.
+- `-s | --stop` ->  Kill all Ngrok processes. 
+<hr>
+
+### share:tor
+```bash
+$ webzone share:tor
+```
+**Use** :  Set up a website in the Onion/Tor network.
+_(**NB**: The developer of webzone will not be responsible for any misuses done by users.)_ 
+
+`options`
+- `--reset` ->  Reset tor configuration.
+- `--port` ->  Set the port to be shared to tor Network
+<hr>
+
+## Credits
+
+[@albinvar](https://github.com/albinvar)
 
 ## Contributing
 
