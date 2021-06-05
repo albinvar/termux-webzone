@@ -88,13 +88,37 @@ class Wordpress extends Command
     
     private function runTasks()
     {
-        $this->task("verifying installation ", function () {
-            if (file_exists($this->dir)) {
+        $this->task("verifying download ", function () {
+            if (file_exists($this->zip)) {
                 return true;
             } else {
                 return false;
             }
         });
+        
+        $this->task("Extracting WordPress ", function () {
+            if ($this->unzip($this->zip)) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+    }
+    
+    private function unzip()
+    {
+        $zip = new \ZipArchive();
+        $file = $this->zip;
+        
+        // open archive
+        if ($zip->open($file) !== true) {
+            return false;
+        }
+        // extract contents to destination directory
+        $zip->extractTo($this->wordpress);
+        // close archive
+        $zip->close();
+        return true;
     }
     
     public function logo()
