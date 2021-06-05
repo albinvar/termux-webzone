@@ -75,7 +75,7 @@ class Wordpress extends Command
     $this->error("Cannot connect to Server");
     break;
   case 200:
-    $this->comment("\nDownloaded Successfully...!!!");
+    $this->comment("\nDownloaded Successfully...!!!\n");
     $this->runTasks();
     break;
   case 404:
@@ -88,7 +88,7 @@ class Wordpress extends Command
     
     private function runTasks()
     {
-        $this->task("verifying download ", function () {
+       $a = $this->task("Verifying download ", function () {
             if (file_exists($this->zip)) {
                 return true;
             } else {
@@ -96,13 +96,30 @@ class Wordpress extends Command
             }
         });
         
-        $this->task("Extracting WordPress ", function () {
+       $b = $this->task("Extracting WordPress ", function () {
             if ($this->unzip($this->zip)) {
                 return true;
             } else {
                 return false;
             }
         });
+        
+        if($a && $b){
+        	$this->successMessage();
+        } else {
+        	$this->errorMessage();
+        }
+    }
+    
+    
+    private function successMessage()
+    {
+    	$this->info("\n Successfully installed wordpress. use \"webzone server:wordpress\" command to start the server");
+    }
+    
+    private function errorMessage()
+    {
+    	$this->error("\n Faced an error while installing WordPress. Use \"-f or --force\" option for a forcefull installation.");
     }
     
     private function unzip()
