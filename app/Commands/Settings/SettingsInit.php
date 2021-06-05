@@ -7,15 +7,16 @@ use LaravelZero\Framework\Commands\Command;
 
 class SettingsInit extends Command
 {
+	
     public $settings;
-    
     
     /**
      * The signature of the command.
      *
      * @var string
      */
-    protected $signature = 'settings:init';
+    protected $signature = 'settings:init
+							{--f|--force}';
 
     /**
      * The description of the command.
@@ -39,7 +40,12 @@ class SettingsInit extends Command
      */
     public function handle()
     {
-        $this->checkIfSettingsExist();
+    	if($this->option('force'))
+        {
+        	$this->create();
+        } else {
+	        $this->checkIfSettingsExist();
+        }
     }
     
     public function checkIfSettingsExist()
