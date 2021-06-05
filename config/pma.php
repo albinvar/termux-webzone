@@ -175,4 +175,14 @@ return [
     */
 	 'MANAGER_PATH' => '/data/data/com.termux/files/usr/var/webzone/manager',
 	
+	/*
+    |--------------------------------------------------------------------------
+    | PHPSTAN Path
+    |--------------------------------------------------------------------------
+    |
+    | Set phpstan installer path.
+    |
+    */
+	 'PHPSTAN_PATH' => '/data/data/com.termux/files/home/.composer/vendor/bin/phpstan',
+	
 ];
