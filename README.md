@@ -211,6 +211,19 @@ $ webzone create:zend blog
 - `--path` _(optional)_ -> Overides default app/project root to a custom root.
 <hr>
 
+### create:nette
+```bash
+$ webzone create:nette blog
+```
+**Use** : Create a fresh new nette project on default project root.
+
+`arguments`
+- `name` -> Sets App/Project name.
+
+`options`
+- `--path` _(optional)_ -> Overides default app/project root to a custom root.
+<hr>
+
 ### create:sapper
 ```bash
 $ webzone create:sapper --name blog 
@@ -389,11 +402,20 @@ $ webzone share:ngrok
 $ webzone share:tor
 ```
 **Use** :  Set up a website in the Onion/Tor network.
+
 _(**NB**: The developer of webzone will not be responsible for any misuses done by users.)_ 
 
 `options`
 - `--reset` ->  Reset tor configuration.
 - `--port` ->  Set the port to be shared to tor Network
+<hr>
+
+### project:list (beta)
+```bash
+$ webzone project:list
+```
+**Use** :  Show all directories inside project root folder.
+
 <hr>
 
 ## Credits
