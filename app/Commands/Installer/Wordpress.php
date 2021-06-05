@@ -121,6 +121,32 @@ class Wordpress extends Command
         return true;
     }
     
+    private function removeDir()
+    {
+        $this->task("\nRemoving Old Files", function () {
+            if (is_dir($this->wordpress)) {
+                $cmd = shell_exec("rm -rf {$this->wordpress}");
+                if (is_null($cmd)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return true;
+            }
+            if (file_exists($this->zip)) {
+                $cmd = shell_exec("rm {$this->zip}");
+                if (is_null($cmd)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        });
+    }
+    
     public function logo()
     {
         $figlet = new \Laminas\Text\Figlet\Figlet();
