@@ -22,7 +22,7 @@ return [
     |
     */
 
-    'WORDPRESS' => '/sdcard/tmp/wordpress.zip',
+    'WORDPRESS' => '/data/data/com.termux/files/usr/var/webzone/wordpress.zip',
     
     /*
     |--------------------------------------------------------------------------
@@ -33,7 +33,7 @@ return [
     |
     */
 
-    'PATH' => '/sdcard/tmp/wordpress',
+    'PATH' => '/data/data/com.termux/files/usr/var/webzone/wordpress',
     
      /*
     |--------------------------------------------------------------------------
@@ -44,6 +44,6 @@ return [
     |
     */
 
-    'DIR' => '/sdcard/tmp/',
+    'DIR' => '/data/data/com.termux/files/usr/var/webzone',
 	
 ];
