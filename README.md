@@ -124,7 +124,7 @@ The following commands are available in our tool. You can use the individual cra
 
 ## Available Commands
 
-### Manager
+### manager
 ```bash
 $ webzone manager 
 ```
@@ -142,6 +142,152 @@ $ webzone settings
 ```
 **Use** : Helps to configure ports and paths to be used for each commands. 
 
+<hr>
+
+### self-update
+```bash
+$ webzone self-update
+```
+**Use** : Automatically updates webzone to latest version.
+<hr>
+
+### composer:global
+```bash
+$ webzone composer:global
+```
+**Use** : Configure composer globally. 
+<hr>
+
+### create:codelighniter
+```bash
+$ webzone create:codelighniter blog 
+```
+**Use** : Create a fresh new codelighniter project on default project root.
+
+`arguments`
+- `name` -> Sets App/Project name.
+
+`options`
+- `--path` _(optional)_ -> Overides default app/project root to a custom root.
+<hr>
+
+### create:laravel
+```bash
+$ webzone create:laravel blog 
+```
+**Use** : Create a fresh new laravel project on default project root.
+
+`arguments`
+- `name` -> Sets App/Project name.
+
+`options`
+- `--path`_(optional)_ -> Overides default app/project root to a custom root.
+<hr>
+
+### create:symfony
+```bash
+$ webzone create:symfony blog --type api
+```
+**Use** : Create a fresh new Symfony project on default project root.
+
+`arguments`
+- `name` -> Sets App/Project name.
+
+`options`
+- `--path` _(optional)_ -> Overides default app/project root to a custom root.
+- `--type` _(optional)_ -> Sets application type. By default uses `web` as type. Expects `web` or `api`. 
+<hr>
+
+### create:zend
+```bash
+$ webzone create:zend blog 
+```
+**Use** : Create a fresh new zend project on default project root.
+
+`arguments`
+- `name` -> Sets App/Project name.
+
+`options`
+- `--path` _(optional)_ -> Overides default app/project root to a custom root.
+<hr>
+
+### create:sapper
+```bash
+$ webzone create:sapper --name blog 
+```
+**Use** : Create a fresh new sapper project on default project root.
+
+
+`options`
+- `--name` -> Set's sapper project name.
+- `--path`_(optional)_ -> Overides default app/project root to a custom root.
+<hr>
+
+
+### install:mysql
+```bash
+$ webzone install:mysql
+```
+**Use** : Install MySql Database (mariadb).
+
+<hr>
+
+### install:pma
+```bash
+$ webzone install:pma
+```
+**Use** : Download and Install PhpMyAdmin latest version from server.
+
+`options`
+- `-f|--force` ->  Redownload and Reinstall PhpMyAdmin forcefully.
+<hr>
+
+### installer:fixer
+```bash
+$ webzone installer:fixer 
+```
+**Use** : Install and configure php-cs-fixer globally. You can use `php-cs-fixer -h` for more details.
+
+`options`
+- `--uninstall` -> Remove php-cs-fixer from device.
+<hr>
+
+### installer:laravel
+```bash
+$ webzone installer:laravel
+```
+**Use** : Install laravel-installer latest version from packagist.
+
+`options`
+- `--uninstall` ->  Remove laravel-installer globally.
+<hr>
+
+### installer:phpstan
+```bash
+$ webzone installer:phpstan
+```
+**Use** : Install phpstan latest version from packagist.
+
+`options`
+- `--uninstall` ->  Remove phpstan globally.
+<hr>
+
+### installer:symfony
+```bash
+$ webzone installer:symfony
+```
+**Use** : Install Symfony CLI from server.
+
+<hr>
+
+### installer:wordpress
+```bash
+$ webzone installer:wordpress
+```
+**Use** : Install wordpress latest version from server.
+
+`options`
+- `-f|--force` ->  Reinstall wordpress from server.
 <hr>
 
 
