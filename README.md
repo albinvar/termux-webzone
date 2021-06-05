@@ -132,6 +132,7 @@ $ webzone manager
 **Use** : An interactive web interface for managing files inside termux storage built using php. Thanks to [Ging-dev](https://github.com/ging-dev) for this attractive feature.
 
 `options`
+- `-f | --force` -> reinstall file manager forcefully if you have any errors.
 
 <hr>
 
@@ -142,6 +143,7 @@ $ webzone settings
 **Use** : Helps to configure ports and paths to be used for each commands. 
 
 <hr>
+
 
 ## Contributing
 
