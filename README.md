@@ -79,6 +79,8 @@ Or if you have installed via composer, use
 composer global update albinvar/termux-webzone
 ```
 
+Additionaly old users needs to regenerate settings using the command ```webzone settings:init -f``` for any major updates.
+
 ## Features
 
 - Install Mysql
