@@ -42,7 +42,9 @@ class SettingsInit extends Command
     {
     	if($this->option('force'))
         {
-        	$this->create();
+        	if ($this->confirm('Do you want to reset your webzone settings?')) {
+		        $this->create();
+		    }
         } else {
 	        $this->checkIfSettingsExist();
         }
