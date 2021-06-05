@@ -63,7 +63,7 @@ class Settings extends Command
     {
         $source = $this->choice(
             'What would you like to modify',
-            [1 => 'Project Root', 'Localhost Port', 'MySql Port', 'Ngrok Port', 'Tor Server Port', 'PhpMyAdmin Port', 9 => 'Exit']
+            [1 => 'Project Root', 'Localhost Port', 'MySql Port', 'Ngrok Port', 'Tor Server Port', 'PhpMyAdmin Port', 'Wordpress Port', 9 => 'Exit']
         );
         switch ($source) {
             case 'Project Root':
@@ -150,6 +150,22 @@ class Settings extends Command
                 $body = "PhpMyAdmin Port";
                 $key = 'pma_port';
                 $this->showDefault('Do you want to change the PMA port', $key);
+                $port = $this->portUpdater();
+                
+                if (strlen($port) > 5) {
+                    $this->error('The port you have provided seems to be invalid. Try again..');
+                    sleep(3);
+                    exec('clear');
+                    return $this->call('settings');
+                }
+                $type = "normal";
+                $this->edit($body, $key, $port, $type);
+                break;
+                
+            case 'Wordpress Port':
+                $body = "Wordpress Port";
+                $key = 'wordpress_port';
+                $this->showDefault("Do you want to change the default wordpress Port?", $key);
                 $port = $this->portUpdater();
                 
                 if (strlen($port) > 5) {
