@@ -11,7 +11,7 @@ return [
     |
     */
 
-    'DOWNLOAD_LINK' => 'http://localhost:7070/wordpress.zip',
+    'DOWNLOAD_LINK' => 'https://gitlab.com/albinvar/pma-cli/-/raw/master/wordpress.zip?inline=false',
     
     /*
     |--------------------------------------------------------------------------
