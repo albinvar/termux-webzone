@@ -42,7 +42,7 @@ class Wordpress extends Command
     
     public function checkInstallation()
     {
-         if (is_dir($this->wordpress) && file_exists($this->wordpress.'/readme.html')) {
+        if (is_dir($this->wordpress) && file_exists($this->wordpress.'/readme.html')) {
             return true;
         } else {
             return false;
@@ -88,7 +88,7 @@ class Wordpress extends Command
     
     private function runTasks()
     {
-       $a = $this->task("Verifying download ", function () {
+        $a = $this->task("Verifying download ", function () {
             if (file_exists($this->zip)) {
                 return true;
             } else {
@@ -96,7 +96,7 @@ class Wordpress extends Command
             }
         });
         
-       $b = $this->task("Extracting WordPress ", function () {
+        $b = $this->task("Extracting WordPress ", function () {
             if ($this->unzip($this->zip)) {
                 return true;
             } else {
@@ -104,22 +104,22 @@ class Wordpress extends Command
             }
         });
         
-        if($a && $b){
-        	$this->successMessage();
+        if ($a && $b) {
+            $this->successMessage();
         } else {
-        	$this->errorMessage();
+            $this->errorMessage();
         }
     }
     
     
     private function successMessage()
     {
-    	$this->info("\n Successfully installed wordpress. use \"webzone server:wordpress\" command to start the server");
+        $this->info("\n Successfully installed wordpress. use \"webzone server:wordpress\" command to start the server");
     }
     
     private function errorMessage()
     {
-    	$this->error("\n Faced an error while installing WordPress. Use \"-f or --force\" option for a forcefull installation.");
+        $this->error("\n Faced an error while installing WordPress. Use \"-f or --force\" option for a forcefull installation.");
     }
     
     private function unzip()

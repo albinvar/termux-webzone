@@ -15,7 +15,7 @@ return [
     
     /*
     |--------------------------------------------------------------------------
-    | PMA Installation Directory 
+    | PMA Installation Directory
     |--------------------------------------------------------------------------
     |
     | Specify storage location to install PhpMyAdmin files.
@@ -26,7 +26,7 @@ return [
     
     /*
     |--------------------------------------------------------------------------
-    | PMA Default Archive 
+    | PMA Default Archive
     |--------------------------------------------------------------------------
     |
     | Set a default PMA archive if the cli fails to contact with API Server
@@ -43,9 +43,9 @@ return [
     | Composer installation path.
     |
     */
-	 'composer' => "/data/data/com.termux/files/usr/bin/composer",
-	
-	/*
+     'composer' => "/data/data/com.termux/files/usr/bin/composer",
+    
+    /*
     |--------------------------------------------------------------------------
     | Bashrc
     |--------------------------------------------------------------------------
@@ -53,9 +53,9 @@ return [
     | 'bash.bashrc' path.
     |
     */
-	 'bashrc' => "/data/data/com.termux/files/usr/etc/bash.bashrc",
-	
-	/*
+     'bashrc' => "/data/data/com.termux/files/usr/etc/bash.bashrc",
+    
+    /*
     |--------------------------------------------------------------------------
     | MySql Command
     |--------------------------------------------------------------------------
@@ -63,9 +63,9 @@ return [
     | Mysql command
     |
     */
-	 'MYSQL_PATH' => '/data/data/com.termux/files/usr/bin/mysql',
-	
-	/*
+     'MYSQL_PATH' => '/data/data/com.termux/files/usr/bin/mysql',
+    
+    /*
     |--------------------------------------------------------------------------
     | MySql Installation Command
     |--------------------------------------------------------------------------
@@ -73,9 +73,9 @@ return [
     | Set base path for development server.
     |
     */
-	 'MYSQL_INSTALLATION_COMMAND' => 'pkg update -y && pkg upgrade -y && pkg install mariadb -y 2> /dev/null',
-	
-	/*
+     'MYSQL_INSTALLATION_COMMAND' => 'pkg update -y && pkg upgrade -y && pkg install mariadb -y 2> /dev/null',
+    
+    /*
     |--------------------------------------------------------------------------
     | PATH Environment Variable
     |--------------------------------------------------------------------------
@@ -83,9 +83,9 @@ return [
     | used on bash.bashrc
     |
     */
-	 'path' => 'PATH=\$PATH:/data/data/com.termux/files/home/.composer/vendor/bin',
-	
-	/*
+     'path' => 'PATH=\$PATH:/data/data/com.termux/files/home/.composer/vendor/bin',
+    
+    /*
     |--------------------------------------------------------------------------
     | PROJECT Base Path
     |--------------------------------------------------------------------------
@@ -93,9 +93,9 @@ return [
     | Set base path for development server.
     |
     */
-	 'PROJECT_BASE_PATH' => '/sdcard/www',
-	
-	/*
+     'PROJECT_BASE_PATH' => '/sdcard/www',
+    
+    /*
     |--------------------------------------------------------------------------
     | LARAVEL INSTALLER Path
     |--------------------------------------------------------------------------
@@ -103,9 +103,9 @@ return [
     | Set laravel installer path.
     |
     */
-	 'LARAVEL_INSTALLER_PATH' => '/data/data/com.termux/files/home/.composer/vendor/bin/laravel',
-	
-	/*
+     'LARAVEL_INSTALLER_PATH' => '/data/data/com.termux/files/home/.composer/vendor/bin/laravel',
+    
+    /*
     |--------------------------------------------------------------------------
     | Ngrok Download link
     |--------------------------------------------------------------------------
@@ -113,9 +113,9 @@ return [
     | Set ngrok download link.
     |
     */
-	 'NGROK' => 'https://gitlab.com/albinvar/pma-cli/-/raw/master/ngrok?inline=false',
-	
-	/*
+     'NGROK' => 'https://gitlab.com/albinvar/pma-cli/-/raw/master/ngrok?inline=false',
+    
+    /*
     |--------------------------------------------------------------------------
     | Torrc
     |--------------------------------------------------------------------------
@@ -123,9 +123,9 @@ return [
     | Set torrc path.
     |
     */
-	 'TORRC' => '/data/data/com.termux/files/usr/etc/tor/torrc',
-	
-	/*
+     'TORRC' => '/data/data/com.termux/files/usr/etc/tor/torrc',
+    
+    /*
     |--------------------------------------------------------------------------
     | Torrc Download link
     |--------------------------------------------------------------------------
@@ -133,9 +133,9 @@ return [
     | Set torrc download link.
     |
     */
-	 'TORRC_DOWNLOAD_LINK' => 'https://gitlab.com/albinvar/pma-cli/-/raw/master/torrc?inline=false',
-	
-	/*
+     'TORRC_DOWNLOAD_LINK' => 'https://gitlab.com/albinvar/pma-cli/-/raw/master/torrc?inline=false',
+    
+    /*
     |--------------------------------------------------------------------------
     | Torrc Hidden Folder
     |--------------------------------------------------------------------------
@@ -143,9 +143,9 @@ return [
     | Stores public key and private key for your hostname.
     |
     */
-	 'TOR_HIDDEN_DIR' => '/data/data/com.termux/files/usr/var/lib/tor/hidden_service',
-	
-	/*
+     'TOR_HIDDEN_DIR' => '/data/data/com.termux/files/usr/var/lib/tor/hidden_service',
+    
+    /*
     |--------------------------------------------------------------------------
     | PHP-CS-FIXER Path
     |--------------------------------------------------------------------------
@@ -153,9 +153,9 @@ return [
     | Set php-cs-fixer installer path.
     |
     */
-	 'PHP_CS_FIXER_PATH' => '/data/data/com.termux/files/home/.composer/vendor/bin/php-cs-fixer',
-	
-	/*
+     'PHP_CS_FIXER_PATH' => '/data/data/com.termux/files/home/.composer/vendor/bin/php-cs-fixer',
+    
+    /*
     |--------------------------------------------------------------------------
     | File Manager Download Link
     |--------------------------------------------------------------------------
@@ -163,9 +163,9 @@ return [
     | Set file manager php Download link.
     |
     */
-	 'MANAGER_DOWNLOAD_LINK' => 'https://gitlab.com/albinvar/pma-cli/-/raw/master/fm.php?inline=false',
-	
-	/*
+     'MANAGER_DOWNLOAD_LINK' => 'https://gitlab.com/albinvar/pma-cli/-/raw/master/fm.php?inline=false',
+    
+    /*
     |--------------------------------------------------------------------------
     | File Manager Download Link
     |--------------------------------------------------------------------------
@@ -173,9 +173,9 @@ return [
     | Set file manager php Download link.
     |
     */
-	 'MANAGER_PATH' => '/data/data/com.termux/files/usr/var/webzone/manager',
-	
-	/*
+     'MANAGER_PATH' => '/data/data/com.termux/files/usr/var/webzone/manager',
+    
+    /*
     |--------------------------------------------------------------------------
     | PHPSTAN Path
     |--------------------------------------------------------------------------
@@ -183,6 +183,6 @@ return [
     | Set phpstan installer path.
     |
     */
-	 'PHPSTAN_PATH' => '/data/data/com.termux/files/home/.composer/vendor/bin/phpstan',
-	
+     'PHPSTAN_PATH' => '/data/data/com.termux/files/home/.composer/vendor/bin/phpstan',
+    
 ];

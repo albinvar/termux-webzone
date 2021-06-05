@@ -34,5 +34,5 @@ return [
     */
 
     'TYPES' => ['web', 'console'],
-	
+    
 ];

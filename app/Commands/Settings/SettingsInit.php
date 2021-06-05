@@ -7,7 +7,6 @@ use LaravelZero\Framework\Commands\Command;
 
 class SettingsInit extends Command
 {
-	
     public $settings;
     
     /**
@@ -40,13 +39,12 @@ class SettingsInit extends Command
      */
     public function handle()
     {
-    	if($this->option('force'))
-        {
-        	if ($this->confirm('Do you want to reset your webzone settings?')) {
-		        $this->create();
-		    }
+        if ($this->option('force')) {
+            if ($this->confirm('Do you want to reset your webzone settings?')) {
+                $this->create();
+            }
         } else {
-	        $this->checkIfSettingsExist();
+            $this->checkIfSettingsExist();
         }
     }
     

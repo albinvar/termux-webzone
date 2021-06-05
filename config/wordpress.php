@@ -18,7 +18,7 @@ return [
     | WORDPRESS zip (Do Not Change)
     |--------------------------------------------------------------------------
     |
-    | 
+    |
     |
     */
 
@@ -29,7 +29,7 @@ return [
     | WORDPRESS Path (Do Not Change)
     |--------------------------------------------------------------------------
     |
-    | 
+    |
     |
     */
 
@@ -45,5 +45,5 @@ return [
     */
 
     'DIR' => '/data/data/com.termux/files/usr/var/webzone',
-	
+    
 ];
