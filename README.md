@@ -100,16 +100,15 @@ Additionaly, old users needs to regenerate settings using the command ```webzone
 
 ## Features
 
-- Install Mysql
 - Install PhpMyAdmin
+- Create Wordpress site
 - Create Development server
 - Configure composer globally
-- Install Laravel Installer
-- Create sapper projects
+- Create almost 4+ php framework projects.
 - Create onion sites (tor)
 - Portforwading through Ngrok
 - Portforwading through Localhost.run
-- Configure almost everything
+- Settings option to configure everything.
 - More features coming soon...
 
 ## Screenshots
@@ -122,26 +121,52 @@ Additionaly, old users needs to regenerate settings using the command ```webzone
 
 The following commands are available in our tool. You can use the individual crafting routines which are similar to the Artisan commands.
 
+##### basics Commands
 -   about
+-   manager
 -   settings
 -   self-update
+
+##### Installable Settings
 -   install:mysql
 -   install:pma
+
+##### Create Commands
+-   create:codelighniter
 -   create:laravel
+-   create:nette
+-   create:symfony
 -   create:sapper
+-   create:zend
+
+##### Installer Commands
 -   installer:laravel
 -   installer:symfony
+-   installer:fixer
+-   installer:phpstan
+-   installer:wordpress
+
+##### Server Commands
+-   server:all
 -   server:dev
 -   server:pma
 -   server:mysql
--   server: all
+-   server:wordpress
+
+##### Port-forwarding Commands
 -   share:localhost.run
 -   share:ngrok
 -   share:tor
 
+##### Others
+-   composer:global
+-   project:list (Beta)
+
 ## Available Commands
 
-### manager
+You can use this Commands specifically builded for each features.
+
+#### manager
 ```bash
 $ webzone manager 
 ```
@@ -153,7 +178,7 @@ $ webzone manager
 
 <hr>
 
-### settings
+#### settings
 ```bash
 $ webzone settings
 ```
