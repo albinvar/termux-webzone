@@ -59,7 +59,7 @@ class Yii extends Command
         
         // set project type.
         if (!empty($this->option('type'))) {
-        	$array = ['basic', 'advanced'];
+            $array = ['basic', 'advanced'];
             if (in_array($this->option('type'), $array)) {
                 if ($this->option('type') == 'basic') {
                     $this->type = 'yiisoft/yii2-app-basic';
