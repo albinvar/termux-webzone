@@ -3,7 +3,7 @@
     <img title="Laravel Zero" height="100" src="https://i.ibb.co/PMrx8jJ/d5651c2b-0efb-45fe-81b7-a4d4d97af732.png"><br>
 <br>
 <img src="https://img.shields.io/packagist/v/albinvar/termux-webzone?label=version">
-<img src="https://img.shields.io/packagist/dm/albinvar/termux-webzone">
+<img src="https://poser.pugx.org/albinvar/termux-webzone/downloads">
 <img src="https://img.shields.io/github/repo-size/albinvar/termux-webzone">
 <a href="LICENSE"><img src="https://img.shields.io/apm/l/Github"></a>
 </p>
