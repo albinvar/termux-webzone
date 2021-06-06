@@ -127,7 +127,7 @@ The following commands are available in our tool. You can use the individual cra
 -   settings
 -   self-update
 
-##### Installable Settings
+##### Installable packages
 -   install:mysql
 -   install:pma
 
@@ -166,7 +166,9 @@ The following commands are available in our tool. You can use the individual cra
 
 You can use this Commands specifically builded for each features.
 
-#### manager
+## Basic Commands
+
+### manager
 ```bash
 $ webzone manager 
 ```
@@ -178,7 +180,7 @@ $ webzone manager
 
 <hr>
 
-#### settings
+### settings
 ```bash
 $ webzone settings
 ```
@@ -199,6 +201,8 @@ $ webzone composer:global
 ```
 **Use** : Configure composer globally. 
 <hr>
+
+## Create Commands
 
 ### create:codelighniter
 ```bash
@@ -266,6 +270,47 @@ $ webzone create:nette blog
 - `--path` _(optional)_ -> Overides default app/project root to a custom root.
 <hr>
 
+### create:lumen
+```bash
+$ webzone create:lumen blog
+```
+**Use** : Create a fresh new lumen project on default project root.
+
+`arguments`
+- `name` -> Sets app/project name.
+
+`options`
+- `--path` _(optional)_ -> Overides default app/project root to a custom root.
+<hr>
+
+### create:cakephp
+```bash
+$ webzone create:cakephp blog
+```
+**Use** : Create a fresh new nette project on default project root.
+
+`arguments`
+- `name` -> Sets app/project name.
+
+`options`
+- `--path` _(optional)_ -> Overides default app/project root to a custom root.
+
+<hr>
+
+### create:yii
+```bash
+$ webzone create:yii blog --type=basic
+```
+**Use** : Create a fresh new Yii project on default project root.
+
+`arguments`
+- `name` -> Sets app/project name.
+
+`options`
+- `--path` _(optional)_ -> Overides default app/project root to a custom root.
+- `--type` _(optional)_ -> Sets application type. By default uses `basic` as type. Expects `basic` or `advanced`.  
+<hr>
+
 ### create:sapper
 ```bash
 $ webzone create:sapper --name blog 
@@ -278,6 +323,8 @@ $ webzone create:sapper --name blog
 - `--path`_(optional)_ -> Overides default app/project root to a custom root.
 <hr>
 
+
+## Installable packages
 
 ### install:mysql
 ```bash
@@ -296,6 +343,9 @@ $ webzone install:pma
 `options`
 - `-f|--force` ->  Redownload and Reinstall PhpMyAdmin forcefully.
 <hr>
+
+
+## Installer Commands
 
 ### installer:fixer
 ```bash
@@ -344,6 +394,8 @@ $ webzone installer:wordpress
 `options`
 - `-f|--force` ->  Reinstall wordpress from server.
 <hr>
+
+Server Commands
 
 ### server:all
 ```bash
@@ -397,6 +449,8 @@ $ webzone server:wordpress
 - `--n` -> Prevent opening browser after starting server.
 - `--port` ->  Overides default port (7070) set in settings. 
 <hr>
+
+##### Port-forwarding Commands
 
 ### share:localhost.run
 ```bash
