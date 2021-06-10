@@ -59,10 +59,10 @@ class Mysql extends Command
                 [1 => 'install now', 0 => 'cancel']
             );
         
-            if ($source == 'install now' || $source == 1) {
+            if ($source == 'install now' || $source === 1) {
                 $this->call('install:mysql');
             }
-            if ($source == 'cancel' || $source == 0) {
+            if ($source == 'cancel' || $source === 0) {
                 $this->info("Good bye");
             }
         } elseif ($this->option('stop')) {
