@@ -7,6 +7,10 @@ use LaravelZero\Framework\Commands\Command;
 
 class Wordpress extends Command
 {
+    protected $port;
+    
+    protected $wordpress;
+    
     /**
      * The signature of the command.
      *
@@ -50,7 +54,8 @@ class Wordpress extends Command
             if ($this->confirm('Do you want Install wordpress?')) {
                 $this->call('installer:wordpress');
             } else {
-                return $this->error('Exiting...');
+                $this->error('Exiting...');
+                return true;
             }
         }
         

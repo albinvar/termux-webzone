@@ -7,6 +7,8 @@ use LaravelZero\Framework\Commands\Command;
 
 class PhpCsFixer extends Command
 {
+    protected $fixer;
+    
     /**
      * The signature of the command.
      *

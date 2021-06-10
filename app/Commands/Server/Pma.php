@@ -7,6 +7,8 @@ use LaravelZero\Framework\Commands\Command;
 
 class Pma extends Command
 {
+    protected $port;
+    
     /**
      * The signature of the command.
      *

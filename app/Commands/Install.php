@@ -7,6 +7,8 @@ use LaravelZero\Framework\Commands\Command;
 
 class Install extends Command
 {
+    protected $dir;
+    
     /**
      * The signature of the command.
      *
@@ -131,14 +133,14 @@ class Install extends Command
     private function runTasks()
     {
         $this->task("Extracting PMA ", function () {
-            if ($this->unzip($this->dir)) {
+            if ($this->unzip()) {
                 return true;
             } else {
                 return false;
             }
         });
         $this->task("Set Configuration File ", function () {
-            if ($this->setPmaConfig($this->dir)) {
+            if ($this->setPmaConfig()) {
                 return true;
             } else {
                 return false;

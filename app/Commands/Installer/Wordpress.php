@@ -7,6 +7,14 @@ use LaravelZero\Framework\Commands\Command;
 
 class Wordpress extends Command
 {
+    protected $wordpress;
+    
+    protected $port;
+    
+    protected $dir;
+    
+    protected $zip;
+    
     /**
      * The signature of the command.
      *
@@ -97,7 +105,7 @@ class Wordpress extends Command
         });
         
         $b = $this->task("Extracting WordPress ", function () {
-            if ($this->unzip($this->zip)) {
+            if ($this->unzip()) {
                 return true;
             } else {
                 return false;

@@ -270,6 +270,9 @@ class Settings extends Command
         case 'validation.numeric':
             $msg = "The value should be a Number";
         break;
+        default:
+            $msg = "Error occured";
+        break;
         }
             $this->error($msg);
             return $this->askValid($question, $field, $rules);

@@ -7,6 +7,18 @@ use LaravelZero\Framework\Commands\Command;
 
 class All extends Command
 {
+    protected $root;
+    
+    protected $mysql;
+    
+    protected $pma;
+    
+    protected $mysqlPort;
+    
+    protected $pmaPort;
+    
+    protected $localhostPort;
+    
     /**
      * The signature of the command.
      *
@@ -32,9 +44,9 @@ class All extends Command
         $this->root = $this->getData()['project_dir'];
         $this->mysql = "/data/data/com.termux/files/usr/bin/mysql";
         $this->pma = config('pma.PMA_DIR');
-        $this->mysql_port = $this->getData()['mysql_port'];
-        $this->pma_port = $this->getData()['pma_port'];
-        $this->localhost_port = $this->getData()['php_port'];
+        $this->mysqlPort = $this->getData()['mysqlPort'];
+        $this->pmaPort = $this->getData()['pmaPort'];
+        $this->localhostPort = $this->getData()['php_port'];
         $this->checkInstallation();
     }
     
@@ -65,7 +77,7 @@ class All extends Command
     
     private function runAll()
     {
-        $cmd = "php -S 127.0.0.1:{$this->pma_port} -t {$this->pma} & php -S 127.0.0.1:{$this->localhost_port} -t {$this->root} & mysqld --port={$this->mysql_port} --gdb & echo \"PHP, MySQL Services Started\" && fg";
+        $cmd = "php -S 127.0.0.1:{$this->pmaPort} -t {$this->pma} & php -S 127.0.0.1:{$this->localhostPort} -t {$this->root} & mysqld --port={$this->mysqlPort} --gdb & echo \"PHP, MySQL Services Started\" && fg";
         exec($cmd);
     }
     
