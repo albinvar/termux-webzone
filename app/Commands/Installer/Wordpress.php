@@ -106,7 +106,7 @@ class Wordpress extends Command
         });
         
         $b = $this->task("Extracting WordPress ", function () {
-            if ($this->unzip($this->zip)) {
+            if ($this->unzip()) {
                 return true;
             } else {
                 return false;

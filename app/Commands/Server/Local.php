@@ -46,7 +46,7 @@ class Local extends Command
         if (!is_dir($this->path)) {
             mkdir($this->path);
             $this->comment('Directory created..');
-            $this->createIndex($this->path);
+            $this->createIndex();
         }
         $this->start();
     }
