@@ -54,11 +54,6 @@ class Settings extends Command
         return $data;
     }
     
-    public function options()
-    {
-        $data = $this->getOptions();
-    }
-    
     private function showList()
     {
         $source = $this->choice(
