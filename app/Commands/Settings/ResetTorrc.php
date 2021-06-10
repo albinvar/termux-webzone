@@ -80,23 +80,25 @@ class ResetTorrc extends Command
     
     private function checkDownloadStatus(Int $status)
     {
+        $bool = null;
         switch ($status) {
-  case 000:
-    $this->error("Cannot connect to Server");
-    return false;
-    break;
-  case 200:
-    $this->comment("\nDownloaded Successfully...!!!");
-    return true;
-    break;
-  case 404:
-    $this->error("File not found on server..");
-    return false;
-    break;
-  default:
-    $this->error("An Unknown Error occurred...");
-    return false;
-}
+            case 000:
+                $this->error("Cannot connect to the server");
+                $bool = 0;
+                break;
+            case 200:
+                $this->comment("\nDownload completed");
+                $bool = 1;
+                break;
+            case 404:
+                $this->error("File could not be found");
+                $bool = 0;
+                break;
+            default:
+                $this->error("An Unknown error occurred");
+                $bool = 0;
+        }
+        return $bool;
     }
     
     
