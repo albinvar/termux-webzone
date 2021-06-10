@@ -54,7 +54,8 @@ class SettingsInit extends Command
             if ($this->validateJson()) {
                 $this->createSettingsJson();
             }
-            return $this->info("Initialized settings");
+            $this->info("Initialized settings");
+            return true;
         } else {
             $this->create();
         }
