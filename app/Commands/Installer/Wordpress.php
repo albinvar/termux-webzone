@@ -153,22 +153,16 @@ class Wordpress extends Command
                 $cmd = shell_exec("rm -rf {$this->wordpress}");
                 if (is_null($cmd)) {
                     return true;
-                } else {
-                    return false;
                 }
-            } else {
-                return true;
-            }
-            if (file_exists($this->zip)) {
+                return false;
+            } elseif (file_exists($this->zip)) {
                 $cmd = shell_exec("rm {$this->zip}");
                 if (is_null($cmd)) {
                     return true;
-                } else {
-                    return false;
                 }
-            } else {
-                return true;
+                return false;
             }
+            return true;
         });
     }
     
