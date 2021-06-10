@@ -7,6 +7,13 @@ use LaravelZero\Framework\Commands\Command;
 
 class ResetTorrc extends Command
 {
+	
+	protected $torrc;
+	
+	protected $torrcLink;
+	
+	protected $torHiddenDir;
+	
     /**
      * The signature of the command.
      *
@@ -31,8 +38,8 @@ class ResetTorrc extends Command
     {
         $this->callSilently('settings:init');
         $this->torrc = config('pma.TORRC');
-        $this->torrc_link = config('pma.TORRC_DOWNLOAD_LINK');
-        $this->tor_hidden_dir = config('pma.TOR_HIDDEN_DIR');
+        $this->torrcLink = config('pma.TORRC_DOWNLOAD_LINK');
+        $this->torHiddenDir = config('pma.torHiddenDir');
         $this->runTasks();
         if ($this->option('force')) {
             $this->call('share:tor');
@@ -58,14 +65,14 @@ class ResetTorrc extends Command
         
         // Task 3
         $this->task("Creating required folders ", function () {
-            exec("mkdir -p {$this->tor_hidden_dir}");
+            exec("mkdir -p {$this->torHiddenDir}");
             return true;
         });
     }
     
     private function downloadCurl()
     {
-        $lines = shell_exec("curl -w '\n%{http_code}\n' {$this->torrc_link} -o {$this->torrc}");
+        $lines = shell_exec("curl -w '\n%{http_code}\n' {$this->torrcLink} -o {$this->torrc}");
         $lines = explode("\n", trim($lines));
         $status = $lines[count($lines)-1];
         $this->checkDownloadStatus($status);

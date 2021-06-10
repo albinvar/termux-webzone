@@ -7,6 +7,14 @@ use LaravelZero\Framework\Commands\Command;
 
 class NodeJsIniter extends Command
 {
+	protected $nodeJs;
+	
+	protected $npm;
+	
+	protected $nodeStatus;
+	
+	protected $npmStatus;
+	
     /**
      * The signature of the command.
      *
@@ -31,7 +39,7 @@ class NodeJsIniter extends Command
         echo exec("clear");
         $this->logo();
         
-        $this->nodejs = "/data/data/com.termux/files/usr/bin/node";
+        $this->nodeJs = "/data/data/com.termux/files/usr/bin/node";
         $this->npm = "/data/data/com.termux/files/usr/bin/npm";
         $this->checkInstallation();
     }
@@ -59,7 +67,7 @@ class NodeJsIniter extends Command
     private function checkNodeJs()
     {
         $this->task("Checking Nodejs ", function () {
-            if (file_exists($this->nodejs)) {
+            if (file_exists($this->nodeJs)) {
                 $this->nodeStatus = true;
                 return true;
             } else {

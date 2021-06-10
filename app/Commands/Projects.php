@@ -7,6 +7,8 @@ use LaravelZero\Framework\Commands\Command;
 
 class Projects extends Command
 {
+	protected $getRoot;
+	
     /**
      * The signature of the command.
      *

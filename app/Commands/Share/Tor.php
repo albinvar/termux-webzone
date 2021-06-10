@@ -7,6 +7,24 @@ use LaravelZero\Framework\Commands\Command;
 
 class Tor extends Command
 {
+	
+	protected $torrc;
+	
+	protected $dir;
+	
+	protected $port;
+	
+	protected $olds;
+	
+	protected $old1;
+	
+	protected $old2;
+	
+	protected $string1;
+	
+	protected $string2;
+	
+	
     /**
      * The signature of the command.
      *

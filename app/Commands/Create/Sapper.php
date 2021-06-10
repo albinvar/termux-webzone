@@ -7,6 +7,9 @@ use LaravelZero\Framework\Commands\Command;
 
 class Sapper extends Command
 {
+	
+	protected $path;
+	
     /**
      * The signature of the command.
      *

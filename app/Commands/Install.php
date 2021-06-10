@@ -7,6 +7,9 @@ use LaravelZero\Framework\Commands\Command;
 
 class Install extends Command
 {
+	
+	protected $dir;
+	
     /**
      * The signature of the command.
      *

@@ -7,6 +7,10 @@ use LaravelZero\Framework\Commands\Command;
 
 class Codeigniter extends Command
 {
+	protected $dir;
+	
+	protected $path;
+	
     /**
      * The signature of the command.
      *
