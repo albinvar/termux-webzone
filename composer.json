@@ -22,9 +22,10 @@
         "padraic/phar-updater": "^1.0.6"
     },
     "require-dev": {
-	    "laravel-zero/framework": "^8.4",
+        "laravel-zero/framework": "^8.4",
         "mockery/mockery": "^1.4.2",
-        "pestphp/pest": "^1.0"
+        "pestphp/pest": "^1.0",
+        "phpstan/phpstan": "^0.12.89"
     },
     "autoload": {
         "psr-4": {
