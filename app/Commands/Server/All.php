@@ -7,18 +7,18 @@ use LaravelZero\Framework\Commands\Command;
 
 class All extends Command
 {
-	protected $root;
-	
-	protected $mysql;
-	
-	protected $pma;
-	
-	protected $mysqlPort;
-	
-	protected $pmaPort;
-	
-	protected $localhostPort;
-	
+    protected $root;
+    
+    protected $mysql;
+    
+    protected $pma;
+    
+    protected $mysqlPort;
+    
+    protected $pmaPort;
+    
+    protected $localhostPort;
+    
     /**
      * The signature of the command.
      *

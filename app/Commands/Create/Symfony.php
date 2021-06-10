@@ -7,12 +7,12 @@ use LaravelZero\Framework\Commands\Command;
 
 class Symfony extends Command
 {
-	protected $dir;
-	
-	protected $path;
-	
-	protected $type;
-	
+    protected $dir;
+    
+    protected $path;
+    
+    protected $type;
+    
     /**
      * The signature of the command.
      *

@@ -7,9 +7,8 @@ use LaravelZero\Framework\Commands\Command;
 
 class LocalhostRun extends Command
 {
-	
-	protected $dir;
-	
+    protected $dir;
+    
     /**
      * The signature of the command.
      *

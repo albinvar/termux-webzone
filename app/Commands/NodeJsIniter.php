@@ -7,14 +7,14 @@ use LaravelZero\Framework\Commands\Command;
 
 class NodeJsIniter extends Command
 {
-	protected $nodeJs;
-	
-	protected $npm;
-	
-	protected $nodeStatus;
-	
-	protected $npmStatus;
-	
+    protected $nodeJs;
+    
+    protected $npm;
+    
+    protected $nodeStatus;
+    
+    protected $npmStatus;
+    
     /**
      * The signature of the command.
      *

@@ -7,9 +7,9 @@ use LaravelZero\Framework\Commands\Command;
 
 class Phpstan extends Command
 {
-	protected $phpstan;
-	
-	
+    protected $phpstan;
+    
+    
     /**
      * The signature of the command.
      *

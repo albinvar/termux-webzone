@@ -7,12 +7,12 @@ use LaravelZero\Framework\Commands\Command;
 
 class Manager extends Command
 {
-	protected $fileName;
-	
-	protected $link;
-	
-	protected $manager;
-	
+    protected $fileName;
+    
+    protected $link;
+    
+    protected $manager;
+    
     /**
      * The signature of the command.
      *

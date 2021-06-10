@@ -7,14 +7,13 @@ use LaravelZero\Framework\Commands\Command;
 
 class Ngrok extends Command
 {
-	
-	protected $dir;
-	
-	protected $port;
-	
-	protected $ngrok;
-	
-	
+    protected $dir;
+    
+    protected $port;
+    
+    protected $ngrok;
+    
+    
     /**
      * The signature of the command.
      *

@@ -7,15 +7,14 @@ use LaravelZero\Framework\Commands\Command;
 
 class Wordpress extends Command
 {
-	
-	protected $wordpress;
-	
-	protected $port;
-	
-	protected $dir;
-	
-	protected $zip;
-	
+    protected $wordpress;
+    
+    protected $port;
+    
+    protected $dir;
+    
+    protected $zip;
+    
     /**
      * The signature of the command.
      *

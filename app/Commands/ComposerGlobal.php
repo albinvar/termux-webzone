@@ -7,12 +7,12 @@ use LaravelZero\Framework\Commands\Command;
 
 class ComposerGlobal extends Command
 {
-	protected $composer;
-	
-	protected $bashrc;
-	
-	protected $string;
-	
+    protected $composer;
+    
+    protected $bashrc;
+    
+    protected $string;
+    
     /**
      * The signature of the command.
      *

@@ -7,10 +7,10 @@ use LaravelZero\Framework\Commands\Command;
 
 class MysqlInstaller extends Command
 {
-	protected $mysql;
-	
-	protected $command;
-	
+    protected $mysql;
+    
+    protected $command;
+    
     /**
      * The signature of the command.
      *

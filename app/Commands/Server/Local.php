@@ -7,10 +7,10 @@ use LaravelZero\Framework\Commands\Command;
 
 class Local extends Command
 {
-	protected $path;
-	
-	protected $port;
-	
+    protected $path;
+    
+    protected $port;
+    
     /**
      * The signature of the command.
      *

@@ -9,11 +9,10 @@ use Illuminate\Support\Facades\Artisan;
 
 class Mysql extends Command
 {
-	
-	protected $mysql;
-	
-	protected $port;
-	
+    protected $mysql;
+    
+    protected $port;
+    
     /**
      * The signature of the command.
      *

@@ -7,13 +7,12 @@ use LaravelZero\Framework\Commands\Command;
 
 class ResetTorrc extends Command
 {
-	
-	protected $torrc;
-	
-	protected $torrcLink;
-	
-	protected $torHiddenDir;
-	
+    protected $torrc;
+    
+    protected $torrcLink;
+    
+    protected $torHiddenDir;
+    
     /**
      * The signature of the command.
      *

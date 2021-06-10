@@ -7,8 +7,8 @@ use LaravelZero\Framework\Commands\Command;
 
 class Laravel extends Command
 {
-	protected $laravelInstaller;
-	
+    protected $laravelInstaller;
+    
     /**
      * The signature of the command.
      *

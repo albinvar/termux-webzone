@@ -257,7 +257,6 @@ class Settings extends Command
     
     protected function askValid($question, $field, $rules)
     {
-    
         $value = $this->ask($question);
 
         if ($message = $this->validateInput($rules, $field, $value)) {
@@ -272,7 +271,7 @@ class Settings extends Command
             $msg = "The value should be a Number";
         break;
         default:
-	        $msg = "Error occured";
+            $msg = "Error occured";
         break;
         }
             $this->error($msg);
