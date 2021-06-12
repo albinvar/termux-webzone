@@ -12,10 +12,6 @@ class NodeJsIniter extends Command
 
     protected $npm;
 
-    protected $nodeStatus;
-
-    protected $npmStatus;
-
     /**
      * The signature of the command.
      *
@@ -33,7 +29,7 @@ class NodeJsIniter extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
@@ -53,41 +49,23 @@ class NodeJsIniter extends Command
 
     public function checkInstallation()
     {
-        $a = $this->checkNodeJs();
-        $b = $this->checkNpm();
+        $nodejs = $this->check($this->nodeJs, "Checking Nodejs ");
+        $npm = $this->check($this->npm, "Checking Npm ");
 
-        if ($this->nodeStatus && $this->npmStatus) {
-        } else {
+        if (!$nodejs && !$npm) {
             if ($this->confirm('Do you to install nodejs?')) {
                 $this->install();
             }
         }
     }
 
-
-    private function checkNodeJs()
+    private function check($file, $message): bool
     {
-        $this->task("Checking Nodejs ", function () {
-            if (file_exists($this->nodeJs)) {
-                $this->nodeStatus = true;
+        return $this->task($message, function () use ($file) {
+            if (file_exists($file)) {
                 return true;
-            } else {
-                $this->nodeStatus = false;
-                return false;
             }
-        });
-    }
-
-    private function checkNpm()
-    {
-        $this->task("Checking Npm ", function () {
-            if (file_exists($this->npm)) {
-                $this->npmStatus = true;
-                return true;
-            } else {
-                $this->npmStatus = false;
-                return false;
-            }
+            return false;
         });
     }
 
