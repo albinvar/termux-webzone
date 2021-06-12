@@ -8,9 +8,9 @@ use LaravelZero\Framework\Commands\Command;
 class MysqlInstaller extends Command
 {
     protected $mysql;
-    
+
     protected $command;
-    
+
     /**
      * The signature of the command.
      *
@@ -37,7 +37,7 @@ class MysqlInstaller extends Command
         $this->command = config('pma.MYSQL_INSTALLATION_COMMAND');
         $this->checkInstallation();
     }
-    
+
     public function checkInstallation()
     {
         if (file_exists($this->mysql)) {
@@ -48,20 +48,20 @@ class MysqlInstaller extends Command
             }
         }
     }
-    
+
     private function install()
     {
         $this->info("\nInstalling MySql\n");
-    
+
         exec($this->command, $output, $result);
-        
+
         $this->comment('MySql installed successfully...');
     }
 
     /**
      * Define the command's itschedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param Schedule $schedule
      * @return void
      */
     public function schedule(Schedule $schedule): void

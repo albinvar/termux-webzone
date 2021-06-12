@@ -3,12 +3,13 @@
 namespace App\Commands\Create;
 
 use Illuminate\Console\Scheduling\Schedule;
+use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
 
 class Sapper extends Command
 {
     protected $path;
-    
+
     /**
      * The signature of the command.
      *
@@ -44,27 +45,28 @@ class Sapper extends Command
         $this->install();
         $this->create();
     }
-    
-    
+
+
     public function logo()
     {
-        $figlet = new \Laminas\Text\Figlet\Figlet();
+        $figlet = new Figlet();
         $this->info($figlet->setFont(config('logo.font'))->render("Sapper"));
     }
-    
+
     public function install()
     {
         $code = exec('npm install -g degit');
     }
-    
+
     public function create()
     {
-        exec('cd '. $this->path .' && npx degit "sveltejs/sapper-template#rollup" '. $this->name .' && cd '. $this->name .' && npm install && npm run dev');
+        exec('cd ' . $this->path . ' && npx degit "sveltejs/sapper-template#rollup" ' . $this->name . ' && cd ' . $this->name . ' && npm install && npm run dev');
     }
+
     /**
      * Define the command's schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param Schedule $schedule
      * @return void
      */
     public function schedule(Schedule $schedule): void

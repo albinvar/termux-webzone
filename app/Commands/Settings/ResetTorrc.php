@@ -8,11 +8,11 @@ use LaravelZero\Framework\Commands\Command;
 class ResetTorrc extends Command
 {
     protected $torrc;
-    
+
     protected $torrcLink;
-    
+
     protected $torHiddenDir;
-    
+
     /**
      * The signature of the command.
      *
@@ -44,7 +44,7 @@ class ResetTorrc extends Command
             $this->call('share:tor');
         }
     }
-    
+
     private function runTasks()
     {
         // Task 1
@@ -56,29 +56,29 @@ class ResetTorrc extends Command
                 return false;
             }
         });
-        
+
         // Task 2
         $this->task("Downloading torrc from server", function () {
             $this->downloadCurl();
         });
-        
+
         // Task 3
         $this->task("Creating required folders ", function () {
             exec("mkdir -p {$this->torHiddenDir}");
             return true;
         });
     }
-    
+
     private function downloadCurl()
     {
         $lines = shell_exec("curl -w '\n%{http_code}\n' {$this->torrcLink} -o {$this->torrc}");
         $lines = explode("\n", trim($lines));
-        $status = $lines[count($lines)-1];
+        $status = $lines[count($lines) - 1];
         $this->checkDownloadStatus($status);
     }
-    
-    
-    private function checkDownloadStatus(Int $status)
+
+
+    private function checkDownloadStatus(int $status)
     {
         $bool = null;
         switch ($status) {
@@ -100,13 +100,12 @@ class ResetTorrc extends Command
         }
         return $bool;
     }
-    
-    
+
 
     /**
      * Define the command's schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param Schedule $schedule
      * @return void
      */
     public function schedule(Schedule $schedule): void

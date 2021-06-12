@@ -3,18 +3,19 @@
 namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
+use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
 
 class NodeJsIniter extends Command
 {
     protected $nodeJs;
-    
+
     protected $npm;
-    
+
     protected $nodeStatus;
-    
+
     protected $npmStatus;
-    
+
     /**
      * The signature of the command.
      *
@@ -38,23 +39,23 @@ class NodeJsIniter extends Command
     {
         echo exec("clear");
         $this->logo();
-        
+
         $this->nodeJs = "/data/data/com.termux/files/usr/bin/node";
         $this->npm = "/data/data/com.termux/files/usr/bin/npm";
         $this->checkInstallation();
     }
-    
+
     public function logo()
     {
-        $figlet = new \Laminas\Text\Figlet\Figlet();
+        $figlet = new Figlet();
         $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
     }
-    
+
     public function checkInstallation()
     {
         $a = $this->checkNodeJs();
         $b = $this->checkNpm();
-    
+
         if ($this->nodeStatus && $this->npmStatus) {
         } else {
             if ($this->confirm('Do you to install nodejs?')) {
@@ -62,8 +63,8 @@ class NodeJsIniter extends Command
             }
         }
     }
-    
-    
+
+
     private function checkNodeJs()
     {
         $this->task("Checking Nodejs ", function () {
@@ -76,7 +77,7 @@ class NodeJsIniter extends Command
             }
         });
     }
-    
+
     private function checkNpm()
     {
         $this->task("Checking Npm ", function () {
@@ -89,7 +90,7 @@ class NodeJsIniter extends Command
             }
         });
     }
-    
+
     private function install()
     {
         $this->task("Installing Nodejs ", function () {
@@ -101,7 +102,7 @@ class NodeJsIniter extends Command
     /**
      * Define the command's schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param Schedule $schedule
      * @return void
      */
     public function schedule(Schedule $schedule): void

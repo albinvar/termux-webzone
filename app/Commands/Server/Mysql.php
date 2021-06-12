@@ -4,15 +4,15 @@ namespace App\Commands\Server;
 
 use App\ConfigIniter;
 use Illuminate\Console\Scheduling\Schedule;
+use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
-use Illuminate\Support\Facades\Artisan;
 
 class Mysql extends Command
 {
     protected $mysql;
-    
+
     protected $port;
-    
+
     /**
      * The signature of the command.
      *
@@ -50,7 +50,33 @@ class Mysql extends Command
 
         $this->checkInstallation();
     }
-    
+
+    private function setPort()
+    {
+        if (!empty($this->option('port'))) {
+            $this->port = $this->option('port');
+        } elseif (!empty($this->getPort())) {
+            $this->port = $this->getPort();
+        } else {
+            $this->port = config('pma.MYSQL_PORT');
+        }
+    }
+
+    public function getPort()
+    {
+        $json_object = file_get_contents(config('settings.PATH') . '/settings.json');
+        $data = json_decode($json_object, true);
+        return $data['mysql_port'];
+    }
+
+    private function stop()
+    {
+        $this->task("Kill Mysql processes ", function () {
+            $cmd = "killall -9 mysqld 2> /dev/null";
+            $response = exec($cmd);
+        });
+    }
+
     public function checkInstallation()
     {
         if (!file_exists($this->mysql)) {
@@ -58,7 +84,7 @@ class Mysql extends Command
                 "mysql doesn't seem to be installed, do you want to install it now ?",
                 [1 => 'install now', 0 => 'cancel']
             );
-        
+
             if ($source == 'install now' || $source === 1) {
                 $this->call('install:mysql');
             }
@@ -71,19 +97,7 @@ class Mysql extends Command
             $this->start();
         }
     }
-    
-    private function setPort()
-    {
-        if (!empty($this->option('port'))) {
-            $this->port = $this->option('port');
-        } elseif (!empty($this->getPort())) {
-            $this->port = $this->getPort();
-        } else {
-            $this->port = config('pma.MYSQL_PORT');
-        }
-    }
-    
-    
+
     private function start()
     {
         $this->logo();
@@ -91,33 +105,17 @@ class Mysql extends Command
         $this->line("\n");
         $cmd = exec("mysqld --port={$this->port} --gdb");
     }
-    
-    private function stop()
-    {
-        $this->task("Kill Mysql processes ", function () {
-            $cmd = "killall -9 mysqld 2> /dev/null";
-            $response = exec($cmd);
-        });
-    }
-    
+
     public function logo()
     {
-        $figlet = new \Laminas\Text\Figlet\Figlet();
+        $figlet = new Figlet();
         $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
     }
-    
-    public function getPort()
-    {
-        $json_object = file_get_contents(config('settings.PATH').'/settings.json');
-        $data = json_decode($json_object, true);
-        return $data['mysql_port'];
-    }
-
 
     /**
      * Define the command's schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param Schedule $schedule
      * @return void
      */
     public function schedule(Schedule $schedule): void

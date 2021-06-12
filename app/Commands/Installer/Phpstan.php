@@ -3,13 +3,14 @@
 namespace App\Commands\Installer;
 
 use Illuminate\Console\Scheduling\Schedule;
+use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
 
 class Phpstan extends Command
 {
     protected $phpstan;
-    
-    
+
+
     /**
      * The signature of the command.
      *
@@ -33,15 +34,32 @@ class Phpstan extends Command
     public function handle()
     {
         $this->phpstan = config('pma.PHPSTAN_PATH');
-        
+
         if ($this->option('uninstall')) {
             $this->uninstall();
         } else {
             $this->install();
         }
     }
-    
-    
+
+    private function uninstall()
+    {
+        if (!$this->checkInstallation()) {
+            $this->error("phpstan isn't installed yet.");
+            return false;
+        }
+
+        if (!$this->confirm('Do you want to uninstall phpstan?')) {
+            return false;
+        }
+
+        $this->info("");
+        $this->logo();
+        $this->comment("\nUnnstalling phpstan ...\n");
+        $cmd = exec('composer global remove phpstan/phpstan');
+        $this->comment("\nUninstalled successfully. \n");
+    }
+
     public function checkInstallation()
     {
         if (file_exists($this->phpstan)) {
@@ -50,7 +68,13 @@ class Phpstan extends Command
             return false;
         }
     }
-    
+
+    public function logo()
+    {
+        $figlet = new Figlet();
+        $this->info($figlet->render("PHPSTAN"));
+    }
+
     private function install()
     {
         if ($this->checkInstallation()) {
@@ -65,42 +89,18 @@ class Phpstan extends Command
         $this->comment("\nInstalled successfully. Launch it using \"phpstan --help\" command.\n");
         $this->initComposerGlobal();
     }
-    
-    private function uninstall()
-    {
-        if (!$this->checkInstallation()) {
-            $this->error("phpstan isn't installed yet.");
-            return false;
-        }
-        
-        if (!$this->confirm('Do you want to uninstall phpstan?')) {
-            return false;
-        }
-        
-        $this->info("");
-        $this->logo();
-        $this->comment("\nUnnstalling phpstan ...\n");
-        $cmd = exec('composer global remove phpstan/phpstan');
-        $this->comment("\nUninstalled successfully. \n");
-    }
-    
+
     private function initComposerGlobal()
     {
         $this->task("Initialize Command ", function () {
             $this->callSilently('composer:global', ['-s' => true]);
         });
     }
-    
-    public function logo()
-    {
-        $figlet = new \Laminas\Text\Figlet\Figlet();
-        $this->info($figlet->render("PHPSTAN"));
-    }
 
     /**
      * Define the command's schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param Schedule $schedule
      * @return void
      */
     public function schedule(Schedule $schedule): void

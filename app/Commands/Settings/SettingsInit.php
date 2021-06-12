@@ -8,7 +8,7 @@ use LaravelZero\Framework\Commands\Command;
 class SettingsInit extends Command
 {
     public $settings;
-    
+
     /**
      * The signature of the command.
      *
@@ -23,15 +23,15 @@ class SettingsInit extends Command
      * @var string
      */
     protected $description = 'Init Settings Json file';
-    
-    
+
+
     public function __construct()
     {
         parent::__construct();
         $this->settings = config('settings.PATH');
     }
-    
-    
+
+
     /**
      * Execute the console command.
      *
@@ -47,20 +47,7 @@ class SettingsInit extends Command
             $this->checkIfSettingsExist();
         }
     }
-    
-    public function checkIfSettingsExist()
-    {
-        if (file_exists($this->settings.'/settings.json')) {
-            if ($this->validateJson()) {
-                $this->createSettingsJson();
-            }
-            $this->info("Initialized settings");
-            return true;
-        } else {
-            $this->create();
-        }
-    }
-    
+
     public function create()
     {
         $this->task("Creating Required Folders ", function () {
@@ -70,7 +57,7 @@ class SettingsInit extends Command
                 return false;
             }
         });
-    
+
         $this->task("Creating JSON file ", function () {
             if ($this->createSettingsJson()) {
                 return true;
@@ -79,7 +66,7 @@ class SettingsInit extends Command
             }
         });
     }
-    
+
     private function createDirectory()
     {
         if (!is_dir($this->settings)) {
@@ -91,26 +78,39 @@ class SettingsInit extends Command
             }
         }
     }
-    
+
     private function createSettingsJson()
     {
-        if (!file_exists($this->settings.'/settings.json')) {
-            touch($this->settings.'/settings.json');
+        if (!file_exists($this->settings . '/settings.json')) {
+            touch($this->settings . '/settings.json');
         }
-        
+
         $array = config('settings.ARRAY');
         $json_object = json_encode($array);
-        $success = file_put_contents($this->settings.'/settings.json', $json_object);
+        $success = file_put_contents($this->settings . '/settings.json', $json_object);
         if ($success === false) {
             return false;
         } else {
             return true;
         }
     }
-    
+
+    public function checkIfSettingsExist()
+    {
+        if (file_exists($this->settings . '/settings.json')) {
+            if ($this->validateJson()) {
+                $this->createSettingsJson();
+            }
+            $this->info("Initialized settings");
+            return true;
+        } else {
+            $this->create();
+        }
+    }
+
     private function validateJson()
     {
-        $json_object = file_get_contents($this->settings.'/settings.json');
+        $json_object = file_get_contents($this->settings . '/settings.json');
         $data = json_decode($json_object);
         if ($data === null) {
             return true;
@@ -118,11 +118,11 @@ class SettingsInit extends Command
             return false;
         }
     }
-    
+
     /**
      * Define the command's schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param Schedule $schedule
      * @return void
      */
     public function schedule(Schedule $schedule): void

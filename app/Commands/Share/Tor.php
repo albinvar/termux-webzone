@@ -3,27 +3,28 @@
 namespace App\Commands\Share;
 
 use Illuminate\Console\Scheduling\Schedule;
+use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
 
 class Tor extends Command
 {
     protected $torrc;
-    
+
     protected $dir;
-    
+
     protected $port;
-    
+
     protected $olds;
-    
+
     protected $old1;
-    
+
     protected $old2;
-    
+
     protected $string1;
-    
+
     protected $string2;
-    
-    
+
+
     /**
      * The signature of the command.
      *
@@ -58,16 +59,10 @@ class Tor extends Command
             $this->call('tor:reset', ['--force' => true]);
             exit();
         }
-        
+
         $this->checkInstallation();
     }
-    
-    public function logo()
-    {
-        $figlet = new \Laminas\Text\Figlet\Figlet();
-        $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
-    }
-    
+
     private function setPort()
     {
         if (!empty($this->option('port'))) {
@@ -78,11 +73,18 @@ class Tor extends Command
             $this->port = config('pma.TOR_PORT');
         }
     }
-    
+
+    public function getPort()
+    {
+        $json_object = file_get_contents(config('settings.PATH') . '/settings.json');
+        $data = json_decode($json_object, true);
+        return $data['tor_port'];
+    }
+
     public function checkInstallation()
     {
         $this->logo();
-        if (!file_exists($this->dir.'/tor')) {
+        if (!file_exists($this->dir . '/tor')) {
             if ($this->confirm("Do you want to install tor?")) {
                 $this->installTor();
                 sleep(1);
@@ -103,7 +105,13 @@ class Tor extends Command
             $this->info($this->getHostname());
         }
     }
-    
+
+    public function logo()
+    {
+        $figlet = new Figlet();
+        $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
+    }
+
     private function installTor()
     {
         $this->task("Installing tor", function () {
@@ -111,7 +119,7 @@ class Tor extends Command
             exec($cmd);
         });
     }
-    
+
     public function setString()
     {
         $this->old1 = "\nHiddenServiceDir";
@@ -121,11 +129,11 @@ class Tor extends Command
         $array = [['old' => $this->old1, 'new' => $this->string1, 'type' => "hidden service directory"], ['old' => $this->old2, 'new' => $this->string2, 'type' => "hidden service port"]];
         return $array;
     }
-    
+
     private function checkIfInitialized($old, $new, $type)
     {
         $file = file_get_contents($this->torrc);
-        
+
         if (strpos(file_get_contents($this->torrc), $old) !== false) {
             $this->comment("\nPreapplied settings already found. Skipping...");
         } else {
@@ -136,14 +144,14 @@ class Tor extends Command
                     return false;
                 }
             });
-        
+
             if ($is_initiated) {
                 $this->info("\n{$type} initialised successfully..\n");
             }
         }
         $this->newLine();
     }
-    
+
     private function rewrite($string)
     {
         $action = file_put_contents($this->torrc, $string, FILE_APPEND | LOCK_EX);
@@ -154,14 +162,7 @@ class Tor extends Command
             return false;
         }
     }
-    
-    public function getPort()
-    {
-        $json_object = file_get_contents(config('settings.PATH').'/settings.json');
-        $data = json_decode($json_object, true);
-        return $data['tor_port'];
-    }
-    
+
     private function getHostname()
     {
         $file = "/data/data/com.termux/files/usr/var/lib/tor/hidden_service/hostname";
@@ -176,7 +177,7 @@ class Tor extends Command
     /**
      * Define the command's schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param Schedule $schedule
      * @return void
      */
     public function schedule(Schedule $schedule): void
