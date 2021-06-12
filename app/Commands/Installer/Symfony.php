@@ -71,7 +71,7 @@ class Symfony extends Command
         $this->comment($figlet->setFont(config('logo.font'))->render("Symfony"));
     }
 
-    private function checkDownloadStatus(int $status, $dir)
+    private function checkDownloadStatus($status, $dir)
     {
         switch ($status) {
             case 000:

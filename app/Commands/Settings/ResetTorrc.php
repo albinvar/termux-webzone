@@ -78,7 +78,7 @@ class ResetTorrc extends Command
     }
 
 
-    private function checkDownloadStatus(int $status)
+    private function checkDownloadStatus($status)
     {
         $bool = null;
         switch ($status) {

@@ -154,7 +154,7 @@ class Ngrok extends Command
         $this->checkDownloadStatus($status, $this->dir);
     }
 
-    private function checkDownloadStatus(int $status, $dir)
+    private function checkDownloadStatus($status, $dir)
     {
         switch ($status) {
             case 000:

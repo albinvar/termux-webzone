@@ -46,7 +46,7 @@ class Projects extends Command
 
     public function listAll()
     {
-        $headers = 'Projects';
+        $headers = ['Projects'];
         $folders = null;
 
         foreach ($this->getProjects() as $result) {

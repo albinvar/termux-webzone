@@ -101,7 +101,7 @@ class Wordpress extends Command
         $this->comment($figlet->setFont(config('logo.font'))->render("WordPress"));
     }
 
-    private function checkDownloadStatus(int $status)
+    private function checkDownloadStatus($status)
     {
         switch ($status) {
             case 000:

@@ -88,7 +88,7 @@ class Manager extends Command
         $this->checkDownloadStatus($status);
     }
 
-    private function checkDownloadStatus(int $status)
+    private function checkDownloadStatus($status)
     {
         switch ($status) {
             case 000:
