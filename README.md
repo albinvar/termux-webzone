@@ -517,6 +517,7 @@ $ webzone project:list
 ## Credits
 
 [@albinvar](https://github.com/albinvar)
+[@shmshd](https://github.com/shmshd)
 
 ## Contributing
 
