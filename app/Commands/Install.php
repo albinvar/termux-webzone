@@ -54,22 +54,16 @@ class Install extends Command
                 $cmd = shell_exec("rm -rf {$this->dir}/pma");
                 if (is_null($cmd)) {
                     return true;
-                } else {
-                    return false;
                 }
-            } else {
-                return true;
-            }
-            if (file_exists($this->dir . '/pma/config.inc.php')) {
+                return false;
+            } elseif (file_exists($this->dir . '/pma/config.inc.php')) {
                 $cmd = shell_exec("rm {$this->dir}/pma.zip");
                 if (is_null($cmd)) {
                     return true;
-                } else {
-                    return false;
                 }
-            } else {
-                return true;
+                return false;
             }
+            return true;
         });
     }
 

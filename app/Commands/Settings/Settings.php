@@ -169,7 +169,6 @@ class Settings extends Command
             case 'Exit':
                 $this->info('Good Bye!');
                 die();
-                break;
         }
     }
 
