@@ -17,6 +17,9 @@
     ],
     "require": {
         "php": "^7.3|^8.0",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-zip": "*",
         "illuminate/validation": "^8.35",
         "laminas/laminas-text": "^2.8",
         "padraic/phar-updater": "^1.0.6"

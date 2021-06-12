@@ -8,11 +8,11 @@ use LaravelZero\Framework\Commands\Command;
 class ResetTorrc extends Command
 {
     protected $torrc;
-    
+
     protected $torrcLink;
-    
+
     protected $torHiddenDir;
-    
+
     /**
      * The signature of the command.
      *
@@ -44,7 +44,7 @@ class ResetTorrc extends Command
             $this->call('share:tor');
         }
     }
-    
+
     private function runTasks()
     {
         // Task 1
@@ -56,55 +56,56 @@ class ResetTorrc extends Command
                 return false;
             }
         });
-        
+
         // Task 2
         $this->task("Downloading torrc from server", function () {
             $this->downloadCurl();
         });
-        
+
         // Task 3
         $this->task("Creating required folders ", function () {
             exec("mkdir -p {$this->torHiddenDir}");
             return true;
         });
     }
-    
+
     private function downloadCurl()
     {
         $lines = shell_exec("curl -w '\n%{http_code}\n' {$this->torrcLink} -o {$this->torrc}");
         $lines = explode("\n", trim($lines));
-        $status = $lines[count($lines)-1];
+        $status = $lines[count($lines) - 1];
         $this->checkDownloadStatus($status);
     }
-    
-    
-    private function checkDownloadStatus(Int $status)
+
+
+    private function checkDownloadStatus($status)
     {
+        $bool = null;
         switch ($status) {
-  case 000:
-    $this->error("Cannot connect to Server");
-    return false;
-    break;
-  case 200:
-    $this->comment("\nDownloaded Successfully...!!!");
-    return true;
-    break;
-  case 404:
-    $this->error("File not found on server..");
-    return false;
-    break;
-  default:
-    $this->error("An Unknown Error occurred...");
-    return false;
-}
+            case 000:
+                $this->error("Cannot connect to the server");
+                $bool = 0;
+                break;
+            case 200:
+                $this->comment("\nDownload completed");
+                $bool = 1;
+                break;
+            case 404:
+                $this->error("File could not be found");
+                $bool = 0;
+                break;
+            default:
+                $this->error("An Unknown error occurred");
+                $bool = 0;
+        }
+        return $bool;
     }
-    
-    
+
 
     /**
      * Define the command's schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param Schedule $schedule
      * @return void
      */
     public function schedule(Schedule $schedule): void

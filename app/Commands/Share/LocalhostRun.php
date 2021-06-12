@@ -3,12 +3,13 @@
 namespace App\Commands\Share;
 
 use Illuminate\Console\Scheduling\Schedule;
+use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
 
 class LocalhostRun extends Command
 {
     protected $dir;
-    
+
     /**
      * The signature of the command.
      *
@@ -34,17 +35,11 @@ class LocalhostRun extends Command
         echo exec('clear');
         $this->checkInstallation();
     }
-    
-    public function logo()
-    {
-        $figlet = new \Laminas\Text\Figlet\Figlet();
-        $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
-    }
-    
+
     public function checkInstallation()
     {
         $this->logo();
-        if (file_exists($this->dir.'/ssh')) {
+        if (file_exists($this->dir . '/ssh')) {
             $this->activity();
             return true;
         } else {
@@ -57,12 +52,18 @@ class LocalhostRun extends Command
             }
         }
     }
-    
+
+    public function logo()
+    {
+        $figlet = new Figlet();
+        $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
+    }
+
     private function activity()
     {
         exec('ssh -R 80:localhost:8080 localhost.run');
     }
-    
+
     private function installopenssh()
     {
         $this->task("Installing openssh", function () {
@@ -70,11 +71,11 @@ class LocalhostRun extends Command
             return true;
         });
     }
-    
+
     /**
      * Define the command's schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param Schedule $schedule
      * @return void
      */
     public function schedule(Schedule $schedule): void

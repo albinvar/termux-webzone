@@ -4,15 +4,15 @@ namespace App\Commands\Server;
 
 use App\ConfigIniter;
 use Illuminate\Console\Scheduling\Schedule;
+use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
-use Illuminate\Support\Facades\Artisan;
 
 class Mysql extends Command
 {
     protected $mysql;
-    
+
     protected $port;
-    
+
     /**
      * The signature of the command.
      *
@@ -50,28 +50,7 @@ class Mysql extends Command
 
         $this->checkInstallation();
     }
-    
-    public function checkInstallation()
-    {
-        if (!file_exists($this->mysql)) {
-            $source = $this->choice(
-                "mysql doesn't seem to be installed, do you want to install it now ?",
-                [1 => 'install now', 0 => 'cancel']
-            );
-        
-            if ($source == 'install now' || $source == 1) {
-                $this->call('install:mysql');
-            }
-            if ($source == 'cancel' || $source == 0) {
-                $this->info("Good bye");
-            }
-        } elseif ($this->option('stop')) {
-            $this->stop();
-        } else {
-            $this->start();
-        }
-    }
-    
+
     private function setPort()
     {
         if (!empty($this->option('port'))) {
@@ -82,16 +61,14 @@ class Mysql extends Command
             $this->port = config('pma.MYSQL_PORT');
         }
     }
-    
-    
-    private function start()
+
+    public function getPort()
     {
-        $this->logo();
-        $this->comment("mysql Services Started....");
-        $this->line("\n");
-        $cmd = exec("mysqld --port={$this->port} --gdb");
+        $json_object = file_get_contents(config('settings.PATH') . '/settings.json');
+        $data = json_decode($json_object, true);
+        return $data['mysql_port'];
     }
-    
+
     private function stop()
     {
         $this->task("Kill Mysql processes ", function () {
@@ -99,25 +76,46 @@ class Mysql extends Command
             $response = exec($cmd);
         });
     }
-    
-    public function logo()
+
+    public function checkInstallation()
     {
-        $figlet = new \Laminas\Text\Figlet\Figlet();
-        $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
-    }
-    
-    public function getPort()
-    {
-        $json_object = file_get_contents(config('settings.PATH').'/settings.json');
-        $data = json_decode($json_object, true);
-        return $data['mysql_port'];
+        if (!file_exists($this->mysql)) {
+            $source = $this->choice(
+                "mysql doesn't seem to be installed, do you want to install it now ?",
+                [1 => 'install now', 0 => 'cancel']
+            );
+
+            if ($source == 'install now' || $source == '1') {
+                $this->call('install:mysql');
+            }
+            if ($source == 'cancel' || $source == '0') {
+                $this->info("Good bye");
+            }
+        } elseif ($this->option('stop')) {
+            $this->stop();
+        } else {
+            $this->start();
+        }
     }
 
+    private function start()
+    {
+        $this->logo();
+        $this->comment("mysql Services Started....");
+        $this->line("\n");
+        $cmd = exec("mysqld --port={$this->port} --gdb");
+    }
+
+    public function logo()
+    {
+        $figlet = new Figlet();
+        $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
+    }
 
     /**
      * Define the command's schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param Schedule $schedule
      * @return void
      */
     public function schedule(Schedule $schedule): void

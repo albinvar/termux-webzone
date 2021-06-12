@@ -3,17 +3,18 @@
 namespace App\Commands\Share;
 
 use Illuminate\Console\Scheduling\Schedule;
+use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
 
 class Ngrok extends Command
 {
     protected $dir;
-    
+
     protected $port;
-    
+
     protected $ngrok;
-    
-    
+
+
     /**
      * The signature of the command.
      *
@@ -41,7 +42,7 @@ class Ngrok extends Command
         $this->dir = "/data/data/com.termux/files/usr/bin";
         $this->ngrok = config('pma.NGROK');
         $this->setPort();
-        
+
         if ($this->option('stop')) {
             exec('killall ngrok -q');
             $this->comment('killed all ngrok sessions..');
@@ -50,7 +51,7 @@ class Ngrok extends Command
         echo exec('clear');
         $this->checkInstallation();
     }
-    
+
     private function setPort()
     {
         if (!empty($this->option('port'))) {
@@ -61,17 +62,18 @@ class Ngrok extends Command
             $this->port = config('pma.NGROK_PORT');
         }
     }
-    
-    public function logo()
+
+    public function getPort()
     {
-        $figlet = new \Laminas\Text\Figlet\Figlet();
-        $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
+        $json_object = file_get_contents(config('settings.PATH') . '/settings.json');
+        $data = json_decode($json_object, true);
+        return $data['ngrok_port'];
     }
-    
+
     public function checkInstallation()
     {
         $this->logo();
-        if (!file_exists($this->dir.'/jq')) {
+        if (!file_exists($this->dir . '/jq')) {
             if ($this->confirm("Do you want to install jq?")) {
                 $this->installjq();
                 sleep(1);
@@ -81,7 +83,7 @@ class Ngrok extends Command
                 exit();
             }
         }
-        if (file_exists($this->dir.'/ngrok')) {
+        if (file_exists($this->dir . '/ngrok')) {
             $this->activity();
             return true;
         } else {
@@ -94,7 +96,21 @@ class Ngrok extends Command
             }
         }
     }
-    
+
+    public function logo()
+    {
+        $figlet = new Figlet();
+        $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
+    }
+
+    private function installjq()
+    {
+        $this->task("Installing jq", function () {
+            $cmd = "apt-get install jq -y -qqq";
+            exec($cmd);
+        });
+    }
+
     private function activity()
     {
         $this->info("Starting ngrok....");
@@ -105,68 +121,15 @@ class Ngrok extends Command
         $this->newLine();
         $this->getUrl();
     }
-    
-    private function installngrok()
-    {
-        $this->task("Installing ngrok", function () {
-            $this->downloadNgrokCurl();
-        });
-    }
-    
-    private function installjq()
-    {
-        $this->task("Installing jq", function () {
-            $cmd = "apt-get install jq -y -qqq";
-            exec($cmd);
-        });
-    }
-    
-    private function downloadNgrokCurl()
-    {
-        $lines = shell_exec("curl -w '\n%{http_code}\n' {$this->ngrok} -o {$this->dir}/ngrok");
-        $lines = explode("\n", trim($lines));
-        $status = $lines[count($lines)-1];
-        $this->checkDownloadStatus($status, $this->dir);
-    }
-    
-    
-    private function checkDownloadStatus(Int $status, $dir)
-    {
-        switch ($status) {
-  case 000:
-    $this->error("Cannot connect to Server");
-    break;
-  case 200:
-    $this->comment("\nDownloaded Successfully...!!!");
-    $this->runTasks();
-    break;
-  case 404:
-    $this->error("File not found on server..");
-    break;
-  default:
-    $this->error("An Unknown Error occurred...");
-}
-    }
-    
-    
-    private function grantPermission()
-    {
-        if (file_exists($this->dir.'/ngrok')) {
-            exec("chmod +x {$this->dir}/ngrok");
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
+
     private function getUrl()
     {
         $cmd = exec("curl -s localhost:4040/api/tunnels | jq -r .tunnels[0].public_url");
-    
+
         if (!empty($cmd) && $cmd != "null") {
             $this->comment('Tunnel created successfully.');
             $this->newLine();
-            $this->info('Link : '. $cmd);
+            $this->info('Link : ' . $cmd);
             $this->newLine();
             $this->comment('use -s or --stop to kill ngrok sessions');
             return true;
@@ -175,7 +138,40 @@ class Ngrok extends Command
             return false;
         }
     }
-    
+
+    private function installngrok()
+    {
+        $this->task("Installing ngrok", function () {
+            $this->downloadNgrokCurl();
+        });
+    }
+
+    private function downloadNgrokCurl()
+    {
+        $lines = shell_exec("curl -w '\n%{http_code}\n' {$this->ngrok} -o {$this->dir}/ngrok");
+        $lines = explode("\n", trim($lines));
+        $status = $lines[count($lines) - 1];
+        $this->checkDownloadStatus($status, $this->dir);
+    }
+
+    private function checkDownloadStatus($status, $dir)
+    {
+        switch ($status) {
+            case 000:
+                $this->error("Cannot connect to Server");
+                break;
+            case 200:
+                $this->comment("\nDownloaded Successfully...!!!");
+                $this->runTasks();
+                break;
+            case 404:
+                $this->error("File not found on server..");
+                break;
+            default:
+                $this->error("An Unknown Error occurred...");
+        }
+    }
+
     private function runTasks()
     {
         $this->task("Setting up permissions", function () {
@@ -186,18 +182,21 @@ class Ngrok extends Command
             }
         });
     }
-    
-    public function getPort()
+
+    private function grantPermission()
     {
-        $json_object = file_get_contents(config('settings.PATH').'/settings.json');
-        $data = json_decode($json_object, true);
-        return $data['ngrok_port'];
+        if (file_exists($this->dir . '/ngrok')) {
+            exec("chmod +x {$this->dir}/ngrok");
+            return true;
+        } else {
+            return false;
+        }
     }
-    
+
     /**
      * Define the command's schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param Schedule $schedule
      * @return void
      */
     public function schedule(Schedule $schedule): void

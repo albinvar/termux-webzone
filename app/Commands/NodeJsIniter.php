@@ -3,18 +3,15 @@
 namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
+use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
 
 class NodeJsIniter extends Command
 {
     protected $nodeJs;
-    
+
     protected $npm;
-    
-    protected $nodeStatus;
-    
-    protected $npmStatus;
-    
+
     /**
      * The signature of the command.
      *
@@ -32,64 +29,46 @@ class NodeJsIniter extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
         echo exec("clear");
         $this->logo();
-        
+
         $this->nodeJs = "/data/data/com.termux/files/usr/bin/node";
         $this->npm = "/data/data/com.termux/files/usr/bin/npm";
         $this->checkInstallation();
     }
-    
+
     public function logo()
     {
-        $figlet = new \Laminas\Text\Figlet\Figlet();
+        $figlet = new Figlet();
         $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
     }
-    
+
     public function checkInstallation()
     {
-        $a = $this->checkNodeJs();
-        $b = $this->checkNpm();
-    
-        if ($this->nodeStatus && $this->npmStatus) {
-        } else {
+        $nodejs = $this->check($this->nodeJs, "Checking Nodejs ");
+        $npm = $this->check($this->npm, "Checking Npm ");
+
+        if (!$nodejs && !$npm) {
             if ($this->confirm('Do you to install nodejs?')) {
                 $this->install();
             }
         }
     }
-    
-    
-    private function checkNodeJs()
+
+    private function check($file, $message): bool
     {
-        $this->task("Checking Nodejs ", function () {
-            if (file_exists($this->nodeJs)) {
-                $this->nodeStatus = true;
+        return $this->task($message, function () use ($file) {
+            if (file_exists($file)) {
                 return true;
-            } else {
-                $this->nodeStatus = false;
-                return false;
             }
+            return false;
         });
     }
-    
-    private function checkNpm()
-    {
-        $this->task("Checking Npm ", function () {
-            if (file_exists($this->npm)) {
-                $this->npmStatus = true;
-                return true;
-            } else {
-                $this->npmStatus = false;
-                return false;
-            }
-        });
-    }
-    
+
     private function install()
     {
         $this->task("Installing Nodejs ", function () {
@@ -101,7 +80,7 @@ class NodeJsIniter extends Command
     /**
      * Define the command's schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param Schedule $schedule
      * @return void
      */
     public function schedule(Schedule $schedule): void

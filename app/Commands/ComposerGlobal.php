@@ -3,16 +3,17 @@
 namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
+use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
 
 class ComposerGlobal extends Command
 {
     protected $composer;
-    
+
     protected $bashrc;
-    
+
     protected $string;
-    
+
     /**
      * The signature of the command.
      *
@@ -40,7 +41,7 @@ class ComposerGlobal extends Command
         $this->bashrc = config('pma.bashrc');
         $this->checkInstallation();
     }
-    
+
     private function checkInstallation()
     {
         if (!$this->option('silent')) {
@@ -54,15 +55,16 @@ class ComposerGlobal extends Command
                 return false;
             }
         });
-        
+
         $this->checkIfInitialized();
     }
-    
-    public function setString()
+
+    public function logo()
     {
-        $this->string = "\n".config('path');
+        $figlet = new Figlet();
+        echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
     }
-    
+
     private function checkIfInitialized()
     {
         $file = file_get_contents($this->bashrc);
@@ -77,14 +79,19 @@ class ComposerGlobal extends Command
                     return false;
                 }
             });
-        
+
             if ($is_initiated) {
                 $this->info("\nComposer initialised successfully..\n");
                 $this->comment("You need to restart your termux session to apply changes..");
             }
         }
     }
-    
+
+    public function setString()
+    {
+        $this->string = "\n" . config('path');
+    }
+
     private function rewrite()
     {
         $action = file_put_contents($this->bashrc, $this->string, FILE_APPEND | LOCK_EX);
@@ -94,17 +101,11 @@ class ComposerGlobal extends Command
             return false;
         }
     }
-    
-    public function logo()
-    {
-        $figlet = new \Laminas\Text\Figlet\Figlet();
-        echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
-    }
-    
+
     /**
      * Define the command's schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param Schedule $schedule
      * @return void
      */
     public function schedule(Schedule $schedule): void

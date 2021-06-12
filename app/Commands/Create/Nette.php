@@ -3,14 +3,15 @@
 namespace App\Commands\Create;
 
 use Illuminate\Console\Scheduling\Schedule;
+use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
 
 class Nette extends Command
 {
     protected $dir;
-    
+
     protected $path;
-    
+
     /**
      * The signature of the command.
      *
@@ -39,7 +40,20 @@ class Nette extends Command
         $this->logo();
         $this->init();
     }
-    
+
+    public function getData()
+    {
+        $json_object = file_get_contents(config('settings.PATH') . '/settings.json');
+        $data = json_decode($json_object, true);
+        return $data;
+    }
+
+    public function logo()
+    {
+        $figlet = new Figlet();
+        $this->comment($figlet->render("Nette"));
+    }
+
     private function init()
     {
         //name of project
@@ -49,7 +63,7 @@ class Nette extends Command
             //planing to generate random names from a new package.
             $this->name = 'nette-blog';
         }
-    
+
         //set path
         if (!empty($this->option('path'))) {
             $this->path = $this->option('path');
@@ -58,7 +72,7 @@ class Nette extends Command
         } else {
             $this->path = '/sdcard';
         }
-        
+
         //check if directory exists
         if (!$this->checkDir()) {
             exit();
@@ -71,24 +85,7 @@ class Nette extends Command
             $this->comment("Nette App created successfully on {$this->path}/{$this->name}");
         }
     }
-    
-    private function create()
-    {
-        $cmd = "cd {$this->path} && composer create-project nette/web-project \"{$this->name}\"";
-        $this->exec($cmd);
-    }
-    
-    private function exec($command)
-    {
-        $this->line(exec($command));
-    }
-    
-    public function logo()
-    {
-        $figlet = new \Laminas\Text\Figlet\Figlet();
-        $this->comment($figlet->render("Nette"));
-    }
-    
+
     private function checkDir()
     {
         if (file_exists($this->path . '/' . $this->name)) {
@@ -98,18 +95,22 @@ class Nette extends Command
             return true;
         }
     }
-    
-    public function getData()
+
+    private function create()
     {
-        $json_object = file_get_contents(config('settings.PATH').'/settings.json');
-        $data = json_decode($json_object, true);
-        return $data;
+        $cmd = "cd {$this->path} && composer create-project nette/web-project \"{$this->name}\"";
+        $this->exec($cmd);
+    }
+
+    private function exec($command)
+    {
+        $this->line(exec($command));
     }
 
     /**
      * Define the command's schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param Schedule $schedule
      * @return void
      */
     public function schedule(Schedule $schedule): void
