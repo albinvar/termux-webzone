@@ -161,10 +161,10 @@ class Install extends Command
         $lines = shell_exec("curl -w '\n%{http_code}\n' {$data['PMA_DOWNLOAD_LINK']} -o {$this->dir}/pma.zip");
         $lines = explode("\n", trim($lines));
         $status = $lines[count($lines) - 1];
-        $this->checkDownloadStatus($status, $this->dir);
+        $this->checkDownloadStatus($status);
     }
 
-    private function checkDownloadStatus(int $status, $dir)
+    private function checkDownloadStatus(int $status)
     {
         switch ($status) {
             case 000:
