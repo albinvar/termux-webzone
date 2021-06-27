@@ -1,39 +1,44 @@
-name: PHP Composer
+name: Tests
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: ['push']
 
 jobs:
-  build:
+  ci:
+    runs-on: ${{ matrix.os }}
 
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        php: ['8.0']
+        dependency-version: [prefer-stable]
+
+    name: PHP ${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
 
     steps:
-    - uses: actions/checkout@v2
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
+    - name: Checkout
+      uses: actions/checkout@v2
 
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v2
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
       with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+        php-version: ${{ matrix.php }}
+        extensions: fileinfo
+        tools: composer:v2
+        coverage: pcov
 
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
+    - name: Setup Problem Matches
+      run: |
+        echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+        echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+    - name: Install Composer dependencies
+      run: composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist --no-suggest
 
-   - name: Test Build
-     run: php webzone app:build webzone --build-version=v0.0.0 --env=development
+    - name: PHPUnit Testing
+      run: vendor/bin/pest --coverage
 
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
+    - name: Build
+      run: php webzone app:build --build-version=0.0
 
-     - name: Run test suite
-       run: php webzone test
+    - name: Build Check
+      run: php builds/webzone --version
