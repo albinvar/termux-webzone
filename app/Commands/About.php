@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -26,16 +24,18 @@ class About extends Command
 
     /**
      * Execute the console command.
+     *
+     * @return mixed
      */
-    public function handle(): mixed
+    public function handle()
     {
         $this->about();
     }
 
-    public function about(): void
+    public function about()
     {
         $this->logo();
-        $this->comment(' ' . app('git.version'));
+        $this->comment(" " . app('git.version'));
         $this->newLine();
         $this->info('Termux Webzone is a CLI application which provides a ton of features for web developers to build, run and test their php applications within the limits of android. The application is designed only to work with Termux.');
         $this->newLine();
@@ -44,18 +44,18 @@ class About extends Command
         $this->credits();
     }
 
-    public function logo(): void
+    public function logo()
     {
         $figlet = new Figlet();
         echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
     }
 
-    public function credits(): void
+    public function credits()
     {
         $headers = ['Developers', 'role'];
 
         $data = [
-            ['Albin', 'Developer'],
+            ['Albin', 'Developer']
         ];
 
         $this->table($headers, $data);
@@ -63,6 +63,9 @@ class About extends Command
 
     /**
      * Define the command's schedule.
+     *
+     * @param Schedule $schedule
+     * @return void
      */
     public function schedule(Schedule $schedule): void
     {

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -27,8 +25,10 @@ class Projects extends Command
 
     /**
      * Execute the console command.
+     *
+     * @return mixed
      */
-    public function handle(): mixed
+    public function handle()
     {
         if (file_exists($this->getRoot())) {
             $this->listAll();
@@ -44,7 +44,7 @@ class Projects extends Command
         return $data['project_dir'];
     }
 
-    public function listAll(): void
+    public function listAll()
     {
         $headers = ['Projects'];
         $folders = null;
@@ -62,16 +62,20 @@ class Projects extends Command
         $this->table($headers, $folders);
     }
 
+    private function getProjects()
+    {
+        $files = scandir($this->getRoot());
+        return $files;
+    }
+
     /**
      * Define the command's schedule.
+     *
+     * @param Schedule $schedule
+     * @return void
      */
     public function schedule(Schedule $schedule): void
     {
         // $schedule->command(static::class)->everyMinute();
-    }
-
-    private function getProjects()
-    {
-        return scandir($this->getRoot());
     }
 }

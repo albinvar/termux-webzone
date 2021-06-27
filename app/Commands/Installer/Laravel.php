@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Commands\Installer;
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -29,8 +27,10 @@ class Laravel extends Command
 
     /**
      * Execute the console command.
+     *
+     * @return mixed
      */
-    public function handle(): mixed
+    public function handle()
     {
         $this->laravelInstaller = config('pma.LARAVEL_INSTALLER_PATH');
 
@@ -41,46 +41,37 @@ class Laravel extends Command
         }
     }
 
-    public function checkInstallation()
-    {
-        if (file_exists($this->laravelInstaller)) {
-            return true;
-        }
-        return false;
-
-    
-    }
-
-    public function logo(): void
-    {
-        $figlet = new Figlet();
-        echo $figlet->setFont(config('logo.font'))->render('Laravel  Installer');
-    }
-
-    /**
-     * Define the command's schedule.
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
-    }
-
     private function uninstall()
     {
-        if (! $this->checkInstallation()) {
+        if (!$this->checkInstallation()) {
             $this->error('Laravel Installer is not installed yet.');
             return false;
         }
 
-        if (! $this->confirm('Do you want to uninstall Laravel Installer?')) {
+        if (!$this->confirm('Do you want to uninstall Laravel Installer?')) {
             return false;
         }
 
-        $this->info('');
+        $this->info("");
         $this->logo();
         $this->comment("\nUnnstalling Laravel Installer...\n");
         $cmd = exec('composer global remove laravel/installer');
         $this->comment("\nUninstalled successfully. \n");
+    }
+
+    public function checkInstallation()
+    {
+        if (file_exists($this->laravelInstaller)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function logo()
+    {
+        $figlet = new Figlet();
+        echo $figlet->setFont(config('logo.font'))->render("Laravel  Installer");
     }
 
     private function install()
@@ -90,7 +81,7 @@ class Laravel extends Command
             return false;
         }
 
-        $this->info('');
+        $this->info("");
         $this->logo();
         $this->comment("\nInstalling Laravel Installer...\n");
         $cmd = exec('composer global require laravel/installer');
@@ -98,10 +89,21 @@ class Laravel extends Command
         $this->initComposerGlobal();
     }
 
-    private function initComposerGlobal(): void
+    private function initComposerGlobal()
     {
-        $this->task('Initialize Command ', function (): void {
+        $this->task("Initialize Command ", function () {
             $this->callSilently('composer:global', ['-s' => true]);
         });
+    }
+
+    /**
+     * Define the command's schedule.
+     *
+     * @param Schedule $schedule
+     * @return void
+     */
+    public function schedule(Schedule $schedule): void
+    {
+        // $schedule->command(static::class)->everyMinute();
     }
 }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Commands\Installer;
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -29,8 +27,10 @@ class PhpCsFixer extends Command
 
     /**
      * Execute the console command.
+     *
+     * @return mixed
      */
-    public function handle(): mixed
+    public function handle()
     {
         $this->fixer = config('pma.PHP_CS_FIXER_PATH');
 
@@ -41,46 +41,37 @@ class PhpCsFixer extends Command
         }
     }
 
-    public function checkInstallation()
-    {
-        if (file_exists($this->fixer)) {
-            return true;
-        }
-        return false;
-
-    
-    }
-
-    public function logo(): void
-    {
-        $figlet = new Figlet();
-        $this->info($figlet->render('PHP CS FIXER'));
-    }
-
-    /**
-     * Define the command's schedule.
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
-    }
-
     private function uninstall()
     {
-        if (! $this->checkInstallation()) {
+        if (!$this->checkInstallation()) {
             $this->error('php-cs-fixer is not installed yet.');
             return false;
         }
 
-        if (! $this->confirm('Do you want to uninstall php-cs-fixer?')) {
+        if (!$this->confirm('Do you want to uninstall php-cs-fixer?')) {
             return false;
         }
 
-        $this->info('');
+        $this->info("");
         $this->logo();
         $this->comment("\nUnnstalling php-cs-fixer ...\n");
         $cmd = exec('composer global remove friendsofphp/php-cs-fixer');
         $this->comment("\nUninstalled successfully. \n");
+    }
+
+    public function checkInstallation()
+    {
+        if (file_exists($this->fixer)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function logo()
+    {
+        $figlet = new Figlet();
+        $this->info($figlet->render("PHP CS FIXER"));
     }
 
     private function install()
@@ -89,8 +80,8 @@ class PhpCsFixer extends Command
             $this->error('Php-cs-fixer is already installed. Use "php-cs-fixer fix <folder_name>" to fix directory codes.');
             return false;
         }
-        $this->info(exec('clear'));
-        $this->info('');
+        $this->info(exec("clear"));
+        $this->info("");
         $this->logo();
         $this->comment("\nInstalling php-cs-fixer...\n");
         $cmd = exec('composer global require friendsofphp/php-cs-fixer');
@@ -98,10 +89,21 @@ class PhpCsFixer extends Command
         $this->initComposerGlobal();
     }
 
-    private function initComposerGlobal(): void
+    private function initComposerGlobal()
     {
-        $this->task('Initialize Command ', function (): void {
+        $this->task("Initialize Command ", function () {
             $this->callSilently('composer:global', ['-s' => true]);
         });
+    }
+
+    /**
+     * Define the command's schedule.
+     *
+     * @param Schedule $schedule
+     * @return void
+     */
+    public function schedule(Schedule $schedule): void
+    {
+        // $schedule->command(static::class)->everyMinute();
     }
 }

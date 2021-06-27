@@ -27,7 +27,6 @@
     "require-dev": {
         "laravel-zero/framework": "^8.4",
         "mockery/mockery": "^1.4.2",
-        "nunomaduro/phpinsights": "^2.0",
         "pestphp/pest": "^1.0",
         "phpstan/phpstan": "^0.12.89"
     },

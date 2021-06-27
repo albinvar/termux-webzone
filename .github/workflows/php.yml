@@ -22,9 +22,6 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@v2
-      
-   -  name: Phpinsights
-   - uses: MilesChou/composer-action@master
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
@@ -43,9 +40,6 @@ jobs:
 
     - name: PHPUnit Testing
       run: vendor/bin/pest --coverage
-
-	- name: Phpinsights Testing
-	- run: vendor/bin/phpinsights -n --ansi --format=github-action
 
     - name: Build
       run: php webzone app:build --build-version=0.0

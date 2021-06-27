@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Commands\Installer;
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -30,12 +28,14 @@ class Symfony extends Command
 
     /**
      * Execute the console command.
+     *
+     * @return mixed
      */
-    public function handle(): mixed
+    public function handle()
     {
         $this->callSilently('settings:init');
         $this->symfony = config('symfony.PATH');
-        $this->dir = '/data/data/com.termux/files/usr/bin';
+        $this->dir = "/data/data/com.termux/files/usr/bin";
         $this->install();
     }
 
@@ -60,53 +60,54 @@ class Symfony extends Command
     {
         if (file_exists($this->symfony)) {
             return true;
+        } else {
+            return false;
         }
-        return false;
-
-    
     }
 
-    public function logo(): void
+    public function logo()
     {
         $figlet = new Figlet();
-        $this->comment($figlet->setFont(config('logo.font'))->render('Symfony'));
+        $this->comment($figlet->setFont(config('logo.font'))->render("Symfony"));
     }
 
-    /**
-     * Define the command's schedule.
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
-    }
-
-    private function checkDownloadStatus($status, $dir): void
+    private function checkDownloadStatus($status, $dir)
     {
         switch ($status) {
             case 000:
-                $this->error('Cannot connect to Server');
+                $this->error("Cannot connect to Server");
                 break;
             case 200:
                 $this->comment("\nDownloaded Successfully...!!!");
                 $this->runTasks();
                 break;
             case 404:
-                $this->error('File not found on server..');
+                $this->error("File not found on server..");
                 break;
             default:
-                $this->error('An Unknown Error occurred...');
+                $this->error("An Unknown Error occurred...");
         }
     }
 
-    private function runTasks(): void
+    private function runTasks()
     {
-        $this->task('verifying command ', function () {
+        $this->task("verifying command ", function () {
             if (file_exists($this->symfony)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
-
-        
         });
+    }
+
+    /**
+     * Define the command's schedule.
+     *
+     * @param Schedule $schedule
+     * @return void
+     */
+    public function schedule(Schedule $schedule): void
+    {
+        // $schedule->command(static::class)->everyMinute();
     }
 }

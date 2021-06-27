@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Commands\Installer;
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -36,8 +34,10 @@ class Wordpress extends Command
 
     /**
      * Execute the console command.
+     *
+     * @return mixed
      */
-    public function handle(): mixed
+    public function handle()
     {
         $this->callSilently('settings:init');
         $this->wordpress = config('wordpress.PATH');
@@ -47,6 +47,26 @@ class Wordpress extends Command
             $this->removeDir();
         }
         $this->install();
+    }
+
+    private function removeDir()
+    {
+        $this->task("\nRemoving Old Files", function () {
+            if (is_dir($this->wordpress)) {
+                $cmd = shell_exec("rm -rf {$this->wordpress}");
+                if (is_null($cmd)) {
+                    return true;
+                }
+                return false;
+            } elseif (file_exists($this->zip)) {
+                $cmd = shell_exec("rm {$this->zip}");
+                if (is_null($cmd)) {
+                    return true;
+                }
+                return false;
+            }
+            return true;
+        });
     }
 
     public function install()
@@ -70,83 +90,51 @@ class Wordpress extends Command
     {
         if (is_dir($this->wordpress) && file_exists($this->wordpress . '/readme.html')) {
             return true;
+        } else {
+            return false;
         }
-        return false;
-
-    
     }
 
-    public function logo(): void
+    public function logo()
     {
         $figlet = new Figlet();
-        $this->comment($figlet->setFont(config('logo.font'))->render('WordPress'));
+        $this->comment($figlet->setFont(config('logo.font'))->render("WordPress"));
     }
 
-    /**
-     * Define the command's schedule.
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
-    }
-
-    private function removeDir(): void
-    {
-        $this->task("\nRemoving Old Files", function () {
-            if (is_dir($this->wordpress)) {
-                $cmd = shell_exec("rm -rf {$this->wordpress}");
-                if (is_null($cmd)) {
-                    return true;
-                }
-                return false;
-            }
-            if (file_exists($this->zip)) {
-                $cmd = shell_exec("rm {$this->zip}");
-                if (is_null($cmd)) {
-                    return true;
-                }
-                return false;
-            }
-            return true;
-        });
-    }
-
-    private function checkDownloadStatus($status): void
+    private function checkDownloadStatus($status)
     {
         switch ($status) {
             case 000:
-                $this->error('Cannot connect to Server');
+                $this->error("Cannot connect to Server");
                 break;
             case 200:
                 $this->comment("\nDownloaded Successfully...!!!\n");
                 $this->runTasks();
                 break;
             case 404:
-                $this->error('File not found on server..');
+                $this->error("File not found on server..");
                 break;
             default:
-                $this->error('An Unknown Error occurred...');
+                $this->error("An Unknown Error occurred...");
         }
     }
 
-    private function runTasks(): void
+    private function runTasks()
     {
-        $a = $this->task('Verifying download ', function () {
+        $a = $this->task("Verifying download ", function () {
             if (file_exists($this->zip)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
-
-        
         });
 
-        $b = $this->task('Extracting WordPress ', function () {
+        $b = $this->task("Extracting WordPress ", function () {
             if ($this->unzip()) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
-
-        
         });
 
         if ($a && $b) {
@@ -172,13 +160,24 @@ class Wordpress extends Command
         return true;
     }
 
-    private function successMessage(): void
+    private function successMessage()
     {
         $this->info("\n Successfully installed wordpress. use \"webzone server:wordpress\" command to start the server");
     }
 
-    private function errorMessage(): void
+    private function errorMessage()
     {
         $this->error("\n Faced an error while installing WordPress. Use \"-f or --force\" option for a forcefull installation.");
+    }
+
+    /**
+     * Define the command's schedule.
+     *
+     * @param Schedule $schedule
+     * @return void
+     */
+    public function schedule(Schedule $schedule): void
+    {
+        // $schedule->command(static::class)->everyMinute();
     }
 }
