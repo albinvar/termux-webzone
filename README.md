@@ -4,6 +4,7 @@
 <br>
 <img src="https://img.shields.io/packagist/v/albinvar/termux-webzone?label=version">
 <img src="https://poser.pugx.org/albinvar/termux-webzone/downloads">
+<a href="https://github.com/albinvar/termux-webzone/actions/workflows/php.yml"><img src="https://github.com/albinvar/termux-webzone/actions/workflows/php.yml/badge.svg"></a>
 <img src="https://img.shields.io/github/repo-size/albinvar/termux-webzone">
 <a href="LICENSE"><img src="https://img.shields.io/apm/l/Github"></a>
 </p>
