@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Commands\Installer;
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -9,7 +11,6 @@ use LaravelZero\Framework\Commands\Command;
 class Phpstan extends Command
 {
     protected $phpstan;
-
 
     /**
      * The signature of the command.
@@ -28,10 +29,8 @@ class Phpstan extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): mixed
     {
         $this->phpstan = config('pma.PHPSTAN_PATH');
 
@@ -42,37 +41,46 @@ class Phpstan extends Command
         }
     }
 
-    private function uninstall()
-    {
-        if (!$this->checkInstallation()) {
-            $this->error("phpstan isn't installed yet.");
-            return false;
-        }
-
-        if (!$this->confirm('Do you want to uninstall phpstan?')) {
-            return false;
-        }
-
-        $this->info("");
-        $this->logo();
-        $this->comment("\nUnnstalling phpstan ...\n");
-        $cmd = exec('composer global remove phpstan/phpstan');
-        $this->comment("\nUninstalled successfully. \n");
-    }
-
     public function checkInstallation()
     {
         if (file_exists($this->phpstan)) {
             return true;
-        } else {
-            return false;
         }
+        return false;
+
+    
     }
 
-    public function logo()
+    public function logo(): void
     {
         $figlet = new Figlet();
-        $this->info($figlet->render("PHPSTAN"));
+        $this->info($figlet->render('PHPSTAN'));
+    }
+
+    /**
+     * Define the command's schedule.
+     */
+    public function schedule(Schedule $schedule): void
+    {
+        // $schedule->command(static::class)->everyMinute();
+    }
+
+    private function uninstall()
+    {
+        if (! $this->checkInstallation()) {
+            $this->error("phpstan isn't installed yet.");
+            return false;
+        }
+
+        if (! $this->confirm('Do you want to uninstall phpstan?')) {
+            return false;
+        }
+
+        $this->info('');
+        $this->logo();
+        $this->comment("\nUnnstalling phpstan ...\n");
+        $cmd = exec('composer global remove phpstan/phpstan');
+        $this->comment("\nUninstalled successfully. \n");
     }
 
     private function install()
@@ -81,8 +89,8 @@ class Phpstan extends Command
             $this->error('Phpstan is already installed. Use "phpstan analyse --level=1 -- <folder_name>" to list out errors in code.');
             return false;
         }
-        $this->info(exec("clear"));
-        $this->info("");
+        $this->info(exec('clear'));
+        $this->info('');
         $this->logo();
         $this->comment("\nInstalling phpstan...\n");
         $cmd = exec('composer global require phpstan/phpstan');
@@ -90,21 +98,10 @@ class Phpstan extends Command
         $this->initComposerGlobal();
     }
 
-    private function initComposerGlobal()
+    private function initComposerGlobal(): void
     {
-        $this->task("Initialize Command ", function () {
+        $this->task('Initialize Command ', function (): void {
             $this->callSilently('composer:global', ['-s' => true]);
         });
-    }
-
-    /**
-     * Define the command's schedule.
-     *
-     * @param Schedule $schedule
-     * @return void
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
     }
 }

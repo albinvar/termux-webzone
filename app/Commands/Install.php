@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -32,13 +34,10 @@ class Install extends Command
         $this->dir = config('pma.PMA_DIR');
     }
 
-
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): mixed
     {
         $this->callSilently('settings:init');
         if ($this->option('force')) {
@@ -47,27 +46,7 @@ class Install extends Command
         $this->checkInstallation();
     }
 
-    private function removeDir()
-    {
-        $this->task("\nRemoving Old Files", function () {
-            if (is_dir($this->dir . '/pma')) {
-                $cmd = shell_exec("rm -rf {$this->dir}/pma");
-                if (is_null($cmd)) {
-                    return true;
-                }
-                return false;
-            } elseif (file_exists($this->dir . '/pma/config.inc.php')) {
-                $cmd = shell_exec("rm {$this->dir}/pma.zip");
-                if (is_null($cmd)) {
-                    return true;
-                }
-                return false;
-            }
-            return true;
-        });
-    }
-
-    public function checkInstallation()
+    public function checkInstallation(): void
     {
         $this->info("\n");
         $this->logo();
@@ -103,38 +82,16 @@ class Install extends Command
     }
     */
 
-    public function logo()
+    public function logo(): void
     {
         $figlet = new Figlet();
         echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
     }
 
-    private function createDirectory()
-    {
-        if (!is_dir($this->dir)) {
-            mkdir($this->dir);
-            $this->info('Directory created successfully..');
-        }
-        return $this->getUrl();
-    }
-
-    protected function getUrl()
-    {
-        $status = $this->isSiteAvailable(config('pma.PMA_URL'));
-        if ($status) {
-            $json = file_get_contents(config('pma.PMA_URL'));
-            $data = json_decode($json, true);
-            $this->downloadPMACurl($data);
-        } else {
-            $data = ['PMA_DOWNLOAD_LINK' => config('pma.PMA_DEFAULT_DOWNLOAD_LINK'),];
-            $this->downloadPMACurl($data);
-        }
-    }
-
     public function isSiteAvailable($url)
     {
         // Check, if a valid url is provided
-        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+        if (! filter_var($url, FILTER_VALIDATE_URL)) {
             return false;
         }
 
@@ -156,7 +113,58 @@ class Install extends Command
         return $response ? true : false;
     }
 
-    private function downloadPMACurl($data)
+    /**
+     * Define the command's schedule.
+     */
+    public function schedule(Schedule $schedule): void
+    {
+        // $schedule->command(static::class)->everyMinute();
+    }
+
+    protected function getUrl(): void
+    {
+        $status = $this->isSiteAvailable(config('pma.PMA_URL'));
+        if ($status) {
+            $json = file_get_contents(config('pma.PMA_URL'));
+            $data = json_decode($json, true);
+            $this->downloadPMACurl($data);
+        } else {
+            $data = ['PMA_DOWNLOAD_LINK' => config('pma.PMA_DEFAULT_DOWNLOAD_LINK')];
+            $this->downloadPMACurl($data);
+        }
+    }
+
+    private function removeDir(): void
+    {
+        $this->task("\nRemoving Old Files", function () {
+            if (is_dir($this->dir . '/pma')) {
+                $cmd = shell_exec("rm -rf {$this->dir}/pma");
+                if (is_null($cmd)) {
+                    return true;
+                }
+                return false;
+            }
+            if (file_exists($this->dir . '/pma/config.inc.php')) {
+                $cmd = shell_exec("rm {$this->dir}/pma.zip");
+                if (is_null($cmd)) {
+                    return true;
+                }
+                return false;
+            }
+            return true;
+        });
+    }
+
+    private function createDirectory()
+    {
+        if (! is_dir($this->dir)) {
+            mkdir($this->dir);
+            $this->info('Directory created successfully..');
+        }
+        return $this->getUrl();
+    }
+
+    private function downloadPMACurl($data): void
     {
         $lines = shell_exec("curl -w '\n%{http_code}\n' {$data['PMA_DOWNLOAD_LINK']} -o {$this->dir}/pma.zip");
         $lines = explode("\n", trim($lines));
@@ -164,46 +172,48 @@ class Install extends Command
         $this->checkDownloadStatus($status);
     }
 
-    private function checkDownloadStatus($status)
+    private function checkDownloadStatus($status): void
     {
         switch ($status) {
             case 000:
-                $this->error("Cannot connect to Server");
+                $this->error('Cannot connect to Server');
                 break;
             case 200:
                 $this->comment("\nDownloaded Successfully...!!!");
                 $this->runTasks();
                 break;
             case 404:
-                $this->error("File not found on server..");
+                $this->error('File not found on server..');
                 break;
             default:
-                $this->error("An Unknown Error occurred...");
+                $this->error('An Unknown Error occurred...');
         }
     }
 
-    private function runTasks()
+    private function runTasks(): void
     {
-        $this->task("Extracting PMA ", function () {
+        $this->task('Extracting PMA ', function () {
             if ($this->unzip()) {
                 return true;
-            } else {
-                return false;
             }
+            return false;
+
+        
         });
-        $this->task("Set Configuration File ", function () {
+        $this->task('Set Configuration File ', function () {
             if ($this->setPmaConfig()) {
                 return true;
-            } else {
-                return false;
             }
+            return false;
+
+        
         });
     }
 
     private function unzip()
     {
         $zip = new ZipArchive();
-        $file = $this->dir . "/pma.zip";
+        $file = $this->dir . '/pma.zip';
 
         // open archive
         if ($zip->open($file) !== true) {
@@ -221,20 +231,10 @@ class Install extends Command
         if (file_exists($this->dir . '/pma/config.sample.inc.php')) {
             if (@rename($this->dir . '/pma/config.sample.inc.php', $this->dir . '/pma/config.inc.php') === true) {
                 return true;
-            } else {
-                return false;
             }
-        }
-    }
+            return false;
 
-    /**
-     * Define the command's schedule.
-     *
-     * @param Schedule $schedule
-     * @return void
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
+        
+        }
     }
 }

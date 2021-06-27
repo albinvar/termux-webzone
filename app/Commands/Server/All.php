@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Commands\Server;
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -35,14 +37,12 @@ class All extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): mixed
     {
         $this->callSilently('settings:init');
         $this->root = $this->getData()['project_dir'];
-        $this->mysql = "/data/data/com.termux/files/usr/bin/mysql";
+        $this->mysql = '/data/data/com.termux/files/usr/bin/mysql';
         $this->pma = config('pma.PMA_DIR');
         $this->mysqlPort = $this->getData()['mysqlPort'];
         $this->pmaPort = $this->getData()['pmaPort'];
@@ -53,49 +53,45 @@ class All extends Command
     public function getData()
     {
         $json_object = file_get_contents(config('settings.PATH') . '/settings.json');
-        $data = json_decode($json_object, true);
-        return $data;
+        return json_decode($json_object, true);
     }
 
-    public function checkInstallation()
+    public function checkInstallation(): void
     {
         if (is_dir($this->root)) {
-            //
+            
         } else {
             $this->error('The path seems to be invalid.');
-            die();
+            die;
         }
 
         if (file_exists($this->mysql)) {
-            //
+            
         } else {
             $this->error('Mysql not installed yet..');
-            die();
+            die;
         }
 
         if (is_dir($this->pma)) {
-            //
+            
         } else {
             $this->error('Pma not installed yet..');
-            die();
+            die;
         }
         $this->runAll();
     }
 
-    private function runAll()
-    {
-        $cmd = "php -S 127.0.0.1:{$this->pmaPort} -t {$this->pma} & php -S 127.0.0.1:{$this->localhostPort} -t {$this->root} & mysqld --port={$this->mysqlPort} --gdb & echo \"PHP, MySQL Services Started\" && fg";
-        exec($cmd);
-    }
-
     /**
      * Define the command's schedule.
-     *
-     * @param Schedule $schedule
-     * @return void
      */
     public function schedule(Schedule $schedule): void
     {
         // $schedule->command(static::class)->everyMinute();
+    }
+
+    private function runAll(): void
+    {
+        $cmd = "php -S 127.0.0.1:{$this->pmaPort} -t {$this->pma} & php -S 127.0.0.1:{$this->localhostPort} -t {$this->root} & mysqld --port={$this->mysqlPort} --gdb & echo \"PHP, MySQL Services Started\" && fg";
+        exec($cmd);
     }
 }
