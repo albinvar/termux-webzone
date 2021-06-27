@@ -29,14 +29,13 @@ class About extends Command
      */
     public function handle()
     {
-        $this->callSilently('settings:init');
         $this->about();
     }
 
     public function about()
     {
         $this->logo();
-        $this->comment("  " . app('git.version'));
+        $this->comment(" " . app('git.version'));
         $this->newLine();
         $this->info('Termux Webzone is a CLI application which provides a ton of features for web developers to build, run and test their php applications within the limits of android. The application is designed only to work with Termux.');
         $this->newLine();
