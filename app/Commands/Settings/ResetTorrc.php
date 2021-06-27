@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Commands\Settings;
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -30,10 +32,8 @@ class ResetTorrc extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): mixed
     {
         $this->callSilently('settings:init');
         $this->torrc = config('pma.TORRC');
@@ -45,31 +45,40 @@ class ResetTorrc extends Command
         }
     }
 
-    private function runTasks()
+    /**
+     * Define the command's schedule.
+     */
+    public function schedule(Schedule $schedule): void
+    {
+        // $schedule->command(static::class)->everyMinute();
+    }
+
+    private function runTasks(): void
     {
         // Task 1
-        $this->task("Removing old torrc", function () {
+        $this->task('Removing old torrc', function () {
             if (file_exists($this->torrc)) {
                 unlink($this->torrc);
                 return true;
-            } else {
-                return false;
             }
+            return false;
+
+        
         });
 
         // Task 2
-        $this->task("Downloading torrc from server", function () {
+        $this->task('Downloading torrc from server', function (): void {
             $this->downloadCurl();
         });
 
         // Task 3
-        $this->task("Creating required folders ", function () {
+        $this->task('Creating required folders ', function () {
             exec("mkdir -p {$this->torHiddenDir}");
             return true;
         });
     }
 
-    private function downloadCurl()
+    private function downloadCurl(): void
     {
         $lines = shell_exec("curl -w '\n%{http_code}\n' {$this->torrcLink} -o {$this->torrc}");
         $lines = explode("\n", trim($lines));
@@ -77,13 +86,12 @@ class ResetTorrc extends Command
         $this->checkDownloadStatus($status);
     }
 
-
     private function checkDownloadStatus($status)
     {
         $bool = null;
         switch ($status) {
             case 000:
-                $this->error("Cannot connect to the server");
+                $this->error('Cannot connect to the server');
                 $bool = 0;
                 break;
             case 200:
@@ -91,25 +99,13 @@ class ResetTorrc extends Command
                 $bool = 1;
                 break;
             case 404:
-                $this->error("File could not be found");
+                $this->error('File could not be found');
                 $bool = 0;
                 break;
             default:
-                $this->error("An Unknown error occurred");
+                $this->error('An Unknown error occurred');
                 $bool = 0;
         }
         return $bool;
-    }
-
-
-    /**
-     * Define the command's schedule.
-     *
-     * @param Schedule $schedule
-     * @return void
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Commands\Server;
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -28,25 +30,12 @@ class Pma extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): mixed
     {
         $this->callSilently('settings:init');
         $this->setPort();
         $this->checkInstallations();
-    }
-
-    private function setPort()
-    {
-        if (!empty($this->option('port'))) {
-            $this->port = $this->option('port');
-        } elseif (!empty($this->getPort())) {
-            $this->port = $this->getPort();
-        } else {
-            $this->port = config('pma.PMA_PORT');
-        }
     }
 
     public function getPort()
@@ -56,41 +45,49 @@ class Pma extends Command
         return $data['pma_port'];
     }
 
-    public function checkInstallations()
+    public function checkInstallations(): void
     {
-        echo shell_exec("clear");
-        $this->info("");
+        echo shell_exec('clear');
+        $this->info('');
         $this->logo();
         $this->info("\n");
         $dir = config('pma.PMA_DIR');
         $cmd = "php -S 127.0.0.1:{$this->port} -t {$dir}/pma";
         $this->comment("Starting phpmyadmin web interface at : http://127.0.0.1:{$this->port}");
-        $this->info("");
+        $this->info('');
         $this->launch();
         shell_exec($cmd);
     }
 
-    public function logo()
+    public function logo(): void
     {
         $figlet = new Figlet();
         echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
     }
 
-    private function launch()
-    {
-        if (!$this->option('n')) {
-            return shell_exec("xdg-open http://127.0.0.1:{$this->port}");
-        }
-    }
-
     /**
      * Define the command's schedule.
-     *
-     * @param Schedule $schedule
-     * @return void
      */
     public function schedule(Schedule $schedule): void
     {
         // $schedule->command(static::class)->everyMinute();
+    }
+
+    private function setPort(): void
+    {
+        if (! empty($this->option('port'))) {
+            $this->port = $this->option('port');
+        } elseif (! empty($this->getPort())) {
+            $this->port = $this->getPort();
+        } else {
+            $this->port = config('pma.PMA_PORT');
+        }
+    }
+
+    private function launch()
+    {
+        if (! $this->option('n')) {
+            return shell_exec("xdg-open http://127.0.0.1:{$this->port}");
+        }
     }
 }

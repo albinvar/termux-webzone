@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Commands\Share;
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -24,7 +26,6 @@ class Tor extends Command
 
     protected $string2;
 
-
     /**
      * The signature of the command.
      *
@@ -43,35 +44,22 @@ class Tor extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): mixed
     {
         $this->torrc = config('pma.TORRC');
-        $this->dir = "/data/data/com.termux/files/usr/bin";
-        if (!file_exists($this->torrc)) {
+        $this->dir = '/data/data/com.termux/files/usr/bin';
+        if (! file_exists($this->torrc)) {
             $this->callSilently('tor:reset');
         }
         echo exec('clear');
         $this->setPort();
         if ($this->option('reset')) {
             $this->call('tor:reset', ['--force' => true]);
-            exit();
+            exit;
         }
 
         $this->checkInstallation();
-    }
-
-    private function setPort()
-    {
-        if (!empty($this->option('port'))) {
-            $this->port = $this->option('port');
-        } elseif (!empty($this->getPort())) {
-            $this->port = $this->getPort();
-        } else {
-            $this->port = config('pma.TOR_PORT');
-        }
     }
 
     public function getPort()
@@ -81,24 +69,24 @@ class Tor extends Command
         return $data['tor_port'];
     }
 
-    public function checkInstallation()
+    public function checkInstallation(): void
     {
         $this->logo();
-        if (!file_exists($this->dir . '/tor')) {
-            if ($this->confirm("Do you want to install tor?")) {
+        if (! file_exists($this->dir . '/tor')) {
+            if ($this->confirm('Do you want to install tor?')) {
                 $this->installTor();
                 sleep(1);
                 $this->call('share:tor');
             } else {
                 $this->error('aborting...');
-                exit();
+                exit;
             }
         } else {
             $this->olds = $this->setString();
             foreach ($this->olds as $string) {
                 $this->checkIfInitialized($string['old'], $string['new'], $string['type']);
             }
-            $this->comment("Starting up Tor client.....");
+            $this->comment('Starting up Tor client.....');
             exec('killall tor >/dev/null 2>&1');
             $this->line(exec('tor > /dev/null 2>/dev/null &'));
             sleep(3);
@@ -106,18 +94,10 @@ class Tor extends Command
         }
     }
 
-    public function logo()
+    public function logo(): void
     {
         $figlet = new Figlet();
         $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
-    }
-
-    private function installTor()
-    {
-        $this->task("Installing tor", function () {
-            $cmd = "apt-get install tor -y -qqq";
-            exec($cmd);
-        });
     }
 
     public function setString()
@@ -126,11 +106,37 @@ class Tor extends Command
         $this->old2 = "\nHiddenServicePort";
         $this->string1 = "\nHiddenServiceDir /data/data/com.termux/files/usr/var/lib/tor/hidden_service/";
         $this->string2 = "\nHiddenServicePort 80 127.0.0.1:{$this->port}";
-        $array = [['old' => $this->old1, 'new' => $this->string1, 'type' => "hidden service directory"], ['old' => $this->old2, 'new' => $this->string2, 'type' => "hidden service port"]];
-        return $array;
+        return [['old' => $this->old1, 'new' => $this->string1, 'type' => 'hidden service directory'], ['old' => $this->old2, 'new' => $this->string2, 'type' => 'hidden service port']];
     }
 
-    private function checkIfInitialized($old, $new, $type)
+    /**
+     * Define the command's schedule.
+     */
+    public function schedule(Schedule $schedule): void
+    {
+        // $schedule->command(static::class)->everyMinute();
+    }
+
+    private function setPort(): void
+    {
+        if (! empty($this->option('port'))) {
+            $this->port = $this->option('port');
+        } elseif (! empty($this->getPort())) {
+            $this->port = $this->getPort();
+        } else {
+            $this->port = config('pma.TOR_PORT');
+        }
+    }
+
+    private function installTor(): void
+    {
+        $this->task('Installing tor', function (): void {
+            $cmd = 'apt-get install tor -y -qqq';
+            exec($cmd);
+        });
+    }
+
+    private function checkIfInitialized($old, $new, $type): void
     {
         $file = file_get_contents($this->torrc);
 
@@ -140,9 +146,10 @@ class Tor extends Command
             $is_initiated = $this->task("configuring {$type} ", function () use (&$new) {
                 if ($this->rewrite($new)) {
                     return true;
-                } else {
-                    return false;
                 }
+                return false;
+
+            
             });
 
             if ($is_initiated) {
@@ -158,30 +165,21 @@ class Tor extends Command
         sleep(1);
         if ($action) {
             return true;
-        } else {
-            return false;
         }
+        return false;
+
+    
     }
 
     private function getHostname()
     {
-        $file = "/data/data/com.termux/files/usr/var/lib/tor/hidden_service/hostname";
+        $file = '/data/data/com.termux/files/usr/var/lib/tor/hidden_service/hostname';
         if (file_exists($file)) {
             $link = file_get_contents($file);
-            return "link : " . $link;
-        } else {
-            return "Something went wrong....";
+            return 'link : ' . $link;
         }
-    }
+        return 'Something went wrong....';
 
-    /**
-     * Define the command's schedule.
-     *
-     * @param Schedule $schedule
-     * @return void
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
+    
     }
 }
