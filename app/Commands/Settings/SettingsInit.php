@@ -35,7 +35,7 @@ class SettingsInit extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): mixed
+    public function handle()
     {
         if ($this->option('force')) {
             if ($this->confirm('Do you want to reset your webzone settings?')) {

@@ -8,6 +8,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
 use ZipArchive;
+use App\Helpers\Downloader;
 
 class Install extends Command
 {
@@ -37,7 +38,7 @@ class Install extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): mixed
+    public function handle()
     {
         $this->callSilently('settings:init');
         if ($this->option('force')) {
@@ -166,10 +167,16 @@ class Install extends Command
 
     private function downloadPMACurl($data): void
     {
-        $lines = shell_exec("curl -w '\n%{http_code}\n' {$data['PMA_DOWNLOAD_LINK']} -o {$this->dir}/pma.zip");
-        $lines = explode("\n", trim($lines));
-        $status = $lines[count($lines) - 1];
-        $this->checkDownloadStatus($status);
+		$pma = new Downloader(config('pma.PMA_DEFAULT_DOWNLOAD_LINK'), 'test/pma.zip');
+		
+		$response = $pma->download();
+		
+		if(!$response['ok'])
+		{
+			echo $response['status_code'];
+		} else {
+			$this->error($response['error']->getMessage());
+		}
     }
 
     private function checkDownloadStatus($status): void

@@ -2,50 +2,39 @@
 
 namespace App\Helpers;
 
+
+use App\Helpers\Webzone;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Utils;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Http;
-use LaravelZero\Framework\Commands\Command;
 
-class Downloader
+class Downloader extends Webzone
 {
 	
-	protected static $client;
-	
-	public function __construct()
+	public function __construct(String $url, String $dir)
 	{
+		parent::__construct();
 		
+		$this->client = new Client();
+		
+		$this->url = $url;
+		$this->dir = $dir;
+		
+		$this->download();
 	}
 	
-	public static function download($link=null, $dir=null)
+	public function download()
     {
-	    self::$client = new Client(['http_errors' => false]);
 	
-	    $resource = Utils::tryFopen('test/pma.zip', 'w');
+	    $resource = Utils::tryFopen($this->dir, 'w');
 		$stream = Utils::streamFor($resource);
 		
 		try {
-			$res = self::$client->request('GET', 'https://files.phpmyadmin.net/phpMyAdmin/5.1.0/phpMyAdmin-5.1.0-all-languages.zip', ['save_to' => $stream]);
+			$res = $this->client->request('GET', $this->url, ['save_to' => $stream]);
+			return ['ok' => true, 'status_code' => $res->getStatusCode(), 'error' => null];
 		} catch (RequestException $e) {
-		    $response = $e->getMessage();
-			return false;
+			return ['ok' => false, 'error' => $e];
 		}
-
-		
-        switch ($res->getStatusCode()) {
-            case 000:
-                $this-error('Cannot connect to Server');
-                break;
-            case 200:
-                $this->comment("\nDownloaded Successfully...!!!");
-                $this->runTasks();
-                break;
-            case 404:
-                $this->error('File not found on server..');
-                break;
-            default:
-                $this->error('An Unknown Error occurred...');
-        }
     }
 }

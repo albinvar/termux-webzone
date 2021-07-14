@@ -20,6 +20,8 @@
         "ext-curl": "*",
         "ext-json": "*",
         "ext-zip": "*",
+        "guzzlehttp/guzzle": "^6.5.5",
+        "illuminate/http": "^8.0",
         "illuminate/validation": "^8.35",
         "laminas/laminas-text": "^2.8",
         "padraic/phar-updater": "^1.0.6"
