@@ -37,7 +37,6 @@ class Downloader extends Webzone
 			$res = $this->client->request('GET', $this->url, ['save_to' => $stream]);
 			return ['ok' => true, 'status_code' => $res->getStatusCode(), 'error' => null];
 		} catch (RequestException $e) {
-			dd($e);
 			return ['ok' => false, 'error' => $e];
 		}
     }

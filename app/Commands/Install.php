@@ -7,8 +7,9 @@ namespace App\Commands;
 use Illuminate\Console\Scheduling\Schedule;
 use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
-use ZipArchive;
 use App\Helpers\Downloader;
+use App\Helpers\Zipper;
+use App\Helpers\PhpMyAdmin;
 
 class Install extends Command
 {
@@ -54,64 +55,42 @@ class Install extends Command
         $this->info("\n");
         if (is_dir($this->dir . '/pma') && file_exists($this->dir . '/pma/config.inc.php')) {
             if ($this->confirm('Do you want to reinstall PMA?')) {
-                $this->createDirectory();
+                $this->showLatestRelease();
             }
         } else {
-            $this->createDirectory();
+            $this->showLatestRelease();
         }
     }
-
-    /*
-    private function downloadPMA()
+    
+    private function showLatestRelease()
     {
-        $url = "https://mattstauffer.com/assets/images/logo.svg";
-        $fp = fopen($dir . 'name.zip', "w+");
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_FILE, $fp);
-        curl_exec($ch);
-        $st_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-        fclose($fp);
-
-        if($st_code == 200)
-             $this->info('File downloaded successfully!');
-        else {
-             $this->error('Error downloading file!');
-        }
-
+    	$pma = new PhpMyAdmin;
+	    $pma = $pma->latestRelease();
+	
+		if(!$pma)
+		{
+			$this->error("Couldn't connect to server.");
+			return 1;
+		}
+	    
+    	$headers = ['Name', 'Version', 'Released on'];
+    
+    $data = [];
+    
+    foreach($pma['releases'] as $release)
+    {
+    	$label = ($release['version'] === $pma['version']) ? ' (latest)' : null;
+    	$data[] = ['PhpMyAdmin', $release['version'] . $label, $release['date']];
     }
-    */
+    
+    $this->table($headers, $data);
+    
+    }
 
     public function logo(): void
     {
         $figlet = new Figlet();
         echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
-    }
-
-    public function isSiteAvailable($url)
-    {
-        // Check, if a valid url is provided
-        if (! filter_var($url, FILTER_VALIDATE_URL)) {
-            return false;
-        }
-
-        // Initialize cURL
-        $curlInit = curl_init($url);
-
-        // Set options
-        curl_setopt($curlInit, CURLOPT_CONNECTTIMEOUT, 10);
-        curl_setopt($curlInit, CURLOPT_HEADER, true);
-        curl_setopt($curlInit, CURLOPT_NOBODY, true);
-        curl_setopt($curlInit, CURLOPT_RETURNTRANSFER, true);
-
-        // Get response
-        $response = curl_exec($curlInit);
-
-        // Close a cURL session
-        curl_close($curlInit);
-
-        return $response ? true : false;
     }
 
     /**
@@ -120,19 +99,6 @@ class Install extends Command
     public function schedule(Schedule $schedule): void
     {
         // $schedule->command(static::class)->everyMinute();
-    }
-
-    protected function getUrl(): void
-    {
-        $status = $this->isSiteAvailable(config('pma.PMA_URL'));
-        if ($status) {
-            $json = file_get_contents(config('pma.PMA_URL'));
-            $data = json_decode($json, true);
-            $this->downloadPMACurl($data);
-        } else {
-            $data = ['PMA_DOWNLOAD_LINK' => config('pma.PMA_DEFAULT_DOWNLOAD_LINK')];
-            $this->downloadPMACurl($data);
-        }
     }
 
     private function removeDir(): void
@@ -165,7 +131,7 @@ class Install extends Command
         return $this->getUrl();
     }
 
-    private function downloadPMACurl($data): void
+    private function download($data)
     {
 		
 		$downloadTask = $this->task('Downloading resources ', function () {
@@ -190,14 +156,11 @@ class Install extends Command
 
     private function runTasks(): void
     {
-        $this->task('Extracting PMA ', function () {
-            if ($this->unzip()) {
-                return true;
-            }
-            return false;
-
-        
+        $this->task('Extracting Zip ', function () {
+        	$zip = new Zipper;
+	        return ($zip->unzip($this->dir, $this->dir.'/pma.zip', $this->dir.'/pma')) ? true : false;
         });
+        
         $this->task('Set Configuration File ', function () {
             if ($this->setPmaConfig()) {
                 return true;
@@ -206,22 +169,6 @@ class Install extends Command
 
         
         });
-    }
-
-    private function unzip()
-    {
-        $zip = new ZipArchive();
-        $file = $this->dir . '/pma.zip';
-
-        // open archive
-        if ($zip->open($file) !== true) {
-            return false;
-        }
-        // extract contents to destination directory
-        $zip->extractTo($this->dir . '/pma');
-        // close archive
-        $zip->close();
-        return true;
     }
 
     private function setPmaConfig()
