@@ -76,14 +76,21 @@ class Install extends Command
     	$headers = ['Name', 'Version', 'Released on'];
     
     $data = [];
+    $versions = [];
     
     foreach($pma['releases'] as $release)
     {
     	$label = ($release['version'] === $pma['version']) ? ' (latest)' : null;
     	$data[] = ['PhpMyAdmin', $release['version'] . $label, $release['date']];
+	    $versions[] = $release['version'];
     }
     
     $this->table($headers, $data);
+    
+	$version = $this->choice(
+        'Which version would you like to use?',
+        $versions
+    );
     
     }
 
