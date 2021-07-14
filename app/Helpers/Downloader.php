@@ -12,11 +12,17 @@ use Illuminate\Support\Facades\Http;
 class Downloader extends Webzone
 {
 	
+	protected $client;
+	
+	protected $url;
+	
+	protected $dir;
+	
 	public function __construct(String $url, String $dir)
 	{
 		parent::__construct();
 		
-		$this->client = new Client();
+		$this->client = new Client(['http_error' => false]);
 		
 		$this->url = $url;
 		$this->dir = $dir;
@@ -24,15 +30,14 @@ class Downloader extends Webzone
 	
 	public function download()
     {
-	
 	    $resource = Utils::tryFopen($this->dir, 'w');
 		$stream = Utils::streamFor($resource);
 		
 		try {
 			$res = $this->client->request('GET', $this->url, ['save_to' => $stream]);
 			return ['ok' => true, 'status_code' => $res->getStatusCode(), 'error' => null];
-			dump($res);
 		} catch (RequestException $e) {
+			dd($e);
 			return ['ok' => false, 'error' => $e];
 		}
     }
