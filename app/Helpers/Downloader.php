@@ -20,8 +20,6 @@ class Downloader extends Webzone
 		
 		$this->url = $url;
 		$this->dir = $dir;
-		
-		$this->download();
 	}
 	
 	public function download()
@@ -33,6 +31,7 @@ class Downloader extends Webzone
 		try {
 			$res = $this->client->request('GET', $this->url, ['save_to' => $stream]);
 			return ['ok' => true, 'status_code' => $res->getStatusCode(), 'error' => null];
+			dump($res);
 		} catch (RequestException $e) {
 			return ['ok' => false, 'error' => $e];
 		}

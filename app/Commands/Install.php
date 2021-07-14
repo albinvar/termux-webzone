@@ -167,34 +167,25 @@ class Install extends Command
 
     private function downloadPMACurl($data): void
     {
-		$pma = new Downloader(config('pma.PMA_DEFAULT_DOWNLOAD_LINK'), 'test/pma.zip');
 		
+		$downloadTask = $this->task('Downloading resources ', function () {
+			
+		$pma = new Downloader(config('pma.PMA_DEFAULT_DOWNLOAD_LINK'), $this->dir.'/pma.zip');
 		$response = $pma->download();
 		
-		if(!$response['ok'])
+		if($response['ok'])
 		{
-			echo $response['status_code'];
+			return true;
 		} else {
 			$this->error($response['error']->getMessage());
+			return false;
 		}
-    }
-
-    private function checkDownloadStatus($status): void
-    {
-        switch ($status) {
-            case 000:
-                $this->error('Cannot connect to Server');
-                break;
-            case 200:
-                $this->comment("\nDownloaded Successfully...!!!");
-                $this->runTasks();
-                break;
-            case 404:
-                $this->error('File not found on server..');
-                break;
-            default:
-                $this->error('An Unknown Error occurred...');
-        }
+		});
+		
+		if($downloadTask)
+		{
+			$this->runTasks();
+		}
     }
 
     private function runTasks(): void
