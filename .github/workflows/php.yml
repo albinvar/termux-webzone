@@ -44,8 +44,8 @@ jobs:
     - name: PHPUnit Testing
       run: vendor/bin/pest --coverage
 
-	- name: Phpinsights Testing
-	- run: vendor/bin/phpinsights -n --ansi --format=github-action
+    - name: Phpinsights Testing
+    - run: vendor/bin/phpinsights -n --ansi --format=github-action
 
     - name: Build
       run: php webzone app:build --build-version=0.0
