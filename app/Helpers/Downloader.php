@@ -24,7 +24,7 @@ class Downloader extends Webzone
 	
 	protected $saveTo;
 	
-	public function __construct(String $url, String $file, String $saveTo='tmp')
+	public function __construct(String $url, String $file, String $disk='tmp')
 	{
 		parent::__construct();
 		
@@ -33,9 +33,9 @@ class Downloader extends Webzone
 		$this->url = $url;
 		$this->file = $file;
 		
-		$this->downloadFile = Storage::disk('local')->getAdapter()->getPathPrefix().'/'.$this->file;
-		
-		$this->saveTo = $saveTo;
+		($disk !== 'tmp') ? $this->disk = $disk : $this->disk = 'tmp';
+
+		$this->downloadFile = Storage::disk($this->disk)->getAdapter()->getPathPrefix().'/'.$this->file;
 	}
 	
 	public function download()
@@ -67,7 +67,7 @@ class Downloader extends Webzone
     public function clean()
     {
     	try {
-	    	Storage::disk('local')->delete($this->file);
+	    	Storage::disk($this->disk)->delete($this->file);
 			return true;
 		} catch(\Exception $e) {
 			return false;

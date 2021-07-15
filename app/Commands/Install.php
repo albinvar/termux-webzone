@@ -161,7 +161,7 @@ class Install extends Command
 		
 		$downloadTask = $this->task('Downloading resources ', function () {
 			
-		$this->downloader = new Downloader($this->getUrl(), 'tmp/phpMyAdmin-v' . $this->version . '.zip', 'tmp/');
+		$this->downloader = new Downloader($this->getUrl(), 'phpMyAdmin-v' . $this->version . '.zip');
 		$response = $this->downloader->download();
 		
 		if($response['ok'])
