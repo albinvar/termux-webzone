@@ -72,8 +72,6 @@ class Wordpress extends Command
             return true;
         }
         return false;
-
-    
     }
 
     public function logo(): void
@@ -136,8 +134,6 @@ class Wordpress extends Command
                 return true;
             }
             return false;
-
-        
         });
 
         $b = $this->task('Extracting WordPress ', function () {
@@ -145,8 +141,6 @@ class Wordpress extends Command
                 return true;
             }
             return false;
-
-        
         });
 
         if ($a && $b) {

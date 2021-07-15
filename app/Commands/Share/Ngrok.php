@@ -82,8 +82,6 @@ class Ngrok extends Command
         } else {
             $this->error('aborting...');
         }
-
-    
     }
 
     public function logo(): void
@@ -144,8 +142,6 @@ class Ngrok extends Command
         }
         $this->error('Link Generation failed. Please turn on your hotspot and try again.');
         return false;
-
-    
     }
 
     private function installngrok(): void
@@ -188,8 +184,6 @@ class Ngrok extends Command
                 return true;
             }
             return false;
-
-        
         });
     }
 
@@ -200,7 +194,5 @@ class Ngrok extends Command
             return true;
         }
         return false;
-
-    
     }
 }

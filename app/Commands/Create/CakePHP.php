@@ -91,8 +91,6 @@ class CakePHP extends Command
         $this->create();
         $this->newline();
         $this->comment("CakePHP App created successfully on {$this->path}/{$this->name}");
-
-    
     }
 
     private function checkDir()
@@ -102,8 +100,6 @@ class CakePHP extends Command
             return false;
         }
         return true;
-
-    
     }
 
     private function create(): void

@@ -148,8 +148,6 @@ class Tor extends Command
                     return true;
                 }
                 return false;
-
-            
             });
 
             if ($is_initiated) {
@@ -167,8 +165,6 @@ class Tor extends Command
             return true;
         }
         return false;
-
-    
     }
 
     private function getHostname()
@@ -179,7 +175,5 @@ class Tor extends Command
             return 'link : ' . $link;
         }
         return 'Something went wrong....';
-
-    
     }
 }

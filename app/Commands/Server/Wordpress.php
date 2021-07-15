@@ -106,8 +106,6 @@ class Wordpress extends Command
             return true;
         }
         return false;
-
-    
     }
 
     private function launch()

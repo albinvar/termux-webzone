@@ -237,8 +237,6 @@ class Settings extends Command
             return true;
         }
         return $this->call('settings');
-
-    
     }
 
     private function dirUpdater($q = 'Enter folder path')
@@ -259,8 +257,6 @@ class Settings extends Command
             return true;
         }
         return false;
-
-    
     }
 
     private function edit($description, $key, $default, $type = 'normal'): void

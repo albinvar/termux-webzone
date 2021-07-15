@@ -62,8 +62,6 @@ class ResetTorrc extends Command
                 return true;
             }
             return false;
-
-        
         });
 
         // Task 2

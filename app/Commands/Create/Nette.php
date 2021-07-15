@@ -90,8 +90,6 @@ class Nette extends Command
         $this->create();
         $this->newline();
         $this->comment("Nette App created successfully on {$this->path}/{$this->name}");
-
-    
     }
 
     private function checkDir()
@@ -101,8 +99,6 @@ class Nette extends Command
             return false;
         }
         return true;
-
-    
     }
 
     private function create(): void

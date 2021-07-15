@@ -113,8 +113,6 @@ class Yii extends Command
         $this->create();
         $this->newline();
         $this->comment("Yii App created successfully on {$this->path}/{$this->name}");
-
-    
     }
 
     private function checkDir()
@@ -124,8 +122,6 @@ class Yii extends Command
             return false;
         }
         return true;
-
-    
     }
 
     private function create(): void

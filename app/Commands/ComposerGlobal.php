@@ -72,8 +72,6 @@ class ComposerGlobal extends Command
                 return true;
             }
             return false;
-
-        
         });
 
         $this->checkIfInitialized();
@@ -91,8 +89,6 @@ class ComposerGlobal extends Command
                     return true;
                 }
                 return false;
-
-            
             });
 
             if ($is_initiated) {
@@ -109,7 +105,5 @@ class ComposerGlobal extends Command
             return true;
         }
         return false;
-
-    
     }
 }

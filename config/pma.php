@@ -12,7 +12,7 @@ return [
     */
 
     'PMA_URL' => 'https://albinvar.github.io/webzone-api/v1/config.json',
-    
+
     /*
     |--------------------------------------------------------------------------
     | PMA Installation Directory
@@ -21,9 +21,9 @@ return [
     | Specify storage location to install PhpMyAdmin files.
     |
     */
-    
+
     'PMA_DIR' => '/data/data/com.termux/files/usr/var/webzone',
-    
+
     /*
     |--------------------------------------------------------------------------
     | PMA Default Archive
@@ -32,9 +32,9 @@ return [
     | Set a default PMA archive if the cli fails to contact with API Server
     |
     */
-    
+
     'PMA_DEFAULT_DOWNLOAD_LINK' => 'https://files.phpmyadmin.net/phpMyAdmin/5.1.0/phpMyAdmin-5.1.0-all-languages.zip',
-    
+
     /*
     |--------------------------------------------------------------------------
     | Composer
@@ -44,7 +44,7 @@ return [
     |
     */
      'composer' => "/data/data/com.termux/files/usr/bin/composer",
-    
+
     /*
     |--------------------------------------------------------------------------
     | Bashrc
@@ -54,7 +54,7 @@ return [
     |
     */
      'bashrc' => "/data/data/com.termux/files/usr/etc/bash.bashrc",
-    
+
     /*
     |--------------------------------------------------------------------------
     | MySql Command
@@ -64,7 +64,7 @@ return [
     |
     */
      'MYSQL_PATH' => '/data/data/com.termux/files/usr/bin/mysql',
-    
+
     /*
     |--------------------------------------------------------------------------
     | MySql Installation Command
@@ -74,7 +74,7 @@ return [
     |
     */
      'MYSQL_INSTALLATION_COMMAND' => 'pkg update -y && pkg upgrade -y && pkg install mariadb -y 2> /dev/null',
-    
+
     /*
     |--------------------------------------------------------------------------
     | PATH Environment Variable
@@ -84,7 +84,7 @@ return [
     |
     */
      'path' => 'PATH=\$PATH:/data/data/com.termux/files/home/.composer/vendor/bin',
-    
+
     /*
     |--------------------------------------------------------------------------
     | PROJECT Base Path
@@ -94,7 +94,7 @@ return [
     |
     */
      'PROJECT_BASE_PATH' => '/sdcard/www',
-    
+
     /*
     |--------------------------------------------------------------------------
     | LARAVEL INSTALLER Path
@@ -104,7 +104,7 @@ return [
     |
     */
      'LARAVEL_INSTALLER_PATH' => '/data/data/com.termux/files/home/.composer/vendor/bin/laravel',
-    
+
     /*
     |--------------------------------------------------------------------------
     | Ngrok Download link
@@ -114,7 +114,7 @@ return [
     |
     */
      'NGROK' => 'https://gitlab.com/albinvar/pma-cli/-/raw/master/ngrok?inline=false',
-    
+
     /*
     |--------------------------------------------------------------------------
     | Torrc
@@ -124,7 +124,7 @@ return [
     |
     */
      'TORRC' => '/data/data/com.termux/files/usr/etc/tor/torrc',
-    
+
     /*
     |--------------------------------------------------------------------------
     | Torrc Download link
@@ -134,7 +134,7 @@ return [
     |
     */
      'TORRC_DOWNLOAD_LINK' => 'https://gitlab.com/albinvar/pma-cli/-/raw/master/torrc?inline=false',
-    
+
     /*
     |--------------------------------------------------------------------------
     | Torrc Hidden Folder
@@ -144,7 +144,7 @@ return [
     |
     */
      'TOR_HIDDEN_DIR' => '/data/data/com.termux/files/usr/var/lib/tor/hidden_service',
-    
+
     /*
     |--------------------------------------------------------------------------
     | PHP-CS-FIXER Path
@@ -154,7 +154,7 @@ return [
     |
     */
      'PHP_CS_FIXER_PATH' => '/data/data/com.termux/files/home/.composer/vendor/bin/php-cs-fixer',
-    
+
     /*
     |--------------------------------------------------------------------------
     | File Manager Download Link
@@ -164,7 +164,7 @@ return [
     |
     */
      'MANAGER_DOWNLOAD_LINK' => 'https://gitlab.com/albinvar/pma-cli/-/raw/master/fm.php?inline=false',
-    
+
     /*
     |--------------------------------------------------------------------------
     | File Manager Download Link
@@ -174,7 +174,7 @@ return [
     |
     */
      'MANAGER_PATH' => '/data/data/com.termux/files/usr/var/webzone/manager',
-    
+
     /*
     |--------------------------------------------------------------------------
     | PHPSTAN Path
@@ -184,5 +184,5 @@ return [
     |
     */
      'PHPSTAN_PATH' => '/data/data/com.termux/files/home/.composer/vendor/bin/phpstan',
-    
+
 ];

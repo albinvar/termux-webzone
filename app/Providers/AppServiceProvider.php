@@ -13,7 +13,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        
     }
 
     /**
@@ -21,6 +20,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        
     }
 }

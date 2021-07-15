@@ -50,8 +50,6 @@ class LocalhostRun extends Command
         } else {
             $this->error('aborting...');
         }
-
-    
     }
 
     public function logo(): void

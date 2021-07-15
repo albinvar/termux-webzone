@@ -53,8 +53,6 @@ class SettingsInit extends Command
                 return true;
             }
             return false;
-
-        
         });
 
         $this->task('Creating JSON file ', function () {
@@ -62,8 +60,6 @@ class SettingsInit extends Command
                 return true;
             }
             return false;
-
-        
         });
     }
 
@@ -77,8 +73,6 @@ class SettingsInit extends Command
             return true;
         }
         $this->create();
-
-    
     }
 
     /**
@@ -98,8 +92,6 @@ class SettingsInit extends Command
         if (is_dir($this->settings)) {
             return true;
         }
-
-    
     }
 
     private function createSettingsJson()
@@ -115,8 +107,6 @@ class SettingsInit extends Command
             return false;
         }
         return true;
-
-    
     }
 
     private function validateJson()
@@ -127,7 +117,5 @@ class SettingsInit extends Command
             return true;
         }
         return false;
-
-    
     }
 }

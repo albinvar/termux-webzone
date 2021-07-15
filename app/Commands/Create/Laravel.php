@@ -91,8 +91,6 @@ class Laravel extends Command
         $this->create();
         $this->newline();
         $this->comment("Laravel App created successfully on {$this->path}/{$this->name}");
-
-    
     }
 
     private function checkDir()
@@ -102,8 +100,6 @@ class Laravel extends Command
             return false;
         }
         return true;
-
-    
     }
 
     private function create(): void

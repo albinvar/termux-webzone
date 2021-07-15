@@ -47,8 +47,6 @@ class PhpCsFixer extends Command
             return true;
         }
         return false;
-
-    
     }
 
     public function logo(): void

@@ -59,21 +59,18 @@ class All extends Command
     public function checkInstallation(): void
     {
         if (is_dir($this->root)) {
-            
         } else {
             $this->error('The path seems to be invalid.');
             die;
         }
 
         if (file_exists($this->mysql)) {
-            
         } else {
             $this->error('Mysql not installed yet..');
             die;
         }
 
         if (is_dir($this->pma)) {
-            
         } else {
             $this->error('Pma not installed yet..');
             die;

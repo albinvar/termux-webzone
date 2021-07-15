@@ -91,8 +91,6 @@ class Lumen extends Command
         $this->create();
         $this->newline();
         $this->comment("Lumen App created successfully on {$this->path}/{$this->name}");
-
-    
     }
 
     private function checkDir()
@@ -102,8 +100,6 @@ class Lumen extends Command
             return false;
         }
         return true;
-
-    
     }
 
     private function create(): void

@@ -62,8 +62,6 @@ class Symfony extends Command
             return true;
         }
         return false;
-
-    
     }
 
     public function logo(): void
@@ -105,8 +103,6 @@ class Symfony extends Command
                 return true;
             }
             return false;
-
-        
         });
     }
 }

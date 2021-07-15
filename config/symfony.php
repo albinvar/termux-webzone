@@ -12,7 +12,7 @@ return [
     */
 
     'CLI_DOWNLOAD_LINK' => 'https://gitlab.com/albinvar/pma-cli/-/raw/master/symfony?inline=false',
-    
+
     /*
     |--------------------------------------------------------------------------
     | Symfony CLI Path (Do Not Change)
@@ -23,7 +23,7 @@ return [
     */
 
     'PATH' => '/data/data/com.termux/files/usr/bin/symfony',
-    
+
     /*
     |--------------------------------------------------------------------------
     | Symfony App Types
@@ -34,5 +34,5 @@ return [
     */
 
     'TYPES' => ['web', 'console'],
-    
+
 ];

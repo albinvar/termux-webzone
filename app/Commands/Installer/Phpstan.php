@@ -47,8 +47,6 @@ class Phpstan extends Command
             return true;
         }
         return false;
-
-    
     }
 
     public function logo(): void
