@@ -24,7 +24,7 @@ class Install extends Command
      * @var string
      */
     protected $signature = 'install:pma
-							{--f|--force}';
+							{--fresh}';
 
     /**
      * The description of the command.
@@ -45,7 +45,7 @@ class Install extends Command
     public function handle()
     {
         $this->callSilently('settings:init');
-        if ($this->option('force')) {
+        if ($this->option('fresh')) {
             $this->removeDir();
         }
         $this->checkInstallation();
@@ -112,22 +112,8 @@ class Install extends Command
 
     private function removeDir(): void
     {
-        $this->task("\nRemoving Old Files", function () {
-            if (is_dir($this->dir . '/www')) {
-                $cmd = shell_exec("rm -rf {$this->dir}/pma");
-                if (is_null($cmd)) {
-                    return true;
-                }
-                return false;
-            }
-            if (file_exists($this->dir . '/www/config.inc.php')) {
-                $cmd = shell_exec("rm {$this->dir}/pma.zip");
-                if (is_null($cmd)) {
-                    return true;
-                }
-                return false;
-            }
-            return true;
+        $this->task("Removing Old Files", function () {
+            
         });
     }
 
