@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Commands\Server;
 
-use App\ConfigIniter;
 use Illuminate\Console\Scheduling\Schedule;
 use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
@@ -31,10 +32,8 @@ class Mysql extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): mixed
     {
         $this->callSilently('settings:init');
         $this->setPort();
@@ -42,24 +41,13 @@ class Mysql extends Command
         pcntl_async_signals(true);
 
         // Catch the cancellation of the action
-        pcntl_signal(SIGINT, function () {
+        pcntl_signal(SIGINT, function (): void {
             $this->comment("\nShutting down...\n");
 
             $this->stop();
         });
 
         $this->checkInstallation();
-    }
-
-    private function setPort()
-    {
-        if (!empty($this->option('port'))) {
-            $this->port = $this->option('port');
-        } elseif (!empty($this->getPort())) {
-            $this->port = $this->getPort();
-        } else {
-            $this->port = config('pma.MYSQL_PORT');
-        }
     }
 
     public function getPort()
@@ -69,27 +57,19 @@ class Mysql extends Command
         return $data['mysql_port'];
     }
 
-    private function stop()
+    public function checkInstallation(): void
     {
-        $this->task("Kill Mysql processes ", function () {
-            $cmd = "killall -9 mysqld 2> /dev/null";
-            $response = exec($cmd);
-        });
-    }
-
-    public function checkInstallation()
-    {
-        if (!file_exists($this->mysql)) {
+        if (! file_exists($this->mysql)) {
             $source = $this->choice(
                 "mysql doesn't seem to be installed, do you want to install it now ?",
                 [1 => 'install now', 0 => 'cancel']
             );
 
-            if ($source == 'install now' || $source == '1') {
+            if ($source === 'install now' || $source === '1') {
                 $this->call('install:mysql');
             }
-            if ($source == 'cancel' || $source == '0') {
-                $this->info("Good bye");
+            if ($source === 'cancel' || $source === '0') {
+                $this->info('Good bye');
             }
         } elseif ($this->option('stop')) {
             $this->stop();
@@ -98,15 +78,7 @@ class Mysql extends Command
         }
     }
 
-    private function start()
-    {
-        $this->logo();
-        $this->comment("mysql Services Started....");
-        $this->line("\n");
-        $cmd = exec("mysqld --port={$this->port} --gdb");
-    }
-
-    public function logo()
+    public function logo(): void
     {
         $figlet = new Figlet();
         $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
@@ -114,12 +86,36 @@ class Mysql extends Command
 
     /**
      * Define the command's schedule.
-     *
-     * @param Schedule $schedule
-     * @return void
      */
     public function schedule(Schedule $schedule): void
     {
         // $schedule->command(static::class)->everyMinute();
+    }
+
+    private function setPort(): void
+    {
+        if (! empty($this->option('port'))) {
+            $this->port = $this->option('port');
+        } elseif (! empty($this->getPort())) {
+            $this->port = $this->getPort();
+        } else {
+            $this->port = config('pma.MYSQL_PORT');
+        }
+    }
+
+    private function stop(): void
+    {
+        $this->task('Kill Mysql processes ', function (): void {
+            $cmd = 'killall -9 mysqld 2> /dev/null';
+            $response = exec($cmd);
+        });
+    }
+
+    private function start(): void
+    {
+        $this->logo();
+        $this->comment('mysql Services Started....');
+        $this->line("\n");
+        $cmd = exec("mysqld --port={$this->port} --gdb");
     }
 }

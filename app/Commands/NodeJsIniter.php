@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -28,35 +30,41 @@ class NodeJsIniter extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
-        echo exec("clear");
+        echo exec('clear');
         $this->logo();
 
-        $this->nodeJs = "/data/data/com.termux/files/usr/bin/node";
-        $this->npm = "/data/data/com.termux/files/usr/bin/npm";
+        $this->nodeJs = '/data/data/com.termux/files/usr/bin/node';
+        $this->npm = '/data/data/com.termux/files/usr/bin/npm';
         $this->checkInstallation();
     }
 
-    public function logo()
+    public function logo(): void
     {
         $figlet = new Figlet();
         $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
     }
 
-    public function checkInstallation()
+    public function checkInstallation(): void
     {
-        $nodejs = $this->check($this->nodeJs, "Checking Nodejs ");
-        $npm = $this->check($this->npm, "Checking Npm ");
+        $nodejs = $this->check($this->nodeJs, 'Checking Nodejs ');
+        $npm = $this->check($this->npm, 'Checking Npm ');
 
-        if (!$nodejs && !$npm) {
+        if (! $nodejs && ! $npm) {
             if ($this->confirm('Do you to install nodejs?')) {
                 $this->install();
             }
         }
+    }
+
+    /**
+     * Define the command's schedule.
+     */
+    public function schedule(Schedule $schedule): void
+    {
+        // $schedule->command(static::class)->everyMinute();
     }
 
     private function check($file, $message): bool
@@ -69,22 +77,11 @@ class NodeJsIniter extends Command
         });
     }
 
-    private function install()
+    private function install(): void
     {
-        $this->task("Installing Nodejs ", function () {
-            $cmd = "apt-get install nodejs -y -qqq";
+        $this->task('Installing Nodejs ', function (): void {
+            $cmd = 'apt-get install nodejs -y -qqq';
             $response = exec($cmd);
         });
-    }
-
-    /**
-     * Define the command's schedule.
-     *
-     * @param Schedule $schedule
-     * @return void
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
     }
 }

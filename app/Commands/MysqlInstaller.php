@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -27,10 +29,8 @@ class MysqlInstaller extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): mixed
     {
         $this->callSilently('settings:init');
         $this->mysql = config('pma.MYSQL_PATH');
@@ -38,7 +38,7 @@ class MysqlInstaller extends Command
         $this->checkInstallation();
     }
 
-    public function checkInstallation()
+    public function checkInstallation(): void
     {
         if (file_exists($this->mysql)) {
             $this->error('Mysql seems to be installed already, Type "pkg uninstall mariadb" to uninstall mysql..');
@@ -49,23 +49,20 @@ class MysqlInstaller extends Command
         }
     }
 
-    private function install()
+    /**
+     * Define the command's itschedule.
+     */
+    public function schedule(Schedule $schedule): void
+    {
+        // $schedule->command(static::class)->everyMinute();
+    }
+
+    private function install(): void
     {
         $this->info("\nInstalling MySql\n");
 
         exec($this->command, $output, $result);
 
         $this->comment('MySql installed successfully...');
-    }
-
-    /**
-     * Define the command's itschedule.
-     *
-     * @param Schedule $schedule
-     * @return void
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
     }
 }

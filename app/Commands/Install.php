@@ -1,15 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
-use ZipArchive;
+use App\Helpers\Downloader;
+use App\Helpers\Zipper;
+use App\Helpers\PhpMyAdmin;
+use Illuminate\Support\Facades\File;
 
 class Install extends Command
 {
     protected $dir;
+
+    protected $downloader;
 
     /**
      * The signature of the command.
@@ -17,7 +24,7 @@ class Install extends Command
      * @var string
      */
     protected $signature = 'install:pma
-							{--f|--force}';
+							{--fresh}';
 
     /**
      * The description of the command.
@@ -32,209 +39,151 @@ class Install extends Command
         $this->dir = config('pma.PMA_DIR');
     }
 
-
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle()
     {
         $this->callSilently('settings:init');
-        if ($this->option('force')) {
+        if ($this->option('fresh')) {
             $this->removeDir();
         }
         $this->checkInstallation();
     }
 
-    private function removeDir()
-    {
-        $this->task("\nRemoving Old Files", function () {
-            if (is_dir($this->dir . '/pma')) {
-                $cmd = shell_exec("rm -rf {$this->dir}/pma");
-                if (is_null($cmd)) {
-                    return true;
-                }
-                return false;
-            } elseif (file_exists($this->dir . '/pma/config.inc.php')) {
-                $cmd = shell_exec("rm {$this->dir}/pma.zip");
-                if (is_null($cmd)) {
-                    return true;
-                }
-                return false;
-            }
-            return true;
-        });
-    }
-
-    public function checkInstallation()
+    public function checkInstallation(): void
     {
         $this->info("\n");
         $this->logo();
         $this->info("\n");
-        if (is_dir($this->dir . '/pma') && file_exists($this->dir . '/pma/config.inc.php')) {
+        if (is_dir($this->dir . '/www') && file_exists($this->dir . '/www/config.inc.php')) {
             if ($this->confirm('Do you want to reinstall PMA?')) {
-                $this->createDirectory();
+                $this->showLatestRelease();
             }
         } else {
-            $this->createDirectory();
+            $this->showLatestRelease();
         }
     }
 
-    /*
-    private function downloadPMA()
+    private function showLatestRelease()
     {
-        $url = "https://mattstauffer.com/assets/images/logo.svg";
-        $fp = fopen($dir . 'name.zip', "w+");
+        $pma = new PhpMyAdmin();
+        $pma = $pma->latestRelease();
 
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_FILE, $fp);
-        curl_exec($ch);
-        $st_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-        fclose($fp);
-
-        if($st_code == 200)
-             $this->info('File downloaded successfully!');
-        else {
-             $this->error('Error downloading file!');
+        if (!$pma) {
+            $this->error("Couldn't connect to server.");
+            return 1;
         }
 
-    }
-    */
+        $headers = ['Name', 'Version', 'Released on'];
 
-    public function logo()
+        $data = [];
+        $versions = [];
+
+        foreach ($pma['releases'] as $release) {
+            $label = ($release['version'] === $pma['version']) ? ' (latest)' : null;
+            $data[] = ['PhpMyAdmin', $release['version'] . $label, $release['date']];
+            $versions[] = $release['version'];
+        }
+
+        $this->table($headers, $data);
+
+        $this->version = $this->choice(
+            'Which version would you like to use?',
+            $versions
+        );
+
+        $this->runTasks();
+    }
+
+    public function logo(): void
     {
         $figlet = new Figlet();
         echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
     }
 
-    private function createDirectory()
-    {
-        if (!is_dir($this->dir)) {
-            mkdir($this->dir);
-            $this->info('Directory created successfully..');
-        }
-        return $this->getUrl();
-    }
-
-    protected function getUrl()
-    {
-        $status = $this->isSiteAvailable(config('pma.PMA_URL'));
-        if ($status) {
-            $json = file_get_contents(config('pma.PMA_URL'));
-            $data = json_decode($json, true);
-            $this->downloadPMACurl($data);
-        } else {
-            $data = ['PMA_DOWNLOAD_LINK' => config('pma.PMA_DEFAULT_DOWNLOAD_LINK'),];
-            $this->downloadPMACurl($data);
-        }
-    }
-
-    public function isSiteAvailable($url)
-    {
-        // Check, if a valid url is provided
-        if (!filter_var($url, FILTER_VALIDATE_URL)) {
-            return false;
-        }
-
-        // Initialize cURL
-        $curlInit = curl_init($url);
-
-        // Set options
-        curl_setopt($curlInit, CURLOPT_CONNECTTIMEOUT, 10);
-        curl_setopt($curlInit, CURLOPT_HEADER, true);
-        curl_setopt($curlInit, CURLOPT_NOBODY, true);
-        curl_setopt($curlInit, CURLOPT_RETURNTRANSFER, true);
-
-        // Get response
-        $response = curl_exec($curlInit);
-
-        // Close a cURL session
-        curl_close($curlInit);
-
-        return $response ? true : false;
-    }
-
-    private function downloadPMACurl($data)
-    {
-        $lines = shell_exec("curl -w '\n%{http_code}\n' {$data['PMA_DOWNLOAD_LINK']} -o {$this->dir}/pma.zip");
-        $lines = explode("\n", trim($lines));
-        $status = $lines[count($lines) - 1];
-        $this->checkDownloadStatus($status);
-    }
-
-    private function checkDownloadStatus($status)
-    {
-        switch ($status) {
-            case 000:
-                $this->error("Cannot connect to Server");
-                break;
-            case 200:
-                $this->comment("\nDownloaded Successfully...!!!");
-                $this->runTasks();
-                break;
-            case 404:
-                $this->error("File not found on server..");
-                break;
-            default:
-                $this->error("An Unknown Error occurred...");
-        }
-    }
-
-    private function runTasks()
-    {
-        $this->task("Extracting PMA ", function () {
-            if ($this->unzip()) {
-                return true;
-            } else {
-                return false;
-            }
-        });
-        $this->task("Set Configuration File ", function () {
-            if ($this->setPmaConfig()) {
-                return true;
-            } else {
-                return false;
-            }
-        });
-    }
-
-    private function unzip()
-    {
-        $zip = new ZipArchive();
-        $file = $this->dir . "/pma.zip";
-
-        // open archive
-        if ($zip->open($file) !== true) {
-            return false;
-        }
-        // extract contents to destination directory
-        $zip->extractTo($this->dir . '/pma');
-        // close archive
-        $zip->close();
-        return true;
-    }
-
-    private function setPmaConfig()
-    {
-        if (file_exists($this->dir . '/pma/config.sample.inc.php')) {
-            if (@rename($this->dir . '/pma/config.sample.inc.php', $this->dir . '/pma/config.inc.php') === true) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
-
     /**
      * Define the command's schedule.
-     *
-     * @param Schedule $schedule
-     * @return void
      */
     public function schedule(Schedule $schedule): void
     {
         // $schedule->command(static::class)->everyMinute();
+    }
+
+    private function removeDir(): void
+    {
+        $this->task("Removing Old Files", function () {
+            
+        });
+    }
+
+    private function createDirectory()
+    {
+        $this->task('Creating Required Folders ', function () {
+            if (!File::isDirectory($this->dir)) {
+                try {
+                    File::makeDirectory($this->dir, 0777, true, true);
+                    return true;
+                } catch (\Exception $e) {
+                    return false;
+                }
+            }
+            return true;
+        });
+    }
+
+    private function getUrl()
+    {
+        if (!isset($this->version)) {
+            return false;
+        }
+        //return 'https://files.phpmyadmin.net/phpMyAdmin/'.$this->version.'/phpMyAdmin-'.$this->version.'-all-languages.zip';
+        return 'http://127.0.0.1:8999/phpMyAdmin-5.1.1-all-languages.zip';
+    }
+
+    private function download()
+    {
+        $downloadTask = $this->task('Downloading resources ', function () {
+            $this->downloader = new Downloader($this->getUrl(), 'phpMyAdmin-v' . $this->version . '.zip');
+            $response = $this->downloader->download();
+
+            if ($response['ok']) {
+                return true;
+            } else {
+                $this->error($response['error']->getMessage());
+                return false;
+            }
+        });
+    }
+
+    private function runTasks(): void
+    {
+        $this->createDirectory();
+
+        $this->task('Setting url ', function () {
+            return $this->getUrl();
+        });
+
+        $this->download();
+
+        $this->task('Extracting Zip ', function () {
+            $zip = new Zipper($this->dir, $this->dir.'/tmp/phpMyAdmin-v' . $this->version . '.zip', $this->dir.'/www');
+            return ($zip->unzip()) ? true : false;
+        });
+
+        $this->task('Set Configuration File ', function () {
+            $pma = new PhpMyAdmin();
+            if ($pma->configurator('/www/phpMyAdmin-' . $this->version . '-all-languages', 'config.sample.inc.php')) {
+                return true;
+            }
+            return false;
+        });
+
+        $this->task('Removing downloaded files ', function () {
+            if ($this->downloader->clean()) {
+                return true;
+            }
+            return false;
+        });
     }
 }

@@ -12,7 +12,7 @@ return [
     */
 
     'DOWNLOAD_LINK' => 'https://gitlab.com/albinvar/pma-cli/-/raw/master/wordpress.zip?inline=false',
-    
+
     /*
     |--------------------------------------------------------------------------
     | WORDPRESS zip (Do Not Change)
@@ -23,7 +23,7 @@ return [
     */
 
     'WORDPRESS' => '/data/data/com.termux/files/usr/var/webzone/wordpress.zip',
-    
+
     /*
     |--------------------------------------------------------------------------
     | WORDPRESS Path (Do Not Change)
@@ -34,7 +34,7 @@ return [
     */
 
     'PATH' => '/data/data/com.termux/files/usr/var/webzone/wordpress',
-    
+
      /*
     |--------------------------------------------------------------------------
     | WORDPRESS Dir (Do Not Change)
@@ -45,5 +45,5 @@ return [
     */
 
     'DIR' => '/data/data/com.termux/files/usr/var/webzone',
-    
+
 ];

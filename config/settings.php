@@ -12,7 +12,7 @@ return [
     */
 
     'PATH' => '/data/data/com.termux/files/usr/var/webzone',
-    
+
     /*
     |--------------------------------------------------------------------------
     | Settings Php Array
@@ -23,6 +23,7 @@ return [
     */
 
     'ARRAY' => [
+				  'pma_version' => '',
                   'project_dir' => '/sdcard/www',
                   'php_port' => '8080',
                   'mysql_port' => '3306',
@@ -32,5 +33,5 @@ return [
                   'pma_port' => '8000',
                   'wordpress_port' => '7070',
                 ],
-                        
+
 ];

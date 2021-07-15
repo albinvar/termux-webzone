@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Commands\Create;
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -28,10 +30,8 @@ class Sapper extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): mixed
     {
         $this->path = $this->option('path');
         $this->name = $this->option('name');
@@ -46,28 +46,24 @@ class Sapper extends Command
         $this->create();
     }
 
-
-    public function logo()
+    public function logo(): void
     {
         $figlet = new Figlet();
-        $this->info($figlet->setFont(config('logo.font'))->render("Sapper"));
+        $this->info($figlet->setFont(config('logo.font'))->render('Sapper'));
     }
 
-    public function install()
+    public function install(): void
     {
         $code = exec('npm install -g degit');
     }
 
-    public function create()
+    public function create(): void
     {
         exec('cd ' . $this->path . ' && npx degit "sveltejs/sapper-template#rollup" ' . $this->name . ' && cd ' . $this->name . ' && npm install && npm run dev');
     }
 
     /**
      * Define the command's schedule.
-     *
-     * @param Schedule $schedule
-     * @return void
      */
     public function schedule(Schedule $schedule): void
     {
