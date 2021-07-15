@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\File;
 class Install extends Command
 {
     protected $dir;
+    
+    protected $downloader;
 
     /**
      * The signature of the command.
@@ -150,8 +152,8 @@ class Install extends Command
     private function getUrl()
     {
     	if(!isset($this->version)) { return false; }
-    	return 'https://files.phpmyadmin.net/phpMyAdmin/'.$this->version.'/phpMyAdmin-'.$this->version.'-all-languages.zip';
-	
+    	//return 'https://files.phpmyadmin.net/phpMyAdmin/'.$this->version.'/phpMyAdmin-'.$this->version.'-all-languages.zip';
+	    return 'http://127.0.0.1:8999/phpMyAdmin-5.1.1-all-languages.zip';
     }
 
     private function download()
@@ -159,8 +161,8 @@ class Install extends Command
 		
 		$downloadTask = $this->task('Downloading resources ', function () {
 			
-		$pma = new Downloader($this->getUrl(), $this->dir.'/tmp/phpMyAdmin-v' . $this->version . '.zip', 'tmp/');
-		$response = $pma->download();
+		$this->downloader = new Downloader($this->getUrl(), 'tmp/phpMyAdmin-v' . $this->version . '.zip', 'tmp/');
+		$response = $this->downloader->download();
 		
 		if($response['ok'])
 		{
@@ -194,8 +196,14 @@ class Install extends Command
                 return true;
             }
             return false;
-
+        });
         
+        $this->task('Removing downloaded files ', function () {
+        	
+            if ($this->downloader->clean()) {
+                return true;
+            }
+            return false;
         });
     }
 }
