@@ -54,7 +54,7 @@ class Install extends Command
         $this->info("\n");
         $this->logo();
         $this->info("\n");
-        if (is_dir($this->dir . '/pma') && file_exists($this->dir . '/pma/config.inc.php')) {
+        if (is_dir($this->dir . '/www') && file_exists($this->dir . '/www/config.inc.php')) {
             if ($this->confirm('Do you want to reinstall PMA?')) {
                 $this->showLatestRelease();
             }
@@ -114,14 +114,14 @@ class Install extends Command
     private function removeDir(): void
     {
         $this->task("\nRemoving Old Files", function () {
-            if (is_dir($this->dir . '/pma')) {
+            if (is_dir($this->dir . '/www')) {
                 $cmd = shell_exec("rm -rf {$this->dir}/pma");
                 if (is_null($cmd)) {
                     return true;
                 }
                 return false;
             }
-            if (file_exists($this->dir . '/pma/config.inc.php')) {
+            if (file_exists($this->dir . '/www/config.inc.php')) {
                 $cmd = shell_exec("rm {$this->dir}/pma.zip");
                 if (is_null($cmd)) {
                     return true;
@@ -151,6 +151,7 @@ class Install extends Command
     {
     	if(!isset($this->version)) { return false; }
     	return 'https://files.phpmyadmin.net/phpMyAdmin/'.$this->version.'/phpMyAdmin-'.$this->version.'-all-languages.zip';
+	
     }
 
     private function download()
@@ -158,7 +159,7 @@ class Install extends Command
 		
 		$downloadTask = $this->task('Downloading resources ', function () {
 			
-		$pma = new Downloader(config('pma.PMA_DEFAULT_DOWNLOAD_LINK'), $this->dir.'/pma.zip');
+		$pma = new Downloader($this->getUrl(), $this->dir.'/tmp/phpMyAdmin-v' . $this->version . '.zip', 'tmp/');
 		$response = $pma->download();
 		
 		if($response['ok'])
@@ -183,29 +184,18 @@ class Install extends Command
     	$this->download();
 	    
         $this->task('Extracting Zip ', function () {
-        	$zip = new Zipper($this->dir, $this->dir.'/pma.zip', $this->dir.'/pma');
+        	$zip = new Zipper($this->dir, $this->dir.'/tmp/phpMyAdmin-v' . $this->version . '.zip', $this->dir.'/www');
 	        return ($zip->unzip()) ? true : false;
         });
         
         $this->task('Set Configuration File ', function () {
-            if ($this->setPmaConfig()) {
+        	$pma = new PhpMyAdmin;
+            if ($pma->configurator('/www/phpMyAdmin-' . $this->version . '-all-languages', 'config.sample.inc.php')) {
                 return true;
             }
             return false;
 
         
         });
-    }
-
-    private function setPmaConfig()
-    {
-        if (file_exists($this->dir . '/pma/config.sample.inc.php')) {
-            if (@rename($this->dir . '/pma/config.sample.inc.php', $this->dir . '/pma/config.inc.php') === true) {
-                return true;
-            }
-            return false;
-
-        
-        }
     }
 }
