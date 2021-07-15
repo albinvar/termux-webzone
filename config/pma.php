@@ -22,7 +22,7 @@ return [
     |
     */
     
-    'PMA_DIR' => '/data/data/com.termux/files/usr/var/www',
+    'PMA_DIR' => '/data/data/com.termux/files/usr/var/webzone',
     
     /*
     |--------------------------------------------------------------------------
