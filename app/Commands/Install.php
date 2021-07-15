@@ -10,6 +10,7 @@ use LaravelZero\Framework\Commands\Command;
 use App\Helpers\Downloader;
 use App\Helpers\Zipper;
 use App\Helpers\PhpMyAdmin;
+use Illuminate\Support\Facades\File;
 
 class Install extends Command
 {
@@ -87,10 +88,12 @@ class Install extends Command
     
     $this->table($headers, $data);
     
-	$version = $this->choice(
+	$this->version = $this->choice(
         'Which version would you like to use?',
         $versions
     );
+    
+    $this->runTasks();
     
     }
 
@@ -131,14 +134,26 @@ class Install extends Command
 
     private function createDirectory()
     {
-        if (! is_dir($this->dir)) {
-            mkdir($this->dir);
-            $this->info('Directory created successfully..');
-        }
-        return $this->getUrl();
+    	$this->task('Creating Required Folders ', function () {
+    	if(!File::isDirectory($this->dir)){
+    	  try {
+	        File::makeDirectory($this->dir, 0777, true, true);
+			return true;
+		} catch(\Exception $e) {
+			return false;
+		}
+		}
+		return true;
+		});
+    }
+    
+    private function getUrl()
+    {
+    	if(!isset($this->version)) { return false; }
+    	return 'https://files.phpmyadmin.net/phpMyAdmin/'.$this->version.'/phpMyAdmin-'.$this->version.'-all-languages.zip';
     }
 
-    private function download($data)
+    private function download()
     {
 		
 		$downloadTask = $this->task('Downloading resources ', function () {
@@ -155,17 +170,21 @@ class Install extends Command
 		}
 		});
 		
-		if($downloadTask)
-		{
-			$this->runTasks();
-		}
     }
 
     private function runTasks(): void
     {
+    	$this->createDirectory();
+	    
+		$this->task('Setting url ', function () {
+			return $this->getUrl();
+	    });
+	
+    	$this->download();
+	    
         $this->task('Extracting Zip ', function () {
-        	$zip = new Zipper;
-	        return ($zip->unzip($this->dir, $this->dir.'/pma.zip', $this->dir.'/pma')) ? true : false;
+        	$zip = new Zipper($this->dir, $this->dir.'/pma.zip', $this->dir.'/pma');
+	        return ($zip->unzip()) ? true : false;
         });
         
         $this->task('Set Configuration File ', function () {

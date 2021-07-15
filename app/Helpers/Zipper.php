@@ -26,13 +26,13 @@ class Zipper extends Webzone
 	
 	public function unzip()
     {
-        if($zip->open($this->filename) !== true){
+        if($this->zip->open($this->filename) !== true){
 			 return false;
 		}
         
-        $zip->extractTo($this->extractFolder, $this->filename);
+        $this->zip->extractTo($this->extractFolder, $this->filename);
         
-        $zip->close();
+        $this->zip->close();
         
         return true;
     }
