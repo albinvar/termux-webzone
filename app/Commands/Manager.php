@@ -34,6 +34,18 @@ class Manager extends Command
      * @var string
      */
     protected $description = 'Web based file manager for termux';
+    
+    
+    public function __construct()
+    {
+        parent::__construct();
+        $this->callSilently('settings:init');
+        
+        $this->link = config('manager.MANAGER_DOWNLOAD_LINK');
+        $this->manager = config('manager.MANAGER_PATH');
+
+
+    }
 
     /**
      * Execute the console command.
@@ -41,10 +53,7 @@ class Manager extends Command
     public function handle(): void
     {
     	pcntl_async_signals(true);
-       
-        $this->link = config('manager.MANAGER_DOWNLOAD_LINK');
-        $this->manager = config('manager.MANAGER_PATH');
-        
+    
         pcntl_signal(SIGINT, function (): void {
             $this->newline();
             $this->comment("\nShutting down...\n");
