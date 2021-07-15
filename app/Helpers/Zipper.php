@@ -30,7 +30,10 @@ class Zipper extends Webzone
 			 return false;
 		}
         
-        $this->zip->extractTo($this->extractFolder, $this->filename);
+        if(!$this->zip->extractTo($this->extractFolder))
+        {
+        	return false;
+        }
         
         $this->zip->close();
         
