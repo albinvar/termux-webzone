@@ -17,6 +17,8 @@ class PmaInstaller extends Command
     protected $dir;
 
     protected $downloader;
+    
+    protected $pma;
 
     /**
      * The signature of the command.
@@ -38,6 +40,10 @@ class PmaInstaller extends Command
         parent::__construct();
         
         $this->dir = config('pma.PMA_DIR');
+        
+        $this->pma = new PhpMyAdmin();
+        
+        $this->pmaData = $this->pma->latestRelease();
     }
 
     /**
@@ -48,7 +54,7 @@ class PmaInstaller extends Command
     	$this->callSilently('settings:init');
     
         if ($this->option('fresh')) {
-            $this->removeDir();
+            $this->removeInstalledPhpMyAdmin();
         }
         $this->checkInstallation();
     }
@@ -69,10 +75,7 @@ class PmaInstaller extends Command
 
     private function showLatestRelease()
     {
-        $pma = new PhpMyAdmin();
-        $pma = $pma->latestRelease();
-
-        if (!$pma) {
+        if (!$this->pmaData) {
             $this->error("Couldn't connect to server.");
             return 1;
         }
@@ -82,8 +85,8 @@ class PmaInstaller extends Command
         $data = [];
         $versions = [];
 
-        foreach ($pma['releases'] as $release) {
-            $label = ($release['version'] === $pma['version']) ? ' (latest)' : null;
+        foreach ($this->pmaData['releases'] as $release) {
+            $label = ($release['version'] === $this->pmaData['version']) ? ' (latest)' : null;
             $data[] = ['PhpMyAdmin', $release['version'] . $label, $release['date']];
             $versions[] = $release['version'];
         }
@@ -112,10 +115,10 @@ class PmaInstaller extends Command
         // $schedule->command(static::class)->everyMinute();
     }
 
-    private function removeDir(): void
+    private function removeInstalledPhpMyAdmin(): void
     {
         $this->task("Removing Old Files", function () {
-            
+            $this->pma->removeOld();
         });
     }
 
@@ -139,8 +142,8 @@ class PmaInstaller extends Command
         if (!isset($this->version)) {
             return false;
         }
-        return 'https://files.phpmyadmin.net/phpMyAdmin/'.$this->version.'/phpMyAdmin-'.$this->version.'-all-languages.zip';
-        //return 'http://127.0.0.1:8999/phpMyAdmin-5.1.1-all-languages.zip';
+        //return 'https://files.phpmyadmin.net/phpMyAdmin/'.$this->version.'/phpMyAdmin-'.$this->version.'-all-languages.zip';
+        return 'http://127.0.0.1:8999/phpMyAdmin-5.1.1-all-languages.zip';
     }
 
     private function download()
@@ -174,8 +177,7 @@ class PmaInstaller extends Command
         });
 
         $this->task('Set Configuration File ', function () {
-            $pma = new PhpMyAdmin();
-            if ($pma->configurator('/www/phpMyAdmin-' . $this->version . '-all-languages', 'config.sample.inc.php')) {
+            if ($this->pma->configurator('/www/phpMyAdmin-' . $this->version . '-all-languages', 'config.sample.inc.php')) {
                 return true;
             }
             return false;

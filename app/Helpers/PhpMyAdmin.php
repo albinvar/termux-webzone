@@ -48,4 +48,20 @@ class PhpMyAdmin extends Webzone
             return false;
         }
     }
+    
+    public function removeOld()
+    {
+    	$existingDirectories = Storage::disk('local')->directories('www');
+    
+		$results = [];
+		
+		foreach($existingDirectories as $key => $dir) {
+	        if (strpos($dir, 'phpMyAdmin') !== FALSE)
+			{
+	           $results[] = Storage::deleteDirectory($dir);
+			}
+		}
+		
+		return !in_array(false, $results, true);
+    }
 }
