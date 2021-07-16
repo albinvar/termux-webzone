@@ -12,7 +12,7 @@ use App\Helpers\Zipper;
 use App\Helpers\PhpMyAdmin;
 use Illuminate\Support\Facades\File;
 
-class Install extends Command
+class PmaInstaller extends Command
 {
     protected $dir;
 
@@ -36,7 +36,7 @@ class Install extends Command
     public function __construct()
     {
         parent::__construct();
-        $this->callSilently('settings:init');
+        
         $this->dir = config('pma.PMA_DIR');
     }
 
@@ -45,6 +45,8 @@ class Install extends Command
      */
     public function handle()
     {
+    	$this->callSilently('settings:init');
+    
         if ($this->option('fresh')) {
             $this->removeDir();
         }
@@ -53,9 +55,9 @@ class Install extends Command
 
     public function checkInstallation(): void
     {
-        $this->info("\n");
+        $this->newline();
         $this->logo();
-        $this->info("\n");
+        $this->newline();
         if (is_dir($this->dir . '/www') && file_exists($this->dir . '/www/config.inc.php')) {
             if ($this->confirm('Do you want to reinstall PMA?')) {
                 $this->showLatestRelease();
@@ -137,8 +139,8 @@ class Install extends Command
         if (!isset($this->version)) {
             return false;
         }
-        //return 'https://files.phpmyadmin.net/phpMyAdmin/'.$this->version.'/phpMyAdmin-'.$this->version.'-all-languages.zip';
-        return 'http://127.0.0.1:8999/phpMyAdmin-5.1.1-all-languages.zip';
+        return 'https://files.phpmyadmin.net/phpMyAdmin/'.$this->version.'/phpMyAdmin-'.$this->version.'-all-languages.zip';
+        //return 'http://127.0.0.1:8999/phpMyAdmin-5.1.1-all-languages.zip';
     }
 
     private function download()

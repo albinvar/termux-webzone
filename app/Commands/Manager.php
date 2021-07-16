@@ -39,7 +39,7 @@ class Manager extends Command
     public function __construct()
     {
         parent::__construct();
-        $this->callSilently('settings:init');
+        
         
         $this->link = config('manager.MANAGER_DOWNLOAD_LINK');
         $this->manager = config('manager.MANAGER_PATH');
@@ -52,6 +52,8 @@ class Manager extends Command
      */
     public function handle(): void
     {
+    	$this->callSilently('settings:init');
+    
     	pcntl_async_signals(true);
     
         pcntl_signal(SIGINT, function (): void {
