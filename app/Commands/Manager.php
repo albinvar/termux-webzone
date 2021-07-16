@@ -7,6 +7,8 @@ namespace App\Commands;
 use Illuminate\Console\Scheduling\Schedule;
 use Laminas\Text\Figlet\Figlet;
 use App\Helpers\Downloader;
+use App\Helpers\WebzoneManager;
+use App\Helpers\Webzone;
 use Storage;
 use LaravelZero\Framework\Commands\Command;
 
@@ -17,6 +19,8 @@ class Manager extends Command
     protected $link;
 
     protected $dir = 'manager';
+    
+    protected $webzone;
 
     protected $manager;
 
@@ -39,10 +43,9 @@ class Manager extends Command
     public function __construct()
     {
         parent::__construct();
-
-
-        $this->link = config('manager.MANAGER_DOWNLOAD_LINK');
-        $this->manager = config('manager.MANAGER_PATH');
+        
+        $this->webzone = new Webzone;
+        $this->manager = new WebzoneManager();
     }
 
     /**
@@ -58,44 +61,40 @@ class Manager extends Command
             $this->newline();
             $this->comment("\nShutting down...\n");
         });
-
+        
         $this->checkInstallation();
     }
 
     private function start(): void
     {
-        $this->line(exec('clear'));
-        $this->logo();
         $this->info('Starting Webzone Manager....');
         $this->newline();
-        $this->comment(exec("cd {$this->manager} && xdg-open http://127.0.0.1:9876/ && php -S 127.0.0.1:9876"));
+        $this->manager->startServer();
     }
 
-    private function checkInstallation(): void
+    private function checkInstallation()
     {
-        if (file_exists($this->manager) && file_exists($this->manager . '/' . $this->fileName) && ! $this->option('force')) {
+    	$this->webzone->clear();
+        $this->webzone->logo(null, 'comment');
+        if (Storage::disk('local')->exists('manager/index.php') && ! $this->option('force')) {
             $this->start();
         } else {
-            $this->install();
-            sleep(5);
-            $this->start();
+	        if($this->confirm('Do you want to install Manager component')) {
+	            $this->install();
+				sleep(5);
+	            $this->start();
+			} else {
+				$this->error('Aborting...');
+				return true;
+			}
         }
-    }
-
-    public function logo(): void
-    {
-        $figlet = new Figlet();
-        $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
     }
 
     public function install(): void
     {
         $this->createDirectory();
-
         $this->download();
-
         $this->newline();
-
         $this->info('Installation Successful. Starting webzone manager for you...');
     }
 
@@ -103,7 +102,7 @@ class Manager extends Command
     {
         $this->task('Creating Required Folders ', function () {
             try {
-                Storage::makeDirectory($this->dir);
+                Storage::makeDirectory($this->manager->getPath());
                 return true;
             } catch (\Exception $e) {
                 return false;
@@ -114,7 +113,7 @@ class Manager extends Command
     private function download()
     {
         $downloadTask = $this->task('Downloading resources ', function () {
-            $this->downloader = new Downloader($this->link, 'manager/index.php', 'local');
+            $this->downloader = new Downloader($this->manager->getLink(), $this->manager->getPath().'/index.php', 'local');
             $response = $this->downloader->download();
 
             if ($response['ok']) {
