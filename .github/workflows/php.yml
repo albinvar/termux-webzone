@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        php: ['7.3', '7.4', '8.0']
+        php: ['7.4', '8.0']
         dependency-version: [prefer-lowest, prefer-stable]
 
     name: PHP ${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
@@ -38,8 +38,9 @@ jobs:
     - name: PHPUnit Testing
       run: vendor/bin/pest --coverage
 
+
     - name: Build
-      run: php application app:build --build-version=0.0
+      run: php webzone app:build --build-version=0.0
 
     - name: Build Check
-      run: php builds/application --version
+      run: php builds/webzone --version
