@@ -81,4 +81,9 @@ class Handler extends Command
         return false;
     }
     
+    public function edit()
+    {
+    	//
+    }
+    
 }

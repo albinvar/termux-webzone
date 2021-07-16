@@ -43,14 +43,12 @@ class SettingsInit extends Command
             if ($this->confirm('Do you want to reset your webzone settings?')) {
                 $this->settings->setStrictMode(true);
             }
-        } else {
-           
         }
         
         $this->init();
     }
 
-    public function init()
+    private function init()
     {
     	if($this->settings->isSettled() && !$this->settings->strictMode)
 	    {
