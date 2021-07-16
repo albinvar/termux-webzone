@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
-use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
 use App\Helpers\Downloader;
+use App\Helpers\Webzone;
 use App\Helpers\Zipper;
 use App\Helpers\PhpMyAdmin;
 use Illuminate\Support\Facades\File;
@@ -43,6 +43,8 @@ class PmaInstaller extends Command
         
         $this->pma = new PhpMyAdmin();
         
+        $this->webzone = new Webzone();
+        
         $this->pmaData = $this->pma->latestRelease();
     }
 
@@ -58,8 +60,9 @@ class PmaInstaller extends Command
 
     public function checkInstallation(): void
     {
+    	$this->webzone->clear();
         $this->newline();
-        $this->logo();
+        $this->webzone->logo();
         $this->newline();
         if (is_dir($this->dir . '/www') && file_exists($this->dir . '/www/config.inc.php')) {
             if ($this->confirm('Do you want to reinstall PMA?')) {
@@ -96,12 +99,6 @@ class PmaInstaller extends Command
         );
 
         $this->runTasks();
-    }
-
-    public function logo(): void
-    {
-        $figlet = new Figlet();
-        echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
     }
 
     /**
