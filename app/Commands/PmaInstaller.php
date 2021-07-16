@@ -53,9 +53,6 @@ class PmaInstaller extends Command
     {
     	$this->callSilently('settings:init');
     
-        if ($this->option('fresh')) {
-            $this->removeInstalledPhpMyAdmin();
-        }
         $this->checkInstallation();
     }
 
@@ -163,6 +160,10 @@ class PmaInstaller extends Command
 
     private function runTasks(): void
     {
+    	if ($this->option('fresh')) {
+            $this->removeInstalledPhpMyAdmin();
+        }
+	    
         $this->createDirectory();
 
         $this->task('Setting url ', function () {
