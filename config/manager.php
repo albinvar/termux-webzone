@@ -9,7 +9,7 @@ return [
     | Set file manager php Download link.
     |
     */
-     'MANAGER_DOWNLOAD_LINK' => 'https://gitlab.com/albinvar/pma-cli/-/raw/master/fm.php?inline=false',
+     'DOWNLOAD_LINK' => 'https://gitlab.com/albinvar/pma-cli/-/raw/master/fm.php?inline=false',
 
     /*
     |--------------------------------------------------------------------------
@@ -19,6 +19,17 @@ return [
     | Set file manager php Download link.
     |
     */
-     'MANAGER_PATH' => '/data/data/com.termux/files/usr/var/webzone/manager',
+     'PATH' => 'manager',
+     'FULL-PATH' => '/data/data/com.termux/files/usr/var/webzone/manager',
+     
+     /*
+    |--------------------------------------------------------------------------
+    | File Manager Port
+    |--------------------------------------------------------------------------
+    |
+    | Set file manager port.
+    |
+    */
+     'PORT' => 9876,
 
      ];

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
-use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
+use App\Helpers\Webzone;
 
 class ComposerGlobal extends Command
 {
@@ -30,22 +30,24 @@ class ComposerGlobal extends Command
      * @var string
      */
     protected $description = 'Init composer globally';
-
+    
+    public function __construct()
+    {
+        parent::__construct();
+        
+        $this->webzone = new Webzone();
+    }
+    
+    
     /**
      * Execute the console command.
      */
-    public function handle(): mixed
+    public function handle()
     {
         $this->callSilently('settings:init');
         $this->composer = config('pma.composer');
         $this->bashrc = config('pma.bashrc');
         $this->checkInstallation();
-    }
-
-    public function logo(): void
-    {
-        $figlet = new Figlet();
-        echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
     }
 
     public function setString(): void
@@ -63,10 +65,7 @@ class ComposerGlobal extends Command
 
     private function checkInstallation(): void
     {
-        if (! $this->option('silent')) {
-            $this->logo();
-        }
-        $this->info("\n");
+        $this->newline();
         $is_installed = $this->task('Check whether composer is installed ', function () {
             if (file_exists($this->composer)) {
                 return true;

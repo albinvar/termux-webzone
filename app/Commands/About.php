@@ -6,6 +6,7 @@ namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Laminas\Text\Figlet\Figlet;
+use App\Helpers\Webzone;
 use LaravelZero\Framework\Commands\Command;
 
 class About extends Command
@@ -23,7 +24,13 @@ class About extends Command
      * @var string
      */
     protected $description = 'About Webzone';
-
+    
+    public function __construct()
+    {
+        parent::__construct();
+        $this->webzone = new Webzone();
+    }
+    
     /**
      * Execute the console command.
      */
@@ -34,7 +41,7 @@ class About extends Command
 
     public function about(): void
     {
-        $this->logo();
+        $this->webzone->logo();
         $this->comment(' ' . app('git.version'));
         $this->newLine();
         $this->info('Termux Webzone is a CLI application which provides a ton of features for web developers to build, run and test their php applications within the limits of android. The application is designed only to work with Termux.');
@@ -44,20 +51,12 @@ class About extends Command
         $this->credits();
     }
 
-    public function logo(): void
-    {
-        $figlet = new Figlet();
-        echo $figlet->setFont(config('logo.font'))->render(config('logo.name'));
-    }
-
     public function credits(): void
     {
         $headers = ['Developers', 'role'];
-
         $data = [
             ['Albin', 'Developer'],
         ];
-
         $this->table($headers, $data);
     }
 

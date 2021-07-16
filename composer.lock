@@ -5899,16 +5899,16 @@
         },
         {
             "name": "nunomaduro/phpinsights",
-            "version": "v2.0.0",
+            "version": "v2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nunomaduro/phpinsights.git",
-                "reference": "d4f789e8a66c256b53492b8987906e99fe34130a"
+                "reference": "d07b45bb8add1f608fd007efbb989ecca59e3e96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nunomaduro/phpinsights/zipball/d4f789e8a66c256b53492b8987906e99fe34130a",
-                "reference": "d4f789e8a66c256b53492b8987906e99fe34130a",
+                "url": "https://api.github.com/repos/nunomaduro/phpinsights/zipball/d07b45bb8add1f608fd007efbb989ecca59e3e96",
+                "reference": "d07b45bb8add1f608fd007efbb989ecca59e3e96",
                 "shasum": ""
             },
             "require": {
@@ -5939,7 +5939,7 @@
                 "mockery/mockery": "^1.0",
                 "phpstan/phpstan-strict-rules": "^0.12",
                 "phpunit/phpunit": "^8.0|^9.0",
-                "rector/rector": "^0.11.2",
+                "rector/rector": "0.11.32",
                 "symfony/var-dumper": "^4.2|^5.0",
                 "thecodingmachine/phpstan-strict-rules": "^0.12.0"
             },
@@ -5983,7 +5983,7 @@
             ],
             "support": {
                 "issues": "https://github.com/nunomaduro/phpinsights/issues",
-                "source": "https://github.com/nunomaduro/phpinsights/tree/v2.0.0"
+                "source": "https://github.com/nunomaduro/phpinsights/tree/v2.0.1"
             },
             "funding": [
                 {
@@ -6003,7 +6003,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2021-06-21T11:16:19+00:00"
+            "time": "2021-07-11T13:33:54+00:00"
         },
         {
             "name": "pestphp/pest",

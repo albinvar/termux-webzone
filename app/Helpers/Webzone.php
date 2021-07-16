@@ -12,7 +12,7 @@ class Webzone extends Command
         $this->output = new \Symfony\Component\Console\Output\ConsoleOutput();
     }
 
-    public function logo($name=null, $type='info', $font=null): void
+    public function logo($name=null, $type=null, $font=null): void
     {
         $name = (is_null($name)) ? config('logo.name') : $name;
         $font = (is_null($font)) ? config('logo.font') : $font;
@@ -29,12 +29,16 @@ class Webzone extends Command
                 $this->error($logo);
                 break;
 
-            case('info'):
-                $this->error($logo);
+            case('comment'):
+                $this->comment($logo);
+                break;
+                
+            case('question'):
+                $this->wuestion($logo);
                 break;
 
             default:
-                $this->error($logo);
+                $this->line($logo);
                 break;
         }
     }
