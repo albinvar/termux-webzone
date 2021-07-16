@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
-use Laminas\Text\Figlet\Figlet;
 use App\Helpers\Downloader;
 use App\Helpers\WebzoneManager;
 use App\Helpers\Webzone;
@@ -14,11 +13,7 @@ use LaravelZero\Framework\Commands\Command;
 
 class Manager extends Command
 {
-    protected $fileName = 'index.php';
-
-    protected $link;
-
-    protected $dir = 'manager';
+    protected $filename = 'index.php';
     
     protected $webzone;
 
@@ -113,7 +108,7 @@ class Manager extends Command
     private function download()
     {
         $downloadTask = $this->task('Downloading resources ', function () {
-            $this->downloader = new Downloader($this->manager->getLink(), $this->manager->getPath().'/index.php', 'local');
+            $this->downloader = new Downloader($this->manager->getLink(), $this->manager->getPath().'/'.$this->filename, 'local');
             $response = $this->downloader->download();
 
             if ($response['ok']) {
