@@ -23,7 +23,7 @@ return [
     */
 
     'ARRAY' => [
-				  'pma_version' => '',
+                  'PMA_VERSION' => '',
                   'project_dir' => '/sdcard/www',
                   'php_port' => '8080',
                   'mysql_port' => '3306',

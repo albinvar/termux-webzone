@@ -1,10 +1,6 @@
 name: Tests
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: ['push', 'pull_request']
 
 jobs:
   ci:
@@ -14,7 +10,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         php: ['7.4', '8.0']
-        dependency-version: [prefer-stable]
+        dependency-version: [prefer-lowest, prefer-stable]
 
     name: PHP ${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
 
@@ -22,9 +18,6 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@v2
-      
-   -  name: Phpinsights
-   - uses: MilesChou/composer-action@master
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
@@ -38,14 +31,13 @@ jobs:
       run: |
         echo "::add-matcher::${{ runner.tool_cache }}/php.json"
         echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
     - name: Install Composer dependencies
       run: composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist --no-suggest
 
     - name: PHPUnit Testing
       run: vendor/bin/pest --coverage
 
-    - name: Phpinsights Testing
-    - run: vendor/bin/phpinsights -n --ansi --format=github-action
 
     - name: Build
       run: php webzone app:build --build-version=0.0

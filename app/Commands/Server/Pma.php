@@ -38,11 +38,11 @@ class Pma extends Command
         $this->checkInstallations();
     }
 
-    public function getPort()
+    public function getData()
     {
         $json_object = file_get_contents(config('settings.PATH') . '/settings.json');
         $data = json_decode($json_object, true);
-        return $data['pma_port'];
+        return $data;
     }
 
     public function checkInstallations(): void
@@ -51,8 +51,8 @@ class Pma extends Command
         $this->info('');
         $this->logo();
         $this->info("\n");
-        $dir = config('pma.PMA_DIR');
-        $cmd = "php -S 127.0.0.1:{$this->port} -t {$dir}/pma";
+        $dir = $this->getData()['pma_root'];
+        $cmd = "php -S 127.0.0.1:{$this->port} -t {$dir}";
         $this->comment("Starting phpmyadmin web interface at : http://127.0.0.1:{$this->port}");
         $this->info('');
         $this->launch();
@@ -77,8 +77,8 @@ class Pma extends Command
     {
         if (! empty($this->option('port'))) {
             $this->port = $this->option('port');
-        } elseif (! empty($this->getPort())) {
-            $this->port = $this->getPort();
+        } elseif (! empty($this->getData()['pma_port'])) {
+            $this->port = $this->getData()['pma_port'];
         } else {
             $this->port = config('pma.PMA_PORT');
         }
