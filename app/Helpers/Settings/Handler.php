@@ -44,6 +44,33 @@ class Handler extends Command
         }
     }
     
+    private function createSettings()
+    {
+        $settings = json_encode($this->getArray);
+        
+       try {
+            Storage::disk('local')->put('/settings.json', $settings);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+    
+    private function validateSettings()
+    {
+    	try {
+	        $json_object = Storage::disk('local')->get('settings.json');
+		} catch (\Exception $e) {
+			return false;
+		}
+		
+        $data = json_decode($json_object);
+        if (is_null($data)) {
+            return true;
+        }
+        return false;
+    }
+    
     
     
 }
