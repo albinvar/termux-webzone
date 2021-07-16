@@ -52,8 +52,9 @@ class SettingsInit extends Command
 
     public function init()
     {
-    	if($this->settings->isSettled())
+    	if($this->settings->isSettled() && !$this->settings->strictMode)
 	    {
+			$this->error('Already initialized. Please use -f|--force option reinitialise settings.');
 			return true;
 		}
 		

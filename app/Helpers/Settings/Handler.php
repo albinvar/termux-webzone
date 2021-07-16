@@ -7,6 +7,9 @@ use Storage;
 
 class Handler extends Command
 {
+	
+	public $strictMode;
+	
     public function __construct()
     {
         $this->output = new \Symfony\Component\Console\Output\ConsoleOutput();
