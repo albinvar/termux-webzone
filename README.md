@@ -342,7 +342,7 @@ $ webzone install:pma
 **Use** : Download and Install PhpMyAdmin latest version from server.
 
 `options`
-- `-f|--force` ->  Redownload and Reinstall PhpMyAdmin forcefully.
+- `-fresh` ->  Remove existing PhpMyAdmin and install latest version from PhpMyAdmin website.
 <hr>
 
 

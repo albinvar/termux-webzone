@@ -27,7 +27,7 @@ class About extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): mixed
+    public function handle()
     {
         $this->about();
     }
