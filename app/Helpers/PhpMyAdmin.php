@@ -43,6 +43,7 @@ class PhpMyAdmin extends Webzone
             $contents = Storage::get($path.'/'.$filename);
             $str = str_replace($oldLines, $newLines, $contents);
             Storage::disk('local')->put($path.'/config.sample.inc.php', $str);
+            Storage::disk('local')->move($path.'/config.sample.inc.php', $path.'/config.inc.php');
             return true;
         } catch (\Exception $e) {
             return false;
