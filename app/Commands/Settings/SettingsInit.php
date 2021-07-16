@@ -6,6 +6,7 @@ namespace App\Commands\Settings;
 
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
+use App\Helpers\Settings\Handler;
 
 class SettingsInit extends Command
 {
@@ -29,7 +30,8 @@ class SettingsInit extends Command
     public function __construct()
     {
         parent::__construct();
-        $this->settings = config('settings.PATH');
+        $this->settings = new Handler();
+        $this->path = config('settings.PATH');
     }
 
     /**
@@ -39,40 +41,32 @@ class SettingsInit extends Command
     {
         if ($this->option('force')) {
             if ($this->confirm('Do you want to reset your webzone settings?')) {
-                $this->create();
+                $this->settings->setStrictMode(true);
             }
-        } else {
-            $this->checkIfSettingsExist();
         }
+        
+        $this->init();
     }
 
-    public function create(): void
+    private function init()
     {
+    	if($this->settings->isSettled() && !$this->settings->strictMode)
+	    {
+			$this->error('Already initialized. Please use -f|--force option reinitialise settings.');
+			return true;
+		}
+		
         $this->task('Creating Required Folders ', function () {
-            if ($this->createDirectory()) {
-                return true;
-            }
-            return false;
-        });
-
-        $this->task('Creating JSON file ', function () {
-            if ($this->createSettingsJson()) {
-                return true;
-            }
-            return false;
-        });
-    }
-
-    public function checkIfSettingsExist()
-    {
-        if (file_exists($this->settings . '/settings.json')) {
-            if ($this->validateJson()) {
-                $this->createSettingsJson();
-            }
-            $this->info('Initialized settings');
-            return true;
-        }
-        $this->create();
+	    	$this->settings->createDir();
+		});
+		
+		$this->task('Flashing default settings ', function () {
+	    	$this->settings->flash();
+		});
+		
+		$this->task('Validating settings ', function () {
+	    	$this->settings->validate();
+		});
     }
 
     /**
@@ -83,39 +77,4 @@ class SettingsInit extends Command
         // $schedule->command(static::class)->everyMinute();
     }
 
-    private function createDirectory()
-    {
-        if (! is_dir($this->settings)) {
-            mkdir($this->settings);
-            return true;
-        }
-        if (is_dir($this->settings)) {
-            return true;
-        }
-    }
-
-    private function createSettingsJson()
-    {
-        if (! file_exists($this->settings . '/settings.json')) {
-            touch($this->settings . '/settings.json');
-        }
-
-        $array = config('settings.ARRAY');
-        $json_object = json_encode($array);
-        $success = file_put_contents($this->settings . '/settings.json', $json_object);
-        if ($success === false) {
-            return false;
-        }
-        return true;
-    }
-
-    private function validateJson()
-    {
-        $json_object = file_get_contents($this->settings . '/settings.json');
-        $data = json_decode($json_object);
-        if ($data === null) {
-            return true;
-        }
-        return false;
-    }
 }
