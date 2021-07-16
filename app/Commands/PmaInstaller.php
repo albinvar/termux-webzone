@@ -17,7 +17,7 @@ class PmaInstaller extends Command
     protected $dir;
 
     protected $downloader;
-    
+
     protected $pma;
 
     /**
@@ -38,13 +38,13 @@ class PmaInstaller extends Command
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->dir = config('pma.PMA_DIR');
-        
+
         $this->pma = new PhpMyAdmin();
-        
+
         $this->webzone = new Webzone();
-        
+
         $this->pmaData = $this->pma->latestRelease();
     }
 
@@ -53,14 +53,14 @@ class PmaInstaller extends Command
      */
     public function handle()
     {
-    	$this->callSilently('settings:init');
-    
+        $this->callSilently('settings:init');
+
         $this->checkInstallation();
     }
 
     public function checkInstallation(): void
     {
-    	$this->webzone->clear();
+        $this->webzone->clear();
         $this->newline();
         $this->webzone->logo();
         $this->newline();
@@ -157,10 +157,10 @@ class PmaInstaller extends Command
 
     private function runTasks(): void
     {
-    	if ($this->option('fresh')) {
+        if ($this->option('fresh')) {
             $this->removeInstalledPhpMyAdmin();
         }
-	    
+
         $this->createDirectory();
 
         $this->task('Setting url ', function () {
@@ -187,7 +187,7 @@ class PmaInstaller extends Command
             }
             return false;
         });
-        
+
         $this->task('Setting PhpMyAdmin root ', function () {
             if ($this->pma->updateRoot(\Storage::disk('local')->getAdapter()->getPathPrefix().'/www/phpMyAdmin-' . $this->version . '-all-languages')) {
                 return true;

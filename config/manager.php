@@ -20,5 +20,5 @@ return [
     |
     */
      'MANAGER_PATH' => '/data/data/com.termux/files/usr/var/webzone/manager',
-     
+
      ];

@@ -15,7 +15,7 @@ class Manager extends Command
     protected $fileName = 'index.php';
 
     protected $link;
-    
+
     protected $dir = 'manager';
 
     protected $manager;
@@ -34,17 +34,15 @@ class Manager extends Command
      * @var string
      */
     protected $description = 'Web based file manager for termux';
-    
-    
+
+
     public function __construct()
     {
         parent::__construct();
-        
-        
+
+
         $this->link = config('manager.MANAGER_DOWNLOAD_LINK');
         $this->manager = config('manager.MANAGER_PATH');
-
-
     }
 
     /**
@@ -52,18 +50,18 @@ class Manager extends Command
      */
     public function handle(): void
     {
-    	$this->callSilently('settings:init');
-    
-    	pcntl_async_signals(true);
-    
+        $this->callSilently('settings:init');
+
+        pcntl_async_signals(true);
+
         pcntl_signal(SIGINT, function (): void {
             $this->newline();
             $this->comment("\nShutting down...\n");
         });
-        
+
         $this->checkInstallation();
     }
-    
+
     private function start(): void
     {
         $this->line(exec('clear'));
@@ -72,7 +70,7 @@ class Manager extends Command
         $this->newline();
         $this->comment(exec("cd {$this->manager} && xdg-open http://127.0.0.1:9876/ && php -S 127.0.0.1:9876"));
     }
-    
+
     private function checkInstallation(): void
     {
         if (file_exists($this->manager) && file_exists($this->manager . '/' . $this->fileName) && ! $this->option('force')) {
@@ -92,27 +90,27 @@ class Manager extends Command
 
     public function install(): void
     {
-    	$this->createDirectory();
-    
-    	$this->download();
-    
-	    $this->newline();
-	
-		$this->info('Installation Successful. Starting webzone manager for you...');
+        $this->createDirectory();
+
+        $this->download();
+
+        $this->newline();
+
+        $this->info('Installation Successful. Starting webzone manager for you...');
     }
-    
+
     private function createDirectory()
     {
         $this->task('Creating Required Folders ', function () {
             try {
-            Storage::makeDirectory($this->dir);
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
+                Storage::makeDirectory($this->dir);
+                return true;
+            } catch (\Exception $e) {
+                return false;
+            }
         });
     }
-    
+
     private function download()
     {
         $downloadTask = $this->task('Downloading resources ', function () {
