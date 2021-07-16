@@ -64,4 +64,18 @@ class PhpMyAdmin extends Webzone
 		
 		return !in_array(false, $results, true);
     }
+    
+    public function updateRoot($path)
+    {
+    	$json_object = file_get_contents(config('settings.PATH') . '/settings.json');
+        $data = json_decode($json_object, true);
+        $data['pma_root'] = $path;
+        
+    	$json_object = json_encode($data);
+        if(file_put_contents(config('settings.PATH') . '/settings.json', $json_object))
+        {
+        	return true;
+        }
+	    return false;
+    }
 }

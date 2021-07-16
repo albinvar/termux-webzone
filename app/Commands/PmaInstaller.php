@@ -136,8 +136,8 @@ class PmaInstaller extends Command
         if (!isset($this->version)) {
             return false;
         }
-        //return 'https://files.phpmyadmin.net/phpMyAdmin/'.$this->version.'/phpMyAdmin-'.$this->version.'-all-languages.zip';
-        return 'http://127.0.0.1:8999/phpMyAdmin-5.1.1-all-languages.zip';
+        return 'https://files.phpmyadmin.net/phpMyAdmin/'.$this->version.'/phpMyAdmin-'.$this->version.'-all-languages.zip';
+        //return 'http://127.0.0.1:8999/phpMyAdmin-5.1.1-all-languages.zip';
     }
 
     private function download()
@@ -183,6 +183,13 @@ class PmaInstaller extends Command
 
         $this->task('Removing downloaded files ', function () {
             if ($this->downloader->clean()) {
+                return true;
+            }
+            return false;
+        });
+        
+        $this->task('Setting PhpMyAdmin root ', function () {
+            if ($this->pma->updateRoot(\Storage::disk('local')->getAdapter()->getPathPrefix().'/www/phpMyAdmin-' . $this->version . '-all-languages')) {
                 return true;
             }
             return false;
