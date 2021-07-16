@@ -24,15 +24,23 @@ class Handler extends Command
     
     public function getSettings()
     {
-    	//
+    	try {
+	    	return Storage::disk('local')->get('settings.json');
+		} catch (\Exception $e) {
+			return false;
+		}
     }
     
     public function init()
     {
-    	$this->task('Creating Webzone Folders ', function () {
-	    	$this->createDir();
-		});
+    	//
     }
+    
+    public function isSettled(): Bool
+    {
+    	return Storage::disk('local')->exists('settings.json');
+    }
+    
     
     public function createDir()
     {
@@ -44,9 +52,9 @@ class Handler extends Command
         }
     }
     
-    private function createSettings()
+    public function flash()
     {
-        $settings = json_encode($this->getArray);
+       $settings = json_encode($this->getArray());
         
        try {
             Storage::disk('local')->put('/settings.json', $settings);
@@ -56,7 +64,7 @@ class Handler extends Command
         }
     }
     
-    private function validateSettings()
+    public function validate()
     {
     	try {
 	        $json_object = Storage::disk('local')->get('settings.json');
@@ -64,13 +72,10 @@ class Handler extends Command
 			return false;
 		}
 		
-        $data = json_decode($json_object);
-        if (is_null($data)) {
+        if (is_null(json_decode($json_object))) {
             return true;
         }
         return false;
     }
-    
-    
     
 }

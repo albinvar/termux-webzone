@@ -44,13 +44,30 @@ class SettingsInit extends Command
                 $this->settings->setStrictMode(true);
             }
         } else {
-            $this->checkIfSettingsExist();
+           
         }
+        
+        $this->init();
     }
 
-    public function create()
+    public function init()
     {
-        $this->settings->init();
+    	if($this->settings->isSettled())
+	    {
+			return true;
+		}
+		
+        $this->task('Creating Required Folders ', function () {
+	    	$this->settings->createDir();
+		});
+		
+		$this->task('Flashing default settings ', function () {
+	    	$this->settings->flash();
+		});
+		
+		$this->task('Validating settings ', function () {
+	    	$this->settings->validate();
+		});
     }
 
     /**
