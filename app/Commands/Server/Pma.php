@@ -41,8 +41,7 @@ class Pma extends Command
     public function getData()
     {
         $json_object = file_get_contents(config('settings.PATH') . '/settings.json');
-        $data = json_decode($json_object, true);
-        return $data;
+        return json_decode($json_object, true);
     }
 
     public function checkInstallations(): void

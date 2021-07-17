@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helpers;
 
 use ZipArchive;
-use App\Helpers\Webzone;
 
 class Zipper extends Webzone
 {
@@ -13,7 +14,7 @@ class Zipper extends Webzone
 
     protected $dir;
 
-    public function __construct(String $dir, String $filename, String $extractFolder)
+    public function __construct(string $dir, string $filename, string $extractFolder)
     {
         parent::__construct();
 
@@ -29,7 +30,7 @@ class Zipper extends Webzone
             return false;
         }
 
-        if (!$this->zip->extractTo($this->extractFolder)) {
+        if (! $this->zip->extractTo($this->extractFolder)) {
             return false;
         }
 

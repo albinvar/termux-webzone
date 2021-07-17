@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Commands\Settings;
 
+use App\Helpers\Settings\Handler;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
-use App\Helpers\Settings\Handler;
 
 class SettingsInit extends Command
 {
@@ -37,36 +37,15 @@ class SettingsInit extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         if ($this->option('force')) {
             if ($this->confirm('Do you want to reset your webzone settings?')) {
                 $this->settings->setStrictMode(true);
             }
         }
-        
-        $this->init();
-    }
 
-    private function init()
-    {
-    	if($this->settings->isSettled() && !$this->settings->strictMode)
-	    {
-			$this->error('Already initialized. Please use -f|--force option reinitialise settings.');
-			return true;
-		}
-		
-        $this->task('Creating Required Folders ', function () {
-	    	$this->settings->createDir();
-		});
-		
-		$this->task('Flashing default settings ', function () {
-	    	$this->settings->flash();
-		});
-		
-		$this->task('Validating settings ', function () {
-	    	$this->settings->validate();
-		});
+        $this->init();
     }
 
     /**
@@ -77,4 +56,23 @@ class SettingsInit extends Command
         // $schedule->command(static::class)->everyMinute();
     }
 
+    private function init()
+    {
+        if ($this->settings->isSettled() && ! $this->settings->strictMode) {
+            $this->error('Already initialized. Please use -f|--force option reinitialise settings.');
+            return true;
+        }
+
+        $this->task('Creating Required Folders ', function (): void {
+            $this->settings->createDir();
+        });
+
+        $this->task('Flashing default settings ', function (): void {
+            $this->settings->flash();
+        });
+
+        $this->task('Validating settings ', function (): void {
+            $this->settings->validate();
+        });
+    }
 }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Commands;
 
+use App\Helpers\Webzone;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
-use App\Helpers\Webzone;
 
 class ComposerGlobal extends Command
 {
@@ -30,19 +30,18 @@ class ComposerGlobal extends Command
      * @var string
      */
     protected $description = 'Init composer globally';
-    
+
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->webzone = new Webzone();
     }
-    
-    
+
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $this->callSilently('settings:init');
         $this->composer = config('pma.composer');

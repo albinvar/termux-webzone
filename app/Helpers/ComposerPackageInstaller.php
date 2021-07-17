@@ -1,26 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helpers;
 
-use Storage;
-use App\Helpers\Webzone;
 use App\Helpers\Settings\Handler;
 use LaravelZero\Framework\Commands\Command;
+use Storage;
 
 class ComposerPackageInstaller extends Command
 {
     public $path;
 
     public $framework;
-    
+
     public $mainPath;
 
     public $name;
 
     public $frameworkDisk;
 
-
-    public function __construct($framework, $disk=null)
+    public function __construct($framework, $disk = null)
     {
         $this->framework = $framework;
         $this->frameworkDisk = $disk;
@@ -29,19 +29,19 @@ class ComposerPackageInstaller extends Command
         $this->output = new \Symfony\Component\Console\Output\ConsoleOutput();
     }
 
-    public function setProperties($name="blog", $path=null, $type=null)
+    public function setProperties($name = 'blog', $path = null, $type = null): void
     {
         $this->name = $name;
-        $this->path = (is_null($path)) ? Storage::disk('projects')->makeDirectory($this->frameworkDisk) : $path;
+        $this->path = is_null($path) ? Storage::disk('projects')->makeDirectory($this->frameworkDisk) : $path;
         $this->type = null;
     }
 
-    public function setComposerPackage($package, $attributes=null)
+    public function setComposerPackage($package, $attributes = null): void
     {
         $this->package = $package;
     }
 
-    public function install()
+    public function install(): void
     {
         if (is_bool($this->path)) {
             try {
@@ -60,16 +60,15 @@ class ComposerPackageInstaller extends Command
     {
         if (is_bool($this->path)) {
             if (Storage::disk('projects')->exists($this->frameworkDisk.'/'.$this->name)) {
-            	
-                return true;
-            }
-            return false;
-        } else {
-            if (is_dir($this->path .'/'. $this->name)) {
-            	
                 return true;
             }
             return false;
         }
+        if (is_dir($this->path .'/'. $this->name)) {
+            return true;
+        }
+        return false;
+
+    
     }
 }
