@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Commands;
 
-use Illuminate\Console\Scheduling\Schedule;
-use LaravelZero\Framework\Commands\Command;
 use App\Helpers\Downloader;
+use App\Helpers\PhpMyAdmin;
 use App\Helpers\Webzone;
 use App\Helpers\Zipper;
-use App\Helpers\PhpMyAdmin;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\File;
+use LaravelZero\Framework\Commands\Command;
 
 class PmaInstaller extends Command
 {
@@ -51,7 +51,7 @@ class PmaInstaller extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $this->callSilently('settings:init');
 
@@ -73,9 +73,17 @@ class PmaInstaller extends Command
         }
     }
 
+    /**
+     * Define the command's schedule.
+     */
+    public function schedule(Schedule $schedule): void
+    {
+        // $schedule->command(static::class)->everyMinute();
+    }
+
     private function showLatestRelease()
     {
-        if (!$this->pmaData) {
+        if (! $this->pmaData) {
             $this->error("Couldn't connect to server.");
             return 1;
         }
@@ -86,7 +94,7 @@ class PmaInstaller extends Command
         $versions = [];
 
         foreach ($this->pmaData['releases'] as $release) {
-            $label = ($release['version'] === $this->pmaData['version']) ? ' (latest)' : null;
+            $label = $release['version'] === $this->pmaData['version'] ? ' (latest)' : null;
             $data[] = ['PhpMyAdmin', $release['version'] . $label, $release['date']];
             $versions[] = $release['version'];
         }
@@ -101,25 +109,17 @@ class PmaInstaller extends Command
         $this->runTasks();
     }
 
-    /**
-     * Define the command's schedule.
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
-    }
-
     private function removeInstalledPhpMyAdmin(): void
     {
-        $this->task("Removing Old Files", function () {
+        $this->task('Removing Old Files', function (): void {
             $this->pma->removeOld();
         });
     }
 
-    private function createDirectory()
+    private function createDirectory(): void
     {
         $this->task('Creating Required Folders ', function () {
-            if (!File::isDirectory($this->dir)) {
+            if (! File::isDirectory($this->dir)) {
                 try {
                     File::makeDirectory($this->dir, 0777, true, true);
                     return true;
@@ -133,14 +133,14 @@ class PmaInstaller extends Command
 
     private function getUrl()
     {
-        if (!isset($this->version)) {
+        if (! isset($this->version)) {
             return false;
         }
         return 'https://files.phpmyadmin.net/phpMyAdmin/'.$this->version.'/phpMyAdmin-'.$this->version.'-all-languages.zip';
         //return 'http://127.0.0.1:8999/phpMyAdmin-5.1.1-all-languages.zip';
     }
 
-    private function download()
+    private function download(): void
     {
         $downloadTask = $this->task('Downloading resources ', function () {
             $this->downloader = new Downloader($this->getUrl(), 'phpMyAdmin-v' . $this->version . '.zip');
@@ -148,10 +148,9 @@ class PmaInstaller extends Command
 
             if ($response['ok']) {
                 return true;
-            } else {
-                $this->error($response['error']->getMessage());
-                return false;
             }
+            $this->error($response['error']->getMessage());
+            return false;
         });
     }
 
@@ -171,7 +170,7 @@ class PmaInstaller extends Command
 
         $this->task('Extracting Zip ', function () {
             $zip = new Zipper($this->dir, $this->dir.'/tmp/phpMyAdmin-v' . $this->version . '.zip', $this->dir.'/www');
-            return ($zip->unzip()) ? true : false;
+            return $zip->unzip() ? true : false;
         });
 
         $this->task('Set Configuration File ', function () {

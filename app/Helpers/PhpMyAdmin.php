@@ -1,11 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helpers;
 
-use App\Helpers\Webzone;
-use Storage;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
+use Storage;
 
 class PhpMyAdmin extends Webzone
 {
@@ -25,9 +25,9 @@ class PhpMyAdmin extends Webzone
         }
     }
 
-    public function configurator(String $path, String $filename)
+    public function configurator(string $path, string $filename)
     {
-        $blowfish = hash('tiger128,4', date("hisa"));
+        $blowfish = hash('tiger128,4', date('hisa'));
 
         $oldLines = [
             '$cfg[\'Servers\'][$i][\'AllowNoPassword\'] = false;',
@@ -62,7 +62,7 @@ class PhpMyAdmin extends Webzone
             }
         }
 
-        return !in_array(false, $results, true);
+        return ! in_array(false, $results, true);
     }
 
     public function updateRoot($path)

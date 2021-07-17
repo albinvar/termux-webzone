@@ -1,14 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helpers;
 
-use App\Helpers\Webzone;
 use GuzzleHttp\Client;
-use Storage;
-use GuzzleHttp\Psr7\Utils;
 use GuzzleHttp\Exception\RequestException;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Filesystem\Filesystem;
+use GuzzleHttp\Psr7\Utils;
+use Storage;
 
 class Downloader extends Webzone
 {
@@ -22,7 +21,7 @@ class Downloader extends Webzone
 
     protected $saveTo;
 
-    public function __construct(String $url, String $file, String $disk='tmp')
+    public function __construct(string $url, string $file, string $disk = 'tmp')
     {
         parent::__construct();
 
@@ -31,14 +30,14 @@ class Downloader extends Webzone
         $this->url = $url;
         $this->file = $file;
 
-        ($disk !== 'tmp') ? $this->disk = $disk : $this->disk = 'tmp';
+        $disk !== 'tmp' ? $this->disk = $disk : $this->disk = 'tmp';
 
         $this->downloadFile = Storage::disk($this->disk)->getAdapter()->getPathPrefix().'/'.$this->file;
     }
 
     public function download()
     {
-        if (!$this->createDirIfNotExists()) {
+        if (! $this->createDirIfNotExists()) {
             return ['ok' => false, 'error' => 'Cannot create directory'];
         }
 
@@ -53,21 +52,20 @@ class Downloader extends Webzone
         }
     }
 
-
-    private function createDirIfNotExists()
+    public function clean()
     {
         try {
-            Storage::makeDirectory($this->saveTo);
+            Storage::disk($this->disk)->delete($this->file);
             return true;
         } catch (\Exception $e) {
             return false;
         }
     }
 
-    public function clean()
+    private function createDirIfNotExists()
     {
         try {
-            Storage::disk($this->disk)->delete($this->file);
+            Storage::makeDirectory($this->saveTo);
             return true;
         } catch (\Exception $e) {
             return false;

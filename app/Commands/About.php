@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Commands;
 
-use Illuminate\Console\Scheduling\Schedule;
-use Laminas\Text\Figlet\Figlet;
 use App\Helpers\Webzone;
+use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
 class About extends Command
@@ -24,17 +23,17 @@ class About extends Command
      * @var string
      */
     protected $description = 'About Webzone';
-    
+
     public function __construct()
     {
         parent::__construct();
         $this->webzone = new Webzone();
     }
-    
+
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $this->about();
     }

@@ -9,17 +9,17 @@ use App\Helpers\Webzone;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
-class Zend extends Command
+class Phpixie extends Command
 {
     protected $dir;
 
     protected $path;
 
-    protected $signature = 'create:zend
+    protected $signature = 'create:phpixie
 							{name=blog}
 							{--path=}';
 
-    protected $description = 'Create Zend projects';
+    protected $description = 'Create Phpixie projects';
 
     /**
      * Execute the console command.
@@ -28,11 +28,11 @@ class Zend extends Command
     {
         $this->callSilently('settings:init');
 
-        $this->installer = new ComposerPackageInstaller('Zend', 'zend');
+        $this->installer = new ComposerPackageInstaller('Phpixie', 'phpixie');
         $this->webzone = new Webzone();
 
         $this->webzone->clear();
-        $this->webzone->logo('Zend Framework', 'comment');
+        $this->webzone->logo('Phpixie', 'comment');
         $this->init();
     }
 
@@ -50,7 +50,7 @@ class Zend extends Command
 
         $this->task('Setting up Installer', function () use ($path): void {
             $this->installer->setProperties($this->argument('name'), $path);
-            $this->installer->setComposerPackage('zendframework/zendframework');
+            $this->installer->setComposerPackage('phpixie/project');
         });
 
         $this->task('Checking if project exists', function () {
@@ -73,11 +73,11 @@ class Zend extends Command
     private function install(): void
     {
         $this->newline();
-        $this->info('Creating Zend Application...');
+        $this->info('Creating Phpixie Application...');
         $this->newline();
         $this->installer->install();
         $this->newline();
-        $this->info("  Zend app created successfully at {$this->installer->mainPath}/{$this->installer->name}. ");
+        $this->info("  Phpixie app created successfully at {$this->installer->mainPath}/{$this->installer->name}. ");
         $this->newline();
         $this->comment('    Create Something Awesome... ');
     }

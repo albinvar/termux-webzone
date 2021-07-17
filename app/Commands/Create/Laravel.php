@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Commands\Create;
 
+use App\Helpers\ComposerPackageInstaller;
+use App\Helpers\Webzone;
 use Illuminate\Console\Scheduling\Schedule;
-use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
 
 class Laravel extends Command
@@ -14,44 +15,25 @@ class Laravel extends Command
 
     protected $path;
 
-    /**
-     * The signature of the command.
-     *
-     * @var string
-     */
     protected $signature = 'create:laravel
-							{name?}
+							{name=blog}
 							{--path=}';
 
-    /**
-     * The description of the command.
-     *
-     * @var string
-     */
-    protected $description = 'Create laravel projects';
+    protected $description = 'Create Laravel projects';
 
     /**
      * Execute the console command.
      */
-    public function handle(): mixed
+    public function handle(): void
     {
         $this->callSilently('settings:init');
-        $this->dir = $this->getData()['project_dir'];
-        $this->line(exec('clear'));
-        $this->logo();
+
+        $this->installer = new ComposerPackageInstaller('Laravel', 'laravel');
+        $this->webzone = new Webzone();
+
+        $this->webzone->clear();
+        $this->webzone->logo('Laravel', 'comment');
         $this->init();
-    }
-
-    public function getData()
-    {
-        $json_object = file_get_contents(config('settings.PATH') . '/settings.json');
-        return json_decode($json_object, true);
-    }
-
-    public function logo(): void
-    {
-        $figlet = new Figlet();
-        $this->comment($figlet->setFont(config('logo.font'))->render('Laravel'));
     }
 
     /**
@@ -64,52 +46,39 @@ class Laravel extends Command
 
     private function init(): void
     {
-        //name of project
-        if (! empty($this->argument('name'))) {
-            $this->name = $this->argument('name');
-        } else {
-            //planing to generate random names from a new package.
-            $this->name = 'something';
-        }
+        $path = $this->option('path');
 
-        //set path
-        if (! empty($this->option('path'))) {
-            $this->path = $this->option('path');
-        } elseif (! empty($this->dir) && is_dir($this->dir)) {
-            $this->path = $this->dir;
-        } else {
-            $this->path = '/sdcard';
-        }
+        $this->task('Setting up Installer', function () use ($path): void {
+            $this->installer->setProperties($this->argument('name'), $path);
+            $this->installer->setComposerPackage('laravel/laravel');
+        });
 
-        //check if directory exists
-        if (! $this->checkDir()) {
-            exit;
+        $this->task('Checking if project exists', function () {
+            if ($this->installer->checkIfProjectExists()) {
+                $this->status = false;
+                $this->newline(2);
+                $this->error('Project with same name already exists');
+                $this->newline();
+                return false;
+            }
+            $this->status = true;
+            return true;
+        });
+
+        if ($this->status) {
+            $this->install();
         }
-        $this->line(exec('tput sgr0'));
-        $this->info('Creating laravel app');
+    }
+
+    private function install(): void
+    {
         $this->newline();
-        $this->create();
+        $this->info('Creating Laravel Application...');
         $this->newline();
-        $this->comment("Laravel App created successfully on {$this->path}/{$this->name}");
-    }
-
-    private function checkDir()
-    {
-        if (file_exists($this->path . '/' . $this->name)) {
-            $this->error('A duplicate file/directory found in the path. Please choose a better name.');
-            return false;
-        }
-        return true;
-    }
-
-    private function create(): void
-    {
-        $cmd = "cd {$this->path} && composer create-project laravel/laravel \"{$this->name}\"";
-        $this->exec($cmd);
-    }
-
-    private function exec($command): void
-    {
-        $this->line(exec($command));
+        $this->installer->install();
+        $this->newline();
+        $this->info("  Laravel app created successfully at {$this->installer->mainPath}/{$this->installer->name}. ");
+        $this->newline();
+        $this->comment('    Create Something Awesome ');
     }
 }
