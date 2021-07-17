@@ -16,20 +16,11 @@ class CakePHP extends Command
 
     protected $path;
 
-    /**
-     * The signature of the command.
-     *
-     * @var string
-     */
+    
     protected $signature = 'create:cakephp
 							{name=blog}
 							{--path=}';
-
-    /**
-     * The description of the command.
-     *
-     * @var string
-     */
+							
     protected $description = 'Create cakephp projects';
 
     /**
@@ -77,13 +68,14 @@ class CakePHP extends Command
     
     private function install()
     {
-    	// $this->line(exec('tput sgr0'));
 	    $this->newline();
-        $this->info('Creating CakePHP app');
+        $this->info('Creating CakePHP Application...');
         $this->newline();
         $this->installer->install();
         $this->newline();
-        $this->comment("CakePHP App created successfully.");
+        $this->info(" 🎉 CakePHP app created successfully at {$this->installer->mainPath}/{$this->installer->name}. 🥳");
+        $this->newline();
+        $this->comment("   🤙 Create Something Awesome 😉");
     }
 
     /**

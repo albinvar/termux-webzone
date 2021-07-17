@@ -34,7 +34,7 @@ class Webzone extends Command
                 break;
                 
             case('question'):
-                $this->wuestion($logo);
+                $this->question($logo);
                 break;
 
             default:

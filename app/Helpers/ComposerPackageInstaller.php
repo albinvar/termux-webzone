@@ -12,6 +12,8 @@ class ComposerPackageInstaller extends Command
     public $path;
 
     public $framework;
+    
+    public $mainPath;
 
     public $name;
 
@@ -43,14 +45,14 @@ class ComposerPackageInstaller extends Command
     {
         if (is_bool($this->path)) {
             try {
-                $path = Storage::disk('projects')->getAdapter()->getPathPrefix() . $this->frameworkDisk;
+                $this->mainPath = Storage::disk('projects')->getAdapter()->getPathPrefix() . $this->frameworkDisk;
             } catch (\Exception $e) {
-                $path = '/sdcard/www';
+                $this->mainPath = '/sdcard/www';
             }
         } else {
-            $path = $this->path;
+            $this->mainPath = $this->path;
         }
-        $cmd = "cd {$path} && composer create-project --prefer-dist {$this->package} '{$this->name}'";
+        $cmd = "cd {$this->mainPath} && composer create-project --prefer-dist {$this->package} '{$this->name}'";
         exec($cmd);
     }
 
