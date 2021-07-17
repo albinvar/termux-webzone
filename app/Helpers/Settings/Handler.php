@@ -34,6 +34,22 @@ class Handler extends Command
 		}
     }
     
+    public function getSettingsAsArray()
+    {
+    	try {
+	    	$settings = Storage::disk('local')->get('settings.json');
+		} catch (\Exception $e) {
+			return false;
+		}
+		
+		$array = json_decode($settings, true);
+		
+		if (json_last_error() === JSON_ERROR_NONE) {
+            return $array;
+        }
+        return false;
+    }
+    
     public function init()
     {
     	//
@@ -70,12 +86,14 @@ class Handler extends Command
     public function validate()
     {
     	try {
-	        $json_object = Storage::disk('local')->get('settings.json');
+	        $jsonObject = Storage::disk('local')->get('settings.json');
 		} catch (\Exception $e) {
 			return false;
 		}
 		
-        if (is_null(json_decode($json_object))) {
+		json_decode($jsonObject);
+		
+        if (json_last_error() === JSON_ERROR_NONE) {
             return true;
         }
         return false;
