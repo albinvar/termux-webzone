@@ -6,6 +6,8 @@ namespace App\Commands\Create;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Laminas\Text\Figlet\Figlet;
+use App\Helpers\ComposerPackageInstaller;
+use App\Helpers\Webzone;
 use LaravelZero\Framework\Commands\Command;
 
 class CakePHP extends Command
@@ -20,7 +22,7 @@ class CakePHP extends Command
      * @var string
      */
     protected $signature = 'create:cakephp
-							{name?}
+							{name=blog}
 							{--path=}';
 
     /**
@@ -33,25 +35,55 @@ class CakePHP extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): mixed
+    public function handle()
     {
         $this->callSilently('settings:init');
-        $this->dir = $this->getData()['project_dir'];
-        $this->line(exec('clear'));
-        $this->logo();
+        
+        $this->installer = new ComposerPackageInstaller("CakePhP", 'cakephp');
+        $this->webzone = new Webzone;
+        
+        $this->webzone->clear();
+        $this->webzone->logo('CAKE PHP', 'comment');
         $this->init();
     }
-
-    public function getData()
+    
+    private function init()
     {
-        $json_object = file_get_contents(config('settings.PATH') . '/settings.json');
-        return json_decode($json_object, true);
+    	$path = $this->option('path');
+    
+	    $this->task('Setting up Installer', function () use($path){
+	    	$this->installer->setProperties($this->argument('name'), $path);
+		    $this->installer->setComposerPackage("cakephp/cakephp");
+		});
+		
+		$this->task('Checking if project exists', function () {
+			if($this->installer->checkIfProjectExists())
+			{
+				$this->status = false;
+				$this->newline(2);
+                $this->error('Project with same name already exists');
+                $this->newline();
+                return false;
+			}
+			$this->status = true;
+			return true;
+		});
+		
+		if($this->status) {
+			$this->install();
+		}
+	  
     }
-
-    public function logo(): void
+    
+    private function install()
     {
-        $figlet = new Figlet();
-        $this->comment($figlet->setFont(config('logo.font'))->render('CakePHP'));
+    	// $this->line(exec('tput sgr0'));
+	    $this->newline();
+        $this->info('Creating CakePHP app');
+        $this->newline();
+        $this->installer->install();
+        $this->newline();
+        $this->comment("CakePHP App created successfully.");
     }
 
     /**
@@ -60,56 +92,5 @@ class CakePHP extends Command
     public function schedule(Schedule $schedule): void
     {
         // $schedule->command(static::class)->everyMinute();
-    }
-
-    private function init(): void
-    {
-        //name of project
-        if (! empty($this->argument('name'))) {
-            $this->name = $this->argument('name');
-        } else {
-            //planing to generate random names from a new package.
-            $this->name = 'cakephp-blog';
-        }
-
-        //set path
-        if (! empty($this->option('path'))) {
-            $this->path = $this->option('path');
-        } elseif (! empty($this->dir) && is_dir($this->dir)) {
-            $this->path = $this->dir;
-        } else {
-            $this->path = '/sdcard';
-        }
-
-        //check if directory exists
-        if (! $this->checkDir()) {
-            exit;
-        }
-        $this->line(exec('tput sgr0'));
-        $this->info('Creating CakePHP app');
-        $this->newline();
-        $this->create();
-        $this->newline();
-        $this->comment("CakePHP App created successfully on {$this->path}/{$this->name}");
-    }
-
-    private function checkDir()
-    {
-        if (file_exists($this->path . '/' . $this->name)) {
-            $this->error('A duplicate file/directory found in the path. Please choose a better name.');
-            return false;
-        }
-        return true;
-    }
-
-    private function create(): void
-    {
-        $cmd = "cd {$this->path} && composer create-project --prefer-dist cakephp/app:~4.0 \"{$this->name}\"";
-        $this->exec($cmd);
-    }
-
-    private function exec($command): void
-    {
-        $this->line(exec($command));
     }
 }
