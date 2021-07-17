@@ -128,8 +128,6 @@ class Manager extends Command
             }
             $this->error($response['error']->getMessage());
             return false;
-
-        
         });
     }
 }

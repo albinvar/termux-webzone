@@ -53,7 +53,6 @@ class Handler extends Command
 
     public function init(): void
     {
-        
     }
 
     public function isSettled(): bool
@@ -100,6 +99,5 @@ class Handler extends Command
 
     public function edit(): void
     {
-        
     }
 }

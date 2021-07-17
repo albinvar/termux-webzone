@@ -68,7 +68,5 @@ class ComposerPackageInstaller extends Command
             return true;
         }
         return false;
-
-    
     }
 }
