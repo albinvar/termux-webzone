@@ -33,18 +33,9 @@ class NodeJsIniter extends Command
      */
     public function handle(): void
     {
-        echo exec('clear');
-        $this->logo();
-
         $this->nodeJs = '/data/data/com.termux/files/usr/bin/node';
         $this->npm = '/data/data/com.termux/files/usr/bin/npm';
         $this->checkInstallation();
-    }
-
-    public function logo(): void
-    {
-        $figlet = new Figlet();
-        $this->comment($figlet->setFont(config('logo.font'))->render(config('logo.name')));
     }
 
     public function checkInstallation(): void
