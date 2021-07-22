@@ -14,6 +14,8 @@ class Jewel
 	
 	public $disk;
 	
+	public $mainPath;
+	
     public function __construct()
     {
 		  
@@ -21,15 +23,28 @@ class Jewel
     
     public function createDirectory($path)
     {
+    	$this->mainPath = $path;
     	$this->path = $path.'/.webzone';
 		if(!File::isDirectory($this->path)){
 			try {
 		        File::makeDirectory($this->path, 0777, true, true);
+				$this->updateGitIgnore();
 			} catch(\Exception $e) {
 				return false;
 			}
-	    }
-		
-		return true;
+	    } else {
+			$this->updateGitIgnore();
+			return true;
+		}
+    }
+    
+    
+    private function updateGitIgnore()
+    {
+    	try {
+	    	File::append($this->mainPath.'/.gitignore', '.webzone/', null);
+		} catch(\Exception $e) {
+			
+		}
     }
 }
