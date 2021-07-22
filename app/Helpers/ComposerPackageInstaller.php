@@ -7,6 +7,7 @@ namespace App\Helpers;
 use App\Helpers\Settings\Handler;
 use LaravelZero\Framework\Commands\Command;
 use Storage;
+use App\Helpers\Jewel\Jewel;
 
 class ComposerPackageInstaller extends Command
 {
@@ -27,6 +28,7 @@ class ComposerPackageInstaller extends Command
         $this->settings = new Handler();
         $this->projectsPath = $this->settings->getSettingsAsArray()['project_dir'];
         $this->output = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $this->jewel = new Jewel();
     }
 
     public function setProperties($name = 'blog', $path = null, $type = null): void
@@ -54,6 +56,8 @@ class ComposerPackageInstaller extends Command
         }
         $cmd = "cd {$this->mainPath} && composer create-project --prefer-dist {$this->package} '{$this->name}'";
         exec($cmd);
+        
+        $this->runTasks();
     }
 
     public function checkIfProjectExists()
@@ -68,5 +72,12 @@ class ComposerPackageInstaller extends Command
             return true;
         }
         return false;
+    }
+    
+    private function runTasks()
+    {
+    	$this->task('Creating directory', function () {
+	    	return $this->jewel->createDirectory($this->mainPath . '/' . $this->name);
+		});
     }
 }
