@@ -11,23 +11,23 @@ class WebzoneManager
         $this->output = new \Symfony\Component\Console\Output\ConsoleOutput();
     }
 
-    public function getPort()
+    public static function getPort()
     {
         return config('manager.PORT', 9876);
     }
 
-    public function getPath($value = null)
+    public static function getPath($value = null)
     {
         return $value === 'full' ? config('manager.FULL-PATH', 'manager') : config('manager.PATH', 'manager');
     }
 
-    public function getLink()
+    public static function getLink()
     {
         return config('manager.DOWNLOAD_LINK');
     }
 
-    public function startServer()
+    public static function startServer()
     {
-        return exec("cd {$this->getPath('full')} && xdg-open http://127.0.0.1:{$this->getPort()}/ && php -S 127.0.0.1:{$this->getPort()}");
+        return exec('cd ' . static::getPath('full') . ' && xdg-open http://127.0.0.1: '. static::getPort() .'/ && php -S 127.0.0.1:'.static::getPort());
     }
 }

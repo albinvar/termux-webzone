@@ -31,7 +31,7 @@ class Symfony extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): mixed
+    public function handle(): void
     {
         $this->callSilently('settings:init');
         $this->symfony = config('symfony.PATH');
@@ -56,7 +56,7 @@ class Symfony extends Command
         $this->checkDownloadStatus($status, $this->dir);
     }
 
-    public function checkInstallation()
+    public function checkInstallation(): bool
     {
         if (file_exists($this->symfony)) {
             return true;
