@@ -28,7 +28,7 @@ class Projects extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): mixed
+    public function handle(): void
     {
         if (file_exists($this->getRoot())) {
             $this->listAll();
