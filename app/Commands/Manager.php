@@ -13,7 +13,7 @@ use Storage;
 
 class Manager extends Command
 {
-    protected $filename = 'index.php';
+    protected static $filename = 'index.php';
 
     protected $webzone;
 
@@ -39,7 +39,6 @@ class Manager extends Command
         parent::__construct();
 
         $this->webzone = new Webzone();
-        $this->manager = new WebzoneManager();
     }
 
     /**
@@ -61,7 +60,7 @@ class Manager extends Command
 
     public function install(): void
     {
-        $this->createDirectory();
+        $this->createDirectoryIfNotExists();
         $this->download();
         $this->newline();
         $this->info('Installation Successful. Starting webzone manager for you...');
@@ -82,9 +81,10 @@ class Manager extends Command
 
     private function start(): void
     {
+    	$this->newline();
         $this->info('Starting Webzone Manager....');
         $this->newline();
-        $this->manager->startServer();
+        WebzoneManager::startServer();
     }
 
     private function checkInstallation()
@@ -96,20 +96,19 @@ class Manager extends Command
         } else {
             if ($this->confirm('Do you want to install Manager component')) {
                 $this->install();
-                sleep(5);
                 $this->start();
             } else {
                 $this->error('Aborting...');
-                return true;
+                return 0;
             }
         }
     }
 
-    private function createDirectory(): void
+    private function createDirectoryIfNotExists(): void
     {
         $this->task('Creating Required Folders ', function () {
             try {
-                Storage::makeDirectory($this->manager->getPath());
+                Storage::makeDirectory(WebzoneManager::getPath());
                 return true;
             } catch (\Exception $e) {
                 return false;
@@ -120,7 +119,7 @@ class Manager extends Command
     private function download(): void
     {
         $downloadTask = $this->task('Downloading resources ', function () {
-            $this->downloader = new Downloader($this->manager->getLink(), $this->manager->getPath().'/'.$this->filename, 'local');
+            $this->downloader = new Downloader(WebzoneManager::getLink(), WebzoneManager::getPath().'/'. static::$filename, 'local');
             $response = $this->downloader->download();
 
             if ($response['ok']) {
