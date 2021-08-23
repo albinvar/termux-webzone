@@ -23,7 +23,7 @@ class Symfony extends Command
     
     protected static $link;
     
-    protected static $needle = 'Symfony CLI version';
+    protected static string $needle = 'Symfony CLI version';
 
     /**
      * The signature of the command.
@@ -101,24 +101,6 @@ class Symfony extends Command
         // $schedule->command(static::class)->everyMinute();
     }
 
-    private function checkDownloadStatus($status, $dir): void
-    {
-        switch ($status) {
-            case 000:
-                $this->error('Cannot connect to Server');
-                break;
-            case 200:
-                $this->comment("\nDownloaded Successfully...!!!");
-                $this->runTasks();
-                break;
-            case 404:
-                $this->error('File not found on server..');
-                break;
-            default:
-                $this->error('An Unknown Error occurred...');
-        }
-    }
-
     private function runTasks(): void
     {
 	    $this->download();
@@ -128,10 +110,7 @@ class Symfony extends Command
 		});
 	
         $this->task('verifying command ', function () {
-            if (str_contains(shell_exec('symfony version'), static::$needle) && file_exists(static::$symfony)) {
-                return true;
-            }
-            return false;
+            return (str_contains(shell_exec('symfony version'), static::$needle) && file_exists(static::$symfony));
         });
     }
     
