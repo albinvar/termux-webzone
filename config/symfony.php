@@ -18,11 +18,22 @@ return [
     | Symfony CLI Path (Do Not Change)
     |--------------------------------------------------------------------------
     |
+    | path to symfony cli.
+    |
+    */
+
+    'CLI_PATH' => '/data/data/com.termux/files/usr/bin/symfony',
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Path which all commands are stored. 
+    |--------------------------------------------------------------------------
+    |
     | location of symfony cli.
     |
     */
 
-    'PATH' => '/data/data/com.termux/files/usr/bin/symfony',
+    'PATH' => '/data/data/com.termux/files/usr/bin',
 
     /*
     |--------------------------------------------------------------------------
