@@ -29,6 +29,7 @@ class Jewel
 			try {
 		        File::makeDirectory($this->path, 0777, true, true);
 				$this->updateGitIgnore();
+				$this->createConfigFile();
 			} catch(\Exception $e) {
 				return false;
 			}
@@ -46,5 +47,16 @@ class Jewel
 		} catch(\Exception $e) {
 			
 		}
+    }
+    
+    private function createConfigFile()
+    {
+    	File::put($this->path.'/webzone.json', $this->generateJson());
+    }
+    
+    private function generateJson()
+    {
+    	$array = ['created_at' => time()];
+	    return json_encode($array);
     }
 }
