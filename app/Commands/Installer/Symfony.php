@@ -22,6 +22,8 @@ class Symfony extends Command
     protected static $disk;
     
     protected static $link;
+    
+    protected static $needle = 'Symfony CLI version';
 
     /**
      * The signature of the command.
@@ -120,9 +122,13 @@ class Symfony extends Command
     private function runTasks(): void
     {
 	    $this->download();
-    
+	
+		$this->task('setting permissions', function() {
+			return chmod(static::$symfony, 0775);
+		});
+	
         $this->task('verifying command ', function () {
-            if (file_exists(static::$symfony)) {
+            if (str_contains(shell_exec('symfony version'), static::$needle) && file_exists(static::$symfony)) {
                 return true;
             }
             return false;
