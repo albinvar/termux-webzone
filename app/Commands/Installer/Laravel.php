@@ -4,13 +4,22 @@ declare(strict_types=1);
 
 namespace App\Commands\Installer;
 
-use Illuminate\Console\Scheduling\Schedule;
-use Laminas\Text\Figlet\Figlet;
+use App\Helpers\ComposerInstallerManager as Manager;
+use App\Helpers\Webzone;
 use LaravelZero\Framework\Commands\Command;
+use Storage;
 
 class Laravel extends Command
 {
-    protected $laravelInstaller;
+    public static $laravelInstaller;
+
+    protected static $dir;
+
+    protected static $disk;
+
+    protected static $cliName;
+
+    protected static $packageName;
 
     /**
      * The signature of the command.
@@ -30,10 +39,14 @@ class Laravel extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): mixed
+    public function handle(): void
     {
-        $this->laravelInstaller = config('pma.LARAVEL_INSTALLER_PATH');
+        //set values for properties.
+        static::setConfigs();
 
+        $this->webzone = new Webzone();
+
+        // change methods based on action.
         if ($this->option('uninstall')) {
             $this->uninstall();
         } else {
@@ -41,58 +54,76 @@ class Laravel extends Command
         }
     }
 
-    public function checkInstallation()
+    public static function setConfigs(): void
     {
-        if (file_exists($this->laravelInstaller)) {
-            return true;
-        }
-        return false;
+        static::$laravelInstaller = config('laravel-installer.FULL_PATH');
+        static::$dir = config('laravel-installer.PATH', '/data/data/com.termux/files/home/.composer/vendor/bin');
+        static::$cliName = config('laravel-installer.NAME', 'laravel');
+        static::$packageName = config('laravel-installer.PACKAGE_NAME');
+        static::createDiskInstance();
     }
 
-    public function logo(): void
+    public static function createDiskInstance(): void
     {
-        $figlet = new Figlet();
-        echo $figlet->setFont(config('logo.font'))->render('Laravel  Installer');
+        static::$disk = Storage::build([
+            'driver' => 'local',
+            'root' => static::$dir,
+        ]);
     }
 
-    /**
-     * Define the command's schedule.
-     */
-    public function schedule(Schedule $schedule): void
+    public function checkInstallation(): bool
     {
-        // $schedule->command(static::class)->everyMinute();
+        return static::$disk->has(static::$cliName);
     }
 
     private function uninstall()
     {
         if (! $this->checkInstallation()) {
-            $this->error('Laravel Installer is not installed yet.');
-            return false;
+            $this->error(static::$cliName . ' isn\'t installed yet.');
+            return 1;
         }
 
-        if (! $this->confirm('Do you want to uninstall Laravel Installer?')) {
-            return false;
+        if (! $this->confirm('Do you want to uninstall '. static::$cliName .'?')) {
+            return 0;
         }
 
-        $this->info('');
-        $this->logo();
-        $this->comment("\nUnnstalling Laravel Installer...\n");
-        $cmd = exec('composer global remove laravel/installer');
-        $this->comment("\nUninstalled successfully. \n");
+        $this->webzone->clear();
+
+        $this->webzone->logo('Laravel Installer', 'comment');
+
+        $this->newline();
+        $this->comment('Unnstalling ' . static::$cliName . '...');
+
+        $status = Manager::package(static::$packageName, static::$cliName, static::$disk)->uninstall();
+
+        $this->newline();
+        $status ? $this->comment('Uninstalled successfully..')
+                  : $this->error('Uninstall failed..');
+        $this->newline();
     }
 
     private function install()
     {
         if ($this->checkInstallation()) {
-            $this->error('Laravel Installer is already installed. Use "laravel new <app_name>" to create a laravel project.');
+            $this->error(static::$cliName . ' is already installed. Use "'. static::$cliName .' --help" to fix directory codes.');
             return false;
         }
 
-        $this->info('');
-        $this->logo();
-        $this->comment("\nInstalling Laravel Installer...\n");
-        $cmd = exec('composer global require laravel/installer');
-        $this->comment("\nInstalled successfully. Launch it using \"laravel --help\" command.\n");
+        $this->webzone->clear();
+
+        $this->webzone->logo('Laravel Installer', 'comment');
+
+        $this->newline();
+        $this->comment('Installing ' . static::$cliName .'...');
+        $this->newline();
+
+        $status = Manager::package(static::$packageName)->install();
+
+        $this->newline();
+        $status ? $this->comment('Installed successfully. Launch it using "laravel --help" command.')
+                              : $this->error('Installation failed..');
+        $this->newline();
+
         $this->initComposerGlobal();
     }
 

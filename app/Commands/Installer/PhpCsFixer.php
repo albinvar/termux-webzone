@@ -4,13 +4,22 @@ declare(strict_types=1);
 
 namespace App\Commands\Installer;
 
-use Illuminate\Console\Scheduling\Schedule;
-use Laminas\Text\Figlet\Figlet;
+use App\Helpers\ComposerInstallerManager as Manager;
+use App\Helpers\Webzone;
 use LaravelZero\Framework\Commands\Command;
+use Storage;
 
 class PhpCsFixer extends Command
 {
-    protected $fixer;
+    protected static $fixer;
+
+    protected static $dir;
+
+    protected static $disk;
+
+    protected static $cliName;
+
+    protected static $packageName;
 
     /**
      * The signature of the command.
@@ -30,10 +39,14 @@ class PhpCsFixer extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): mixed
+    public function handle(): void
     {
-        $this->fixer = config('pma.PHP_CS_FIXER_PATH');
+        //set values for properties.
+        static::setConfigs();
 
+        $this->webzone = new Webzone();
+
+        // change methods based on action.
         if ($this->option('uninstall')) {
             $this->uninstall();
         } else {
@@ -41,58 +54,76 @@ class PhpCsFixer extends Command
         }
     }
 
-    public function checkInstallation()
+    public static function setConfigs(): void
     {
-        if (file_exists($this->fixer)) {
-            return true;
-        }
-        return false;
+        static::$fixer = config('php-cs-fixer.FULL_PATH');
+        static::$dir = config('php-cs-fixer.PATH', '/data/data/com.termux/files/home/.composer/vendor/bin');
+        static::$cliName = config('php-cs-fixer.NAME', 'php-cs-fixer');
+        static::$packageName = config('php-cs-fixer.PACKAGE_NAME');
+        static::createDiskInstance();
     }
 
-    public function logo(): void
+    public static function createDiskInstance(): void
     {
-        $figlet = new Figlet();
-        $this->info($figlet->render('PHP CS FIXER'));
+        static::$disk = Storage::build([
+            'driver' => 'local',
+            'root' => static::$dir,
+        ]);
     }
 
-    /**
-     * Define the command's schedule.
-     */
-    public function schedule(Schedule $schedule): void
+    public function checkInstallation(): bool
     {
-        // $schedule->command(static::class)->everyMinute();
+        return static::$disk->has(static::$cliName);
     }
 
     private function uninstall()
     {
         if (! $this->checkInstallation()) {
-            $this->error('php-cs-fixer is not installed yet.');
-            return false;
+            $this->error(static::$cliName . ' isn\'t installed yet.');
+            return 1;
         }
 
-        if (! $this->confirm('Do you want to uninstall php-cs-fixer?')) {
-            return false;
+        if (! $this->confirm('Do you want to uninstall '. static::$cliName .'?')) {
+            return 0;
         }
 
-        $this->info('');
-        $this->logo();
-        $this->comment("\nUnnstalling php-cs-fixer ...\n");
-        $cmd = exec('composer global remove friendsofphp/php-cs-fixer');
-        $this->comment("\nUninstalled successfully. \n");
+        $this->webzone->clear();
+
+        $this->webzone->logo('php  cs  fixer', 'comment');
+
+        $this->newline();
+        $this->comment('Unnstalling ' . static::$cliName . '...');
+
+        $status = Manager::package(static::$packageName, static::$cliName, static::$disk)->uninstall();
+
+        $this->newline();
+        $status ? $this->comment('Uninstalled successfully..')
+                  : $this->error('Uninstall failed..');
+        $this->newline();
     }
 
     private function install()
     {
         if ($this->checkInstallation()) {
-            $this->error('Php-cs-fixer is already installed. Use "php-cs-fixer fix <folder_name>" to fix directory codes.');
+            $this->error(static::$cliName . ' is already installed. Use "'. static::$cliName .' fix <folder_name>" to fix directory codes.');
             return false;
         }
-        $this->info(exec('clear'));
-        $this->info('');
-        $this->logo();
-        $this->comment("\nInstalling php-cs-fixer...\n");
-        $cmd = exec('composer global require friendsofphp/php-cs-fixer');
-        $this->comment("\nInstalled successfully. Launch it using \"php-cs-fixer --help\" command.\n");
+
+        $this->webzone->clear();
+
+        $this->webzone->logo('php  cs  fixer', 'comment');
+
+        $this->newline();
+        $this->comment('Installing ' . static::$cliName .'...');
+        $this->newline();
+
+        $status = Manager::package(static::$packageName, static::$cliName, static::$disk)->install();
+
+        $this->newline();
+        $status ? $this->comment('Installed successfully. Launch it using "php-cs-fixer --help" command.')
+                  : $this->error('Installation failed..');
+        $this->newline();
+
         $this->initComposerGlobal();
     }
 
