@@ -5,12 +5,21 @@ declare(strict_types=1);
 namespace App\Commands\Installer;
 
 use Illuminate\Console\Scheduling\Schedule;
-use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
+use App\Helpers\Webzone;
+use Storage;
 
 class Phpstan extends Command
 {
-    protected $phpstan;
+    protected static $phpstan;
+    
+    protected static $dir;
+    
+    protected static $disk;
+    
+    protected static $cliName;
+    
+    protected static $packageName;
 
     /**
      * The signature of the command.
@@ -25,34 +34,47 @@ class Phpstan extends Command
      *
      * @var string
      */
-    protected $description = 'Install phpstan globally';
+    protected $description = 'Install phpstan ';
 
     /**
      * Execute the console command.
      */
-    public function handle(): mixed
+    public function handle(): void
     {
-        $this->phpstan = config('pma.PHPSTAN_PATH');
-
+    	//set values for properties.
+    	static::setConfigs();
+    
+        $this->webzone = new Webzone();
+    
+	    // change methods based on action.
         if ($this->option('uninstall')) {
             $this->uninstall();
         } else {
             $this->install();
         }
     }
-
-    public function checkInstallation()
+    
+    public static function setConfigs()
     {
-        if (file_exists($this->phpstan)) {
-            return true;
-        }
-        return false;
+    	static::$phpstan = config('phpstan-installer.FULL_PATH');
+	    static::$dir = config('phpstan-installer.PATH', '/data/data/com.termux/files/home/.composer/vendor/bin');
+		static::$cliName = config('phpstan-installer.NAME', 'laravel');
+		static::$packageName = config('phpstan-installer.PACKAGE_NAME');
+		static::createDiskInstance();
+    }
+    
+    public static function createDiskInstance()
+    {
+    	static::$disk = Storage::build([
+		    'driver' => 'local',
+		    'root' => static::$dir,
+		]);
+		
     }
 
-    public function logo(): void
+    public function checkInstallation(): bool
     {
-        $figlet = new Figlet();
-        $this->info($figlet->render('PHPSTAN'));
+        return static::$disk->has(static::$cliName);
     }
 
     /**
@@ -66,33 +88,50 @@ class Phpstan extends Command
     private function uninstall()
     {
         if (! $this->checkInstallation()) {
-            $this->error("phpstan isn't installed yet.");
-            return false;
+            $this->error(static::$cliName . ' isn\'t installed yet.');
+            return 1;
         }
 
-        if (! $this->confirm('Do you want to uninstall phpstan?')) {
-            return false;
-        }
-
-        $this->info('');
-        $this->logo();
-        $this->comment("\nUnnstalling phpstan ...\n");
-        $cmd = exec('composer global remove phpstan/phpstan');
-        $this->comment("\nUninstalled successfully. \n");
+        if (! $this->confirm('Do you want to uninstall '. static::$cliName .'?')) {
+            return 0;
+        }   
+        
+        $this->webzone->clear();
+        
+        $this->webzone->logo('Laravel Installer', 'comment');
+        
+        
+        $this->newline();
+        $this->comment('Unnstalling ' . static::$cliName . '...');
+        
+        $cmd = exec('composer global remove ' . static::$packageName);
+        
+        $this->newline();
+        $this->comment('Uninstalled successfully..');
+        $this->newline();
     }
 
     private function install()
     {
         if ($this->checkInstallation()) {
-            $this->error('Phpstan is already installed. Use "phpstan analyse --level=1 -- <folder_name>" to list out errors in code.');
+            $this->error(static::$cliName . ' is already installed. Use "'. static::$cliName .' --help" to fix directory codes.');
             return false;
         }
-        $this->info(exec('clear'));
-        $this->info('');
-        $this->logo();
-        $this->comment("\nInstalling phpstan...\n");
-        $cmd = exec('composer global require phpstan/phpstan');
-        $this->comment("\nInstalled successfully. Launch it using \"phpstan --help\" command.\n");
+        
+        $this->webzone->clear();
+        
+        $this->webzone->logo('Laravel Installer', 'comment');
+        
+        $this->newline();
+        $this->comment('Installing ' . static::$cliName .'...');
+        $this->newline();
+        
+        $cmd = exec('composer global require ' . static::$packageName);
+        
+        $this->newline();
+        $this->comment("Installed successfully. Launch it using \"laravel --help\" command.");
+        $this->newline();
+        
         $this->initComposerGlobal();
     }
 
