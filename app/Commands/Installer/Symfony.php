@@ -50,13 +50,29 @@ class Symfony extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): void
+    public function handle(): mixed
     {
         $this->callSilently('settings:init');
         
         self::setConfigs();
         
+        if ($this->checkInstallation() && ! $this->option('uninstall')) {
+            $this->error('Symfony CLI is already installed. Use "symfony help" to show all commands.');
+            return 1;
+        }
+        
+        $this->webzone->clear();
+        
+        $this->webzone->logo('Symfony', 'comment');
+        
+        if($this->option('uninstall'))
+	    {
+			$this->uninstall();
+			return 0;
+		}
+		
         $this->install();
+        return 0;
     }
     
     public static function setConfigs()
@@ -78,22 +94,6 @@ class Symfony extends Command
 
     public function install()
     {
-        if ($this->checkInstallation() && ! $this->option('uninstall')) {
-            $this->error('Symfony CLI is already installed. Use "symfony help" to show all commands.');
-            return 1;
-        }
-
-        $this->webzone->clear();
-        
-        $this->webzone->logo('Symfony', 'comment');
-        
-        if($this->option('uninstall'))
-	    {
-			$this->uninstall();
-			return 0;
-		}
-        
-        
         $this->newline();
         $this->comment("Installing Symfony CLI...");
         $this->newline();
@@ -141,7 +141,6 @@ class Symfony extends Command
     
     private function download(): void
     {
-		
         $downloadTask = $this->task('Downloading resources ', function () {
             $this->downloader = new Downloader(static::$link, static::$cliName, static::$disk);
             $response = $this->downloader->download();
@@ -149,6 +148,7 @@ class Symfony extends Command
             if ($response['ok']) {
                 return true;
             }
+            
             $this->error($response['error']->getMessage());
             return false;
         });
