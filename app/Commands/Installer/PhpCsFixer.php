@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Commands\Installer;
 
-use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 use App\Helpers\Webzone;
+use App\Helpers\ComposerInstallerManager as Manager;
 use Storage;
 
 class PhpCsFixer extends Command
@@ -77,14 +77,6 @@ class PhpCsFixer extends Command
         return static::$disk->has(static::$cliName);
     }
 
-    /**
-     * Define the command's schedule.
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
-    }
-
     private function uninstall()
     {
         if (! $this->checkInstallation()) {
@@ -100,14 +92,14 @@ class PhpCsFixer extends Command
         
         $this->webzone->logo('php  cs  fixer', 'comment');
         
-        
         $this->newline();
         $this->comment('Unnstalling ' . static::$cliName . '...');
         
-        $cmd = exec('composer global remove ' . static::$packageName);
+        $status = Manager::package(static::$packageName, static::$cliName, static::$disk)->uninstall();
         
         $this->newline();
-        $this->comment('Uninstalled successfully..');
+        ($status) ? $this->comment('Uninstalled successfully..')
+				  : $this->error('Uninstall failed..');
         $this->newline();
     }
 
@@ -126,10 +118,11 @@ class PhpCsFixer extends Command
         $this->comment('Installing ' . static::$cliName .'...');
         $this->newline();
         
-        $cmd = exec('composer global require ' . static::$packageName);
+        $status = Manager::package(static::$packageName, static::$cliName, static::$disk)->install();
         
         $this->newline();
-        $this->comment("Installed successfully. Launch it using \"php-cs-fixer --help\" command.");
+        ($status) ? $this->comment("Installed successfully. Launch it using \"php-cs-fixer --help\" command.")
+				  : $this->error('Installation failed..');
         $this->newline();
         
         $this->initComposerGlobal();

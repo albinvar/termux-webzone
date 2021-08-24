@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Commands\Installer;
 
-use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 use App\Helpers\Webzone;
 use Storage;
@@ -78,14 +77,6 @@ class Laravel extends Command
         return static::$disk->has(static::$cliName);
     }
 
-    /**
-     * Define the command's schedule.
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
-    }
-
     private function uninstall()
     {
         if (! $this->checkInstallation()) {
@@ -109,7 +100,7 @@ class Laravel extends Command
         
         $this->newline();
         ($status) ? $this->comment('Uninstalled successfully..')
-						      : $this->error('Uninstall failed..');
+				  : $this->error('Uninstall failed..');
         $this->newline();
     }
 

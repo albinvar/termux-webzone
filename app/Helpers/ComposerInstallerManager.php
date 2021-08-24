@@ -38,7 +38,7 @@ class ComposerInstallerManager
 			return true;
 		}
 		
-		return $disk->has(self::$cliName);
+		return self::$disk->has(self::$cliName);
 	}
 	
 	public function uninstall()
