@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Helpers;
 
+use App\Helpers\Jewel\Jewel;
 use App\Helpers\Settings\Handler;
 use LaravelZero\Framework\Commands\Command;
 use Storage;
-use App\Helpers\Jewel\Jewel;
 
 class ComposerPackageInstaller extends Command
 {
@@ -56,7 +56,7 @@ class ComposerPackageInstaller extends Command
         }
         $cmd = "cd {$this->mainPath} && composer create-project --prefer-dist {$this->package} '{$this->name}'";
         exec($cmd);
-        
+
         $this->runTasks();
     }
 
@@ -73,11 +73,11 @@ class ComposerPackageInstaller extends Command
         }
         return false;
     }
-    
-    private function runTasks()
+
+    private function runTasks(): void
     {
-    	$this->task('Creating directory', function () {
-	    	return $this->jewel->createDirectory($this->mainPath . '/' . $this->name);
-		});
+        $this->task('Creating directory', function () {
+            return $this->jewel->createDirectory($this->mainPath . '/' . $this->name);
+        });
     }
 }

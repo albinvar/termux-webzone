@@ -7,8 +7,8 @@ namespace App\Helpers;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Utils;
-use Storage;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Storage;
 
 class Downloader extends Webzone
 {
@@ -30,15 +30,13 @@ class Downloader extends Webzone
 
         $this->url = $url;
         $this->file = $file;
-        
-        if(is_object($disk) && $disk instanceof FilesystemAdapter)
-        {
-        	$this->downloadFile = $disk->getAdapter()->getPathPrefix().$this->file;
-        } else {
-        	$this->disk = ($disk !== 'tmp') ? $disk : 'tmp';
-        	$this->downloadFile = Storage::disk($this->disk)->getAdapter()->getPathPrefix().'/'.$this->file;
-        }
 
+        if (is_object($disk) && $disk instanceof FilesystemAdapter) {
+            $this->downloadFile = $disk->getAdapter()->getPathPrefix().$this->file;
+        } else {
+            $this->disk = $disk !== 'tmp' ? $disk : 'tmp';
+            $this->downloadFile = Storage::disk($this->disk)->getAdapter()->getPathPrefix().'/'.$this->file;
+        }
     }
 
     public function download()

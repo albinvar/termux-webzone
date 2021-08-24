@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
-use Laminas\Text\Figlet\Figlet;
 use LaravelZero\Framework\Commands\Command;
 
 class NodeJsIniter extends Command

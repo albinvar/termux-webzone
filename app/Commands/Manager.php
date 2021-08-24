@@ -81,7 +81,7 @@ class Manager extends Command
 
     private function start(): void
     {
-    	$this->newline();
+        $this->newline();
         $this->info('Starting Webzone Manager....');
         $this->newline();
         WebzoneManager::startServer();
