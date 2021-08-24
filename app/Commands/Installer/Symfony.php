@@ -111,10 +111,7 @@ class Symfony extends Command
 
     public function checkInstallation(): bool
     {
-        if (file_exists(static::$symfony)) {
-            return true;
-        }
-        return false;
+        return static::$disk->has(static::$cliName);
     }
 
 
