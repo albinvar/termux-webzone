@@ -30,7 +30,8 @@ class Symfony extends Command
      *
      * @var string
      */
-    protected $signature = 'installer:symfony';
+    protected $signature = 'installer:symfony
+							{--uninstall}';
 
     /**
      * The description of the command.
@@ -63,11 +64,21 @@ class Symfony extends Command
     	static::$symfony = config('symfony.CLI_PATH');
 	    static::$dir = config('symfony.PATH', '/data/data/com.termux/files/usr/bin');
 		static::$link = config('symfony.CLI_DOWNLOAD_LINK');
+		static::createDiskInstance();
+    }
+    
+    public static function createDiskInstance()
+    {
+    	static::$disk = Storage::build([
+		    'driver' => 'local',
+		    'root' => static::$dir,
+		]);
+		
     }
 
     public function install()
     {
-        if ($this->checkInstallation()) {
+        if ($this->checkInstallation() && ! $this->option('uninstall')) {
             $this->error('Symfony CLI is already installed. Use "symfony help" to show all commands.');
             return 1;
         }
@@ -76,12 +87,26 @@ class Symfony extends Command
         
         $this->webzone->logo('Symfony', 'comment');
         
+        if($this->option('uninstall'))
+	    {
+			$this->uninstall();
+			return 0;
+		}
+        
+        
         $this->newline();
         $this->comment("Installing Symfony CLI...");
         $this->newline();
         
         $this->runTasks();
         
+    }
+    
+    public function uninstall()
+    {
+    	$this->task('Uninstalling Symfony CLI ', function () {
+	    	return static::$disk->delete(static::$cliName);
+		});
     }
 
     public function checkInstallation(): bool
@@ -116,10 +141,6 @@ class Symfony extends Command
     
     private function download(): void
     {
-    	static::$disk = Storage::build([
-		    'driver' => 'local',
-		    'root' => static::$dir,
-		]);
 		
         $downloadTask = $this->task('Downloading resources ', function () {
             $this->downloader = new Downloader(static::$link, static::$cliName, static::$disk);
