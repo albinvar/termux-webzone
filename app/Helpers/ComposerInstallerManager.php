@@ -16,7 +16,7 @@ class ComposerInstallerManager
 	
 	private static $disk;
 	
-	public static function package($packageName, $cliName=null, $disk=null)
+	public static function package(string $packageName, string $cliName=null, $disk=null)
     {
     	self::$package = $packageName;
 	    self::$cliName = $cliName;

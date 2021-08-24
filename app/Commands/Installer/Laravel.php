@@ -8,6 +8,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 use App\Helpers\Webzone;
 use Storage;
+use App\Helpers\ComposerInstallerManager as Manager;
 
 class Laravel extends Command
 {
@@ -104,10 +105,11 @@ class Laravel extends Command
         $this->newline();
         $this->comment('Unnstalling ' . static::$cliName . '...');
         
-        $cmd = exec('composer global remove ' . static::$packageName);
+        $status = Manager::package(static::$packageName, static::$cliName, static::$disk)->uninstall();
         
         $this->newline();
-        $this->comment('Uninstalled successfully..');
+        ($status) ? $this->comment('Uninstalled successfully..')
+						      : $this->error('Uninstall failed..');
         $this->newline();
     }
 
@@ -126,10 +128,11 @@ class Laravel extends Command
         $this->comment('Installing ' . static::$cliName .'...');
         $this->newline();
         
-        $cmd = exec('composer global require ' . static::$packageName);
+        $status = Manager::package(static::$packageName)->install();
         
         $this->newline();
-        $this->comment("Installed successfully. Launch it using \"laravel --help\" command.");
+        ($status) ? $this->comment("Installed successfully. Launch it using \"laravel --help\" command.")
+						      : $this->error("Installation failed..");
         $this->newline();
         
         $this->initComposerGlobal();
