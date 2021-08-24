@@ -6,7 +6,6 @@ namespace App\Commands\Installer;
 
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
-use App\Helpers\ComposerPackageInstaller;
 use App\Helpers\Webzone;
 use Storage;
 
@@ -45,7 +44,6 @@ class PhpCsFixer extends Command
     	//set values for properties.
     	static::setConfigs();
     
-	    $this->installer = new ComposerPackageInstaller('Laminas', 'laminas');
         $this->webzone = new Webzone();
     
 	    // change methods based on action.
