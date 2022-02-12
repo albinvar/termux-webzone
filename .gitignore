@@ -2,6 +2,7 @@
 /.idea
 /.vscode
 /.vagrant
-.phpunit.result.cache
-test
-.php-cs-fixer.cache
+/.phpunit.result.cache
+/test
+/.php-cs-fixer.cache
+/builds

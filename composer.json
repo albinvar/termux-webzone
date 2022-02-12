@@ -16,18 +16,18 @@
         }
     ],
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^8.0",
         "ext-curl": "*",
         "ext-json": "*",
         "ext-zip": "*",
-        "guzzlehttp/guzzle": "^6.5.5",
-        "illuminate/http": "^8.0",
-        "illuminate/validation": "^8.35",
-        "laminas/laminas-text": "^2.8",
+        "guzzlehttp/guzzle": "^7.4",
+        "illuminate/http": "^9.0",
+        "illuminate/validation": "^9.0",
+        "laminas/laminas-text": "^2.9",
         "padraic/phar-updater": "^1.0.6"
     },
     "require-dev": {
-        "laravel-zero/framework": "^8.4",
+        "laravel-zero/framework": "^9.0.0",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/phpinsights": "^2.0",
         "pestphp/pest": "^1.0",
