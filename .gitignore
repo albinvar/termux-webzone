@@ -5,4 +5,3 @@
 /.phpunit.result.cache
 /test
 /.php-cs-fixer.cache
-/builds
