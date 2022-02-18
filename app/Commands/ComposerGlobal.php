@@ -51,7 +51,7 @@ class ComposerGlobal extends Command
 
     public function setString(): void
     {
-        $this->string = "\n" . config('path');
+        $this->string = "\n" . config('composer.PATH_CONFIG');
     }
 
     /**

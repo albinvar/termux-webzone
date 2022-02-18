@@ -23,10 +23,10 @@ return [
     */
 
     'CLI_PATH' => '/data/data/com.termux/files/usr/bin/symfony',
-    
+
     /*
     |--------------------------------------------------------------------------
-    | Path which all commands are stored. 
+    | Path which all commands are stored.
     |--------------------------------------------------------------------------
     |
     | location of symfony cli.

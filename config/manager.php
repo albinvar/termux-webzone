@@ -21,7 +21,7 @@ return [
     */
      'PATH' => 'manager',
      'FULL-PATH' => '/data/data/com.termux/files/usr/var/webzone/manager',
-     
+
      /*
     |--------------------------------------------------------------------------
     | File Manager Port

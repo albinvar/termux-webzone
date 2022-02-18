@@ -47,7 +47,7 @@ class ComposerPackageInstaller extends Command
     {
         if (is_bool($this->path)) {
             try {
-                $this->mainPath = Storage::disk('projects')->getAdapter()->getPathPrefix() . $this->frameworkDisk;
+                $this->mainPath = Storage::disk('projects')->path($this->frameworkDisk);
             } catch (\Exception $e) {
                 $this->mainPath = '/sdcard/www';
             }

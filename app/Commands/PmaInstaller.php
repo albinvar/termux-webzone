@@ -10,6 +10,7 @@ use App\Helpers\Webzone;
 use App\Helpers\Zipper;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use LaravelZero\Framework\Commands\Command;
 
 class PmaInstaller extends Command
@@ -137,7 +138,6 @@ class PmaInstaller extends Command
             return false;
         }
         return 'https://files.phpmyadmin.net/phpMyAdmin/'.$this->version.'/phpMyAdmin-'.$this->version.'-all-languages.zip';
-        //return 'http://127.0.0.1:8999/phpMyAdmin-5.1.1-all-languages.zip';
     }
 
     private function download(): void
@@ -188,7 +188,7 @@ class PmaInstaller extends Command
         });
 
         $this->task('Setting PhpMyAdmin root ', function () {
-            if ($this->pma->updateRoot(\Storage::disk('local')->getAdapter()->getPathPrefix().'/www/phpMyAdmin-' . $this->version . '-all-languages')) {
+            if ($this->pma->updateRoot(Storage::disk('local')->path('/www/phpMyAdmin-' . $this->version . '-all-languages'))) {
                 return true;
             }
             return false;
