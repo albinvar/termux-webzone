@@ -19,8 +19,8 @@ class Downloader extends Webzone
     protected $file;
 
     protected $downloadedFile;
-
-    protected $saveTo;
+    
+    protected $disk;
 
     public function __construct(string $url, string $file, $disk = 'tmp')
     {
@@ -69,7 +69,7 @@ class Downloader extends Webzone
     private function createDirIfNotExists()
     {
         try {
-            Storage::makeDirectory($this->saveTo);
+            Storage::makeDirectory($this->disk);
             return true;
         } catch (\Exception $e) {
             return false;
