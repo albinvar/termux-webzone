@@ -188,7 +188,7 @@ class PmaInstaller extends Command
         });
 
         $this->task('Setting PhpMyAdmin root ', function () {
-            if ($this->pma->updateRoot(\Storage::disk('local')->getAdapter()->getPathPrefix().'/www/phpMyAdmin-' . $this->version . '-all-languages')) {
+            if ($this->pma->updateRoot(Storage::disk('local')->path('/www/phpMyAdmin-' . $this->version . '-all-languages'))) {
                 return true;
             }
             return false;
