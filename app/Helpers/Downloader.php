@@ -32,10 +32,10 @@ class Downloader extends Webzone
         $this->file = $file;
 
         if (is_object($disk) && $disk instanceof FilesystemAdapter) {
-            $this->downloadFile = $disk->getAdapter()->getPathPrefix().$this->file;
+            $this->downloadFile = Storage::disk($disk)->path($this->file);
         } else {
             $this->disk = $disk !== 'tmp' ? $disk : 'tmp';
-            $this->downloadFile = Storage::disk($this->disk)->getAdapter()->getPathPrefix().'/'.$this->file;
+            $this->downloadFile = Storage::disk($this->disk)->path($this->file);
         }
     }
 
