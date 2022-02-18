@@ -19,7 +19,7 @@ class Downloader extends Webzone
     protected $file;
 
     protected $downloadedFile;
-    
+
     protected $disk;
 
     public function __construct(string $url, string $file, $disk = 'tmp')
