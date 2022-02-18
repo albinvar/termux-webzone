@@ -20,7 +20,7 @@ class Downloader extends Webzone
 
     protected $downloadedFile;
 
-    protected $saveTo;
+    protected $disk;
 
     public function __construct(string $url, string $file, $disk = 'tmp')
     {
@@ -32,10 +32,10 @@ class Downloader extends Webzone
         $this->file = $file;
 
         if (is_object($disk) && $disk instanceof FilesystemAdapter) {
-            $this->downloadFile = $disk->getAdapter()->getPathPrefix().$this->file;
+            $this->downloadFile = Storage::disk($disk)->path($this->file);
         } else {
             $this->disk = $disk !== 'tmp' ? $disk : 'tmp';
-            $this->downloadFile = Storage::disk($this->disk)->getAdapter()->getPathPrefix().'/'.$this->file;
+            $this->downloadFile = Storage::disk($this->disk)->path($this->file);
         }
     }
 
@@ -49,7 +49,7 @@ class Downloader extends Webzone
         $stream = Utils::streamFor($resource);
 
         try {
-            $res = $this->client->request('GET', $this->url, ['save_to' => $stream]);
+            $res = $this->client->request('GET', $this->url, ['sink' => $stream]);
             return ['ok' => true, 'status_code' => $res->getStatusCode(), 'error' => null, 'path' => $this->downloadFile];
         } catch (RequestException $e) {
             return ['ok' => false, 'error' => $e];
@@ -69,7 +69,7 @@ class Downloader extends Webzone
     private function createDirIfNotExists()
     {
         try {
-            Storage::makeDirectory($this->saveTo);
+            Storage::makeDirectory($this->disk);
             return true;
         } catch (\Exception $e) {
             return false;
