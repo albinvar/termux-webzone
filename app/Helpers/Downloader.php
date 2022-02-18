@@ -49,7 +49,7 @@ class Downloader extends Webzone
         $stream = Utils::streamFor($resource);
 
         try {
-            $res = $this->client->request('GET', $this->url, ['save_to' => $stream]);
+            $res = $this->client->request('GET', $this->url, ['sink' => $stream]);
             return ['ok' => true, 'status_code' => $res->getStatusCode(), 'error' => null, 'path' => $this->downloadFile];
         } catch (RequestException $e) {
             return ['ok' => false, 'error' => $e];
