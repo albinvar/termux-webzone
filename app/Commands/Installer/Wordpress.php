@@ -37,7 +37,7 @@ class Wordpress extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): mixed
+    public function handle()
     {
         $this->callSilently('settings:init');
         $this->wordpress = config('wordpress.PATH');
